@@ -1,0 +1,564 @@
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline" style="width: 120px;">
+                        <select id="sltKey">
+                            <option value="">-搜索条件-</option>
+                               <option value="fishery">渔业公司</option>
+                               <option value="fishname">渔船名</option>
+                               <option value="record">记录者</option>
+                               <option value="samplingtime">采样时间</option>
+                               <option value="type">类型</option>
+                                                                                                                                                                                                                                                                                                                                    </select>
+                    </div>
+                    <div class="layui-inline">
+                        <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                    </div>
+                    <div class="layui-inline" style="width: 120px;">
+                        <select id="type" name="type">
+                            <option value="" selected="selected">-请选择类型-</option>
+                            <option value="金枪鱼延绳钓">金枪鱼延绳钓</option>
+                            <option value="金枪鱼围网">金枪鱼围网</option>
+                            <option value="远洋鱿钓渔业">远洋鱿钓渔业</option>
+                            <option value="南极磷虾渔业">南极磷虾渔业</option>
+                            <option value="秋刀鱼渔业">秋刀鱼渔业</option>
+                            <option value="竹筴鱼渔业">竹筴鱼渔业</option>
+                            <option value="过洋性拖网渔业">过洋性拖网渔业</option>
+                            <option value="过洋性其他渔业">过洋性其他渔业</option>
+                            <option value="其他围网渔业">其他围网渔业</option>
+                            <option value="其他渔具渔业">其他渔具渔业</option>
+                        </select>
+                    </div>
+
+
+                    <div class="layui-inline">
+                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        <!--<button id="btnType" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索类型</button>-->
+                        <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                        <!--<button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>-->
+                        <!--<button type="button" class="layui-btn icon-btn" id="importdata"><i class="layui-icon"></i>导入</button>-->
+                        <button id="ImportTable" class="layui-btn icon-btn"><i class="layui-icon"></i>导入</button>
+                        <button id="outputTbaleTemp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>模板下载</button>
+                        <!--<button id="outputTbale" class="layui-btn layui-btn-normal icon-btn"><i class="layui-icon">&#xe654;</i>导出</button>-->
+                        <button id="delete" class="layui-btn icon-btn"><i class="layui-icon"></i>批量删除</button>
+                    </div>
+                </div>
+            </div>
+
+            <table class="layui-table" id="portTable" lay-filter="portTable"></table>
+        </div>
+    </div>
+
+</div>
+
+
+    <!-- 表单弹窗 -->
+<script type="text/html" id="portModel">
+    <form id="portForm" lay-filter="portForm" class="layui-form model-form">
+        <input name="id" type="hidden"/>
+                     <div class="layui-form-item">
+                         <label class="layui-form-label">类型</label>
+                         <div class="layui-input-block">
+                             <select id="type" name="type" selected="selected" type="text" lay-verify="required">
+                                 <option value="">请选择类型</option>
+                                 <option value="金枪鱼延绳钓">金枪鱼延绳钓</option>
+                                 <option value="金枪鱼围网">金枪鱼围网</option>
+                                 <option value="远洋鱿钓渔业">远洋鱿钓渔业</option>
+                                 <option value="南极磷虾渔业">南极磷虾渔业</option>
+                                 <option value="秋刀鱼渔业">秋刀鱼渔业</option>
+                                 <option value="竹筴鱼渔业">竹筴鱼渔业</option>
+                                 <option value="过洋性拖网渔业">过洋性拖网渔业</option>
+                                 <option value="过洋性其他渔业">过洋性其他渔业</option>
+                                 <option value="其他围网渔业">其他围网渔业</option>
+                                 <option value="其他渔具渔业">其他渔具渔业</option>
+                             </select>
+                             <span ><font color="red">必填</font></span>
+                         </div>
+                     </div>
+
+                                                <div class="layui-form-item">
+                    <label class="layui-form-label">港口名称</label>
+                    <div class="layui-input-block">
+                        <input name="portname" placeholder="请输入港口名称" type="text" class="layui-input" maxlength="50"/>
+                    </div>
+                </div>
+                                                <div class="layui-form-item">
+                    <label class="layui-form-label">渔业公司</label>
+                    <div class="layui-input-block">
+                        <input name="fishery" placeholder="请输入渔业公司" type="text" class="layui-input" maxlength="50"/>
+                    </div>
+                </div>
+                                                <div class="layui-form-item">
+                    <label class="layui-form-label">作业范围</label>
+                    <div class="layui-input-block">
+                        <input name="jobarea" placeholder="请输入作业范围" type="text" class="layui-input" maxlength="50"/>
+                    </div>
+                </div>
+
+
+                 <div class="layui-form-item">
+                     <label class="layui-form-label">开始作业时间</label>
+                     <div class="layui-input-block">
+                         <input id="createtime" name="createtime" placeholder="请输入开始作业时间" type="text" class="layui-input" maxlength="50"/>
+                     </div>
+                 </div>
+
+
+
+        <div class="layui-form-item">
+                    <label class="layui-form-label">结束作业时间</label>
+                    <div class="layui-input-block">
+                        <input id="endtime" name="endtime" placeholder="请输入结束作业时间" type="text" class="layui-input" maxlength="50"/>
+                    </div>
+                </div>
+
+
+
+
+                                                <div class="layui-form-item">
+                    <label class="layui-form-label">渔船名</label>
+                    <div class="layui-input-block">
+                        <input name="fishname" placeholder="请输入渔船名" type="text" class="layui-input" maxlength="50"/>
+                    </div>
+                </div>
+                                                <div class="layui-form-item">
+                    <label class="layui-form-label">采样时间</label>
+                    <div class="layui-input-block">
+                        <input id="caiyangtime" name="samplingtime" placeholder="请输入采样时间" type="text" class="layui-input" maxlength="50"/>
+                    </div>
+                </div>
+
+
+
+
+
+
+                                                <div class="layui-form-item">
+                    <label class="layui-form-label">记录者</label>
+                    <div class="layui-input-block">
+                        <input name="record" placeholder="请输入记录者" type="text" class="layui-input" maxlength="50"/>
+                    </div>
+                </div>
+                                                <div class="layui-form-item">
+                    <label class="layui-form-label">天气情况</label>
+                    <div class="layui-input-block">
+                        <input name="nwp" placeholder="请输入天气情况" type="text" class="layui-input" maxlength="50"/>
+                    </div>
+                </div>
+
+            <div class="layui-form-item text-right">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+            <button class="layui-btn" lay-filter="portFormSubmit" lay-submit>保存</button>
+        </div>
+    </form>
+</script>
+
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script type="text/html" id="importModel">
+    <center>
+        <form id="portDetailForm" lay-filter="portDetailForm" class="layui-form model-form">
+                <a class="layui-btn btn-add btn-default" id="btn-excel">选择Excel文件</a><br><br>
+                <a class="layui-btn btn-add btn-default" id="btn-excel-sure">上传导入</a>
+                <!--<span >导入文件不能超过5M，仅允许导入“xls”或“xlsx”格式文件！</span>-->
+             <!-- <div class="layui-form-item text-right">
+                <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+                <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+            </div>-->
+        </form>
+    </center>
+</script>
+
+
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'config','formSelects','laytpl','upload','index'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var config = layui.config;
+        var formSelects = layui.formSelects;
+        var laytpl = layui.laytpl;
+        var upload = layui.upload;
+        var index = layui.index;
+        var laydate=layui.laydate;
+        form.render();
+
+
+        layui.use('upload', function(){
+            var upload = layui.upload;
+
+            //执行实例
+            var uploadInst = upload.render({
+                elem: '#test1' //绑定元素
+                ,url:config.base_server + 'base/port/fileUpload'
+                    // ?token=
+                        // +config.getToken().access_token //上传接口
+                ,done: function(res){
+                    //上传完毕回调
+                }
+                ,error: function(){
+                    //请求异常回调
+                }
+            });
+        });
+
+        // 添加按钮点击事件
+        //导入
+       $('#importdata').click(function () {
+            // importData();
+           showimportModel();
+
+        });
+       $('#ImportTable').click(function () {
+            // showimportModel();
+           importData();
+        });
+       //导出
+       $('#outputTbale').click(function () {
+            // showimportModel();
+           outputTableData();
+        });
+       //模板下载
+        $('#outputTbaleTemp').click(function () {
+            // showimportModel();
+            outputTableTemp();
+        });
+      // 导入按钮弹窗
+        //待删除
+        function showimportModel(data) {
+            // console.log(selectKey)
+            //     admin.putTempData('selectKey', selectKey);
+            //     admin.putTempData('formOk', false);
+
+                top.layui.admin.open({
+                    type: 2,
+                    title: '导入文件',
+                    area: ['500px', '350px'],
+                    offset: '200px',
+                    url: 'components/base/portForm1.html',
+                    // content: 'base/upload/editForm',
+                    resize: true,
+                    end: function () {
+                        // console.log(selectKey)
+                        admin.getTempData('formOk') && table.reload('portTable');  // 成功刷新表格
+                    }
+                });
+            }
+
+        //批量删除
+        $('#delete').click(function () {
+            //获取选中行数据
+            var checkStatus = table.checkStatus('portTable')
+                ,dataSeaId = checkStatus.data;
+
+            if(dataSeaId.length==0){
+                layer.msg("请选择要删除的数据",{icon: 3});
+            }else{
+
+                layer.confirm('确定要删除'+ dataSeaId.length +'条吗？', {
+                    skin: 'layui-layer-admin',
+                    btn: ['确定', '取消']
+                }, function (index, layero) {
+                    var str = new Array();
+                    for (var i = 0; i < dataSeaId.length; i++) {
+                        str[i] = dataSeaId[i].id;
+                    }
+                    admin.req("base/port/batchelete",{
+                        id:JSON.stringify(str)
+                    },function (data) {
+                        table.reload('portTable');
+                        if (data.code == 200) {
+                            layer.msg(data.msg, {icon: 1});
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+                    },"PUT");
+                    layer.closeAll('dialog');  //加入这个信息点击确定 会关闭这个消息框
+                });
+            }
+
+        });
+
+
+
+
+
+
+
+
+        // }
+        //导入
+        function importData(data) {
+            var type = document.getElementById("type").value;
+            if(type == null || type == "" ){
+                // alert("请选择类型");
+                layer.msg("请选择类型", {
+                    icon: 1
+                });
+            }else {
+                // console.log(type)
+                // console.log(data.type)
+                admin.open({
+                    type: 1,
+                    // title: data,
+                   /* offset: "200px",
+                    area: ['300px', '300px'],*/
+                    title:"文件导入",
+                    area:["300px","270px"],//宽,高
+                    btn:["取消"],
+                    offset: ['20%', '40%'],
+                    content: document.getElementById('importModel').innerHTML,
+                    success: function () {
+                        upload.render({
+                            elem: '#btn-excel',
+                            // ,url: 'layer/excelparser?fileName=1'
+                            url: config.base_server + 'base/port/fileUpload?type='+ type
+                            , auto: false
+                            , multiple: false
+                            , bindAction: '#btn-excel-sure'
+                            , size: 5120 //最大允许上传的文件大小
+                            , accept: 'file' //允许上传的文件类型
+                            // ,exts:'xlsx'|'xls'//只上传pdf文档
+                            , done: function (res) {
+                                console.log(res)
+                                if (res.code == 1) {//成功的回调
+
+                                    //do something （比如将res返回的图片链接保存到表单的隐藏域）
+                                    // $('#set-add-put input[name="fileName"]').val(res.data.fileName);
+
+                                    layer.msg(res.msg, {
+                                        icon: 1
+                                    });
+                                    table.reload('portTable');
+                                    admin.closeDialog('#portDetailForm');
+                                    // location.reload();
+                                } else if (res.code == 2) {
+                                    layer.msg(res.msg, {
+                                        icon: 2
+                                    });
+                                    table.reload('portTable');
+                                    admin.closeDialog('#portDetailForm');
+                                }
+                            }
+                        });
+
+                    }
+                })
+            }
+
+        }
+        //导入模板下载
+        function outputTableTemp(data) {
+            window.location.href= config.base_server + 'base/port/exportTemp?Authorization='+ config.getToken().access_token;
+        }
+
+        //导出
+        function outputTableData(data) {
+
+            window.location.href= config.base_server + 'base/port/export?Authorization='+ config.getToken().access_token;
+            }
+
+
+
+
+
+
+
+
+
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#portTable',
+            url: config.base_server + 'base/port',
+            page: true,
+            cols: [[
+                {type: 'checkbox'},{type: 'numbers'},
+                {field: 'portname', sort: true, title: '港口名称'},
+                {field: 'fishery', sort: true, title: '渔业公司'},
+                {field: 'jobarea', sort: true, title: '作业范围'},
+                 {field: 'endtime', sort: true, title: '作业结束时间'},
+                {field: 'fishname', sort: true, title: '渔船名'},
+                {field: 'samplingtime', sort: true, title: '采样时间'},
+                {field: 'record', sort: true, title: '记录者'},
+                {field: 'nwp', sort: true, title: '天气情况'},
+                {field: 'type', sort: true, title: '类型'},
+                // {field: 'updatetime', sort: true, title: '更新时间',style:'cursor: pointer;color:#007DDB;',event:"updatetime"},
+                {align: 'center', toolbar: '#tableBar', title: '操作'}
+            ]]
+        });
+
+
+
+
+        // 导出excel
+        $('#btnExp').click(function () {
+            var checkRows = table.checkStatus('portTable');
+            if (checkRows.data.length == 0) {
+                layer.msg('请选择要导出的数据', {icon: 2});
+            } else {
+                table.exportFile(ins1.config.id, checkRows.data, 'xls');
+            }
+        });
+
+
+
+        // 添加按钮点击事件
+        $('#btnAdd').click(function () {
+            showEditModel();
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            var vals = $('#type').val();
+            table.reload('portTable', {where: {searchKey: key, searchValue: value||vals}});
+        });
+        // 搜索按钮点击事件 类型
+      /*  $('#btnType').click(function () {
+            var key = $('#type').val();
+            var value = $('#type').val();
+            table.reload('portTable', {where: {searchKey: key, searchValue: value}});
+        });*/
+
+        // 表单提交事件
+        form.on('submit(portFormSubmit)', function (data) {
+            var options=$("#ty option:selected");
+            if (options == "" & options == null) {
+                alert("请选择类型")
+                return;
+            }
+            console.info(data.field);
+            layer.load(2);
+            var theMethod = data.field.id?"PUT":"POST";
+            admin.req('base/port', data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                    table.reload('portTable');
+                    admin.closeDialog('#portForm');
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, theMethod);
+            return false;
+        });
+
+        // 工具条点击事件
+        table.on('tool(portTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            }else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }else if (obj.event === 'detail') { //详情
+                deat(obj);
+            }else if(obj.event==='updatetime'){
+                // console.log(123);
+                // console.log(obj.data.id);
+                showEditModel(data);
+              /*  index.openNewTab({
+                    //title: '页面传参',
+                    url: '#/observer/observerhooktime/p1=' + obj.data.id //+ '/p2=' + 2 + '/p3=' + 3
+                });*/
+            }
+
+        });
+
+        function deat(obj) {
+            index.openNewTab({
+                //title: '参数接收',
+                url: '#/base/portForm/p1=' + obj.data.id //+ '/p2=' + 2 + '/p3=' + 3
+            });
+            // console.log(url);
+            // var dada = layui.router().search.p1;
+        }
+
+
+        // 删除
+        function doDelete(obj) {
+            layer.confirm('确定要删除吗？', {
+                skin: 'layui-layer-admin'
+            }, function (i) {
+                layer.close(i);
+                layer.load(2);
+                admin.req('base/port/'+ obj.data.id, {}, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                        // table.reload('portTable');
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                        // table.reload('portTable');
+                    }
+                    table.reload('portTable');
+                }, 'delete');
+            });
+        };
+
+
+
+        // 显示表单弹窗
+        function showEditModel(data) {
+            admin.open({
+                type: 1,
+                area: ['550px', '800px'],
+                title: data ? '修改Port' : '添加港口采样',
+                content: laytpl(document.getElementById('portModel').innerHTML).render(data||{}),
+                success: function (layero, index) {
+                    //采样时间
+                    $('#portForm')[0].reset();
+                    laydate.render({
+                        elem: '#caiyangtime'
+                        ,type:'date'
+                    });
+
+                    //结束作业时间
+                    $('#portForm')[0].reset();
+                    laydate.render({
+                        elem: '#endtime'
+                        ,type:'date'
+                    });
+
+                    //开始作业时间
+                    $('#portForm')[0].reset();
+                    laydate.render({
+                        elem: '#createtime'
+                        ,type:'date'
+                    });
+
+
+
+
+                    if (data) {
+                        form.val('portForm', data);
+                    }
+                    // $(layero).children('.layui-layer-content').css('overflow', 'visible');  // 禁止出现滚动条
+                }
+            });
+        }
+
+        form.render();
+
+    });
+
+
+
+
+
+</script>

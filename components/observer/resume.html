@@ -1,0 +1,195 @@
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline" style="width: 120px;">
+                        <select id="sltKey">
+                            <option value="">-搜索条件-</option>
+                            <option value="shipsname">船名</option>
+                            <option value="voyage">航次</option>
+                            <option value="starttime">开始时间</option>
+                            <option value="endtime">结束时间</option>
+                            <option value="talentsinfoid">${field.comment}</option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
+                        <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                        <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
+                    </div>
+                </div>
+            </div>
+
+            <table class="layui-table" id="resumeTable" lay-filter="resumeTable"></table>
+        </div>
+    </div>
+
+</div>
+
+<!-- 表单弹窗 -->
+<script type="text/html" id="resumeModel">
+    <form id="resumeForm" lay-filter="resumeForm" class="layui-form model-form">
+        <input name="id" type="hidden"/>
+                                                        <div class="layui-form-item">
+                    <label class="layui-form-label">船名</label>
+                    <div class="layui-input-block">
+                        <input name="shipsname" placeholder="请输入船名" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">航次</label>
+                    <div class="layui-input-block">
+                        <input name="voyage" placeholder="请输入航次" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">开始时间</label>
+                    <div class="layui-input-block">
+                        <input name="starttime" placeholder="请输入开始时间" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">结束时间</label>
+                    <div class="layui-input-block">
+                        <input name="endtime" placeholder="请输入结束时间" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">${field.comment}</label>
+                    <div class="layui-input-block">
+                        <input name="talentsinfoid" placeholder="请输入${field.comment}" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                            <div class="layui-form-item text-right">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+            <button class="layui-btn" lay-filter="resumeFormSubmit" lay-submit>保存</button>
+        </div>
+    </form>
+</script>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'config','formSelects','laytpl'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var config = layui.config;
+        var formSelects = layui.formSelects;
+        var laytpl = layui.laytpl;
+
+        form.render('select');
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#resumeTable',
+            url: config.base_server + 'observer/resume',
+            page: true,
+            cols: [[
+                {type: 'checkbox'},{type: 'numbers'},
+                {field: '
+shipsname', sort: true, title: '船名'},
+                {field: 'voyage', sort: true, title: '航次'},
+                {field: 'starttime', sort: true, title: '开始时间'},
+                {field: 'endtime', sort: true, title: '结束时间'},
+                {field: 'talentsinfoid', sort: true, title: '${field.comment}'},
+                    {align: 'center', toolbar: '#tableBar', title: '操作'}
+            ]]
+        });
+
+        // 添加按钮点击事件
+        $('#btnAdd').click(function () {
+            showEditModel();
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            table.reload('resumeTable', {where: {searchKey: key, searchValue: value}});
+        });
+        // 表单提交事件
+        form.on('submit(resumeFormSubmit)', function (data) {
+            layer.load(2);
+            var theMethod = data.field.id?"PUT":"POST";
+            admin.req('observer/resume', data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                    table.reload('resumeTable');
+                    admin.closeDialog('#resumeForm');
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, theMethod);
+            return false;
+        });
+        // 工具条点击事件
+        table.on('tool(resumeTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            }else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }
+        });
+        // 删除
+        function doDelete(obj) {
+            layer.confirm('确定要删除吗？', {
+                skin: 'layui-layer-admin'
+            }, function (i) {
+                layer.close(i);
+                layer.load(2);
+                admin.req('resume/delete/'+ obj.data.id, {}, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'delete');
+            });
+        };
+        // 导出excel
+        $('#btnExp').click(function () {
+            var checkRows = table.checkStatus('resumeTable');
+            if (checkRows.data.length == 0) {
+                layer.msg('请选择要导出的数据', {icon: 2});
+            } else {
+                table.exportFile(ins1.config.id, checkRows.data, 'xls');
+            }
+        });
+
+        // 显示表单弹窗
+        function showEditModel(data) {
+            admin.open({
+                type: 1,
+                title: data ? '修改Resume' : '添加Resume',
+                content: laytpl(document.getElementById('resumeModel').innerHTML).render(data||{}),
+                success: function (layero, index) {
+                    $('#resumeForm')[0].reset();
+                    if (data) {
+                        form.val('resumeForm', data);
+                    }
+                    $(layero).children('.layui-layer-content').css('overflow', 'visible');  // 禁止出现滚动条
+                }
+            });
+        }
+
+    });
+</script>

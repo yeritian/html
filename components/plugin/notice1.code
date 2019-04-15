@@ -1,0 +1,39 @@
+layui.use(['notice'], function () {
+    var notice = layui.notice;
+    //
+    // 成功消息
+    notice.success({
+        title: '消息通知',
+        message: '你有新的消息，请注意查收!'
+    });
+    //
+    // 警告消息
+    notice.warning({
+        title: '消息通知',
+        message: '你有新的消息，请注意查收!'
+    });
+    //
+    // 错误消息
+    notice.error({
+    title: '消息通知',
+        message: '你有新的消息，请注意查收!'
+    });
+    //
+    // 通知消息
+    notice.info({
+        title: '消息通知',
+        message: '你有新的消息，请注意查收!'
+    });
+    //
+    // 参数设置
+    notice.info({
+        title: '消息通知',
+        message: '你有新的消息，请注意查收!',
+        position: 'topLeft',    // 位置
+        transitionIn: 'bounceInLeft',    // 进入动画
+        transitionOut: 'fadeOut'       // 退出动画
+    });
+    //
+    // 关闭所有
+    notice.destroy();
+});

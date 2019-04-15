@@ -1,0 +1,128 @@
+<form id="uploadForm" lay-filter="uploadForm" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">作者</label>
+        <div class="layui-input-block">
+            <input name="author" placeholder="请输入作者" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">文件来源</label>
+        <div class="layui-input-block">
+            <input name="source" placeholder="请输入文件来源" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">文件年份</label>
+        <div class="layui-input-block">
+           <input id="yearyyyy"  name="year" placeholder="yyyy" type="text" class="layui-input date-icon" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">提交者</label>
+        <div class="layui-input-block">
+            <input name="submitter" placeholder="请输入提交者" type="text" class="layui-input " maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">文件名称</label>
+        <div class="layui-input-block">
+            <input name="filename" placeholder="请输入文件名称" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+<!--    <div class="layui-form-item">
+        <label class="layui-form-label">上传时间</label>
+        <div class="layui-input-block">
+            <input name="uploadTime " placeholder="请输入上传时间" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>-->
+  <!--  <div class="layui-form-item">
+        <label class="layui-form-label">文件类型</label>
+        <div class="layui-input-block">
+            <input name="filetype" placeholder="请输入文件类型" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>-->
+  <!--  <div class="layui-form-item">
+        <label class="layui-form-label">文件大小</label>
+        <div class="layui-input-block">
+            <input name="filesize" placeholder="请输入文件大小" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>-->
+ <!--   <div class="layui-form-item">
+        <label class="layui-form-label">下载次数</label>
+        <div class="layui-input-block">
+            <input name="downloads" placeholder="请输入下载次数" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>-->
+
+    <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+    </div>
+</form>
+
+
+<script>
+    layui.use(['layer', 'form','config', 'formSelects', 'admin','laydate'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var config = layui.config;
+        var laydate = layui.laydate;
+        var prem=2;
+         var url = 'add';
+        laydate.render({
+            elem: '#yearyyyy'
+            ,type: 'year'
+        });
+        // config.base_server +  'upload/uploadFile?token=' + config.getToken().access_token,
+        //var url = config.base_server +  'add?token=' + config.getToken().access_token;
+        // 回显upload数据
+        var upload = admin.getTempData('t_upload');
+        if (upload) {
+            url = 'update';
+            form.val('uploadForm', upload);
+        }
+
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            layer.load(2);
+            var theMethod = data.field.id?"PUT":"POST";
+            // $.post(url, data.field, function (data) {
+            admin.req('upload',data.field,function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    console.log(data);
+                    // console.log(data.prem);
+                    // 关闭当前iframe弹出层
+                    admin.closeDialog('#uploadForm');
+                    // parent.layer.close(parent.layer.getFrameIndex(window.name));
+                    admin.putTempData('formOk', true);  // 操作成功刷新表格
+                    // console.log(data.data.prem);
+
+                    if (data.data.prem==1){
+                        top.layer.msg("您暂无修改权限", {icon: 2});
+                        return false;
+                    }else{
+                        top.layer.msg(data.msg, {icon: 1});
+                    }
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            },theMethod);
+            return false;
+        });
+    });
+</script>
+

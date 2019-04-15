@@ -1,0 +1,137 @@
+
+    <style>
+        .layui-form-item {
+            margin-bottom: 0;
+            margin-top: 20px;
+        }
+
+        .layui-form-item .layui-inline {
+            margin-bottom: 25px;
+            margin-right: 0;
+        }
+        .layui-form-label {
+            padding: 9px 0px;
+            width: 180px;
+        }
+        .layui-input-block {
+            margin-left: 190px;
+        }
+
+    </style>
+
+
+<!-- 加载动画，移除位置在common.js中 -->
+<!--<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>-->
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card" id="logDiv">
+        <div class="layui-card-header">日志信息</div>
+        <div class="layui-card-body">
+
+            <div class="layui-form">
+                <div class="layui-form-item layui-row">
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">船名:</label>
+                        <div class="layui-input-block">
+                            <input id="shipName" type="text"  readonly="readonly" class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">日期:</label>
+                        <div class="layui-input-block">
+                            <input id="logDate" type="text"  readonly="readonly" class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">活动类型:</label>
+                        <div class="layui-input-block">
+                            <input id="actionTypeStr" type="text"  readonly="readonly" class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">经度:</label>
+                        <div class="layui-input-block">
+                            <input id="lon" type="text"   class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">纬度:</label>
+                        <div class="layui-input-block">
+                            <input id="lat" type="text"   class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">备注:</label>
+                        <div class="layui-input-block">
+                            <input id="remark" type="text"   class="layui-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item text-center">
+                    <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+                    <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'formSelects', 'admin', 'config', 'jquery', 'laydate', 'table'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var config = layui.config;
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+        var table = layui.table;
+
+        var log = admin.getTempData('t_fishinglog');
+        if (log) {
+            $("#shipName").val(log.shipName);
+            $("#logDate").val(log.logDate);
+            $("#actionTypeStr").val(log.actionTypeStr);
+            $("#startTime").val(log.startTime);
+            $("#lon").val(log.lonStr);
+            $("#lat").val(log.latStr);
+            $("#remark").val(log.remark);
+        }
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            layer.load(2);
+            var ulog = {};
+            ulog.id=log.id;
+            ulog.shipId=log.shipId;
+            ulog.logType=log.logType;
+            ulog.actionType=log.actionType;
+            ulog.createTimeStr = log.createTime;
+            ulog.logRecordType = log.logRecordType;
+            ulog.logDateStr = log.logDate;
+            ulog.startTime=$("#startTime").val();
+            ulog.lonStr=$("#lon").val();
+            ulog.latStr=$("#lat").val();
+            ulog.remark=$("#remark").val();
+            admin.req('fishinglog/updateLog', ulog, function (data) {
+                parent.layer.closeAll();
+                if (data.code == 200) {
+                    parent.layui.table.reload('fishinglogTable');
+                    top.layer.msg(data.msg, {icon: 1});
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            }, "POST");
+            return false;
+        });
+    });
+</script>

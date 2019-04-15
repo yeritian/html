@@ -1,0 +1,261 @@
+<!-- 关闭Tab时顶部标题 -->
+<div class="layui-body-header">
+    <span class="layui-body-header-title">菜单管理</span>
+    <span class="layui-breadcrumb pull-right">
+        <a href="#/">首页</a>
+        <a><cite>菜单管理</cite></a>
+    </span>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">搜索：</label>
+                        <div class="layui-input-inline mr0">
+                            <input id="authEdtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="authBtnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索
+                        </button>
+                        <button id="authBtnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                    </div>
+                </div>
+            </div>
+
+            <table class="layui-table" id="authTable" lay-filter="authTable"></table>
+
+        </div>
+    </div>
+
+</div>
+<!-- 表单弹窗 -->
+<script type="text/html" id="authorityModel">
+    <form id="authForm" lay-filter="authForm" class="layui-form model-form">
+        <input name="id" type="hidden"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">名称</label>
+            <div class="layui-input-block">
+                <input name="authorityName" placeholder="请输入名称" type="text" class="layui-input" maxlength="50"
+                       lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-parentId-item" style="{{ d.superiorAuthority.id ? '':'display:none' }}">
+            <label class="layui-form-label">上级菜单</label>
+            <div class="layui-input-block">
+                <input name="parentId" value="{{ d.superiorAuthority.id || -1 }}" type="hidden"
+                       class="layui-input parentId-input"/>
+                <input type="text" value="{{ d.superiorAuthority.authorityName }}" disabled="true"
+                       class="layui-input parentId-label"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">权限标识</label>
+            <div class="layui-input-block">
+                <input name="authority" placeholder="请输入权限标识" type="text" class="layui-input" lay-verify="required"
+                       required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">访问路径</label>
+            <div class="layui-input-block">
+                <input name="menuUrl" placeholder="请输入访问路径" type="text" class="layui-input" lay-verify="required"
+                       required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单图标</label>
+            <div class="layui-input-block">
+                <input name="menuIcon" placeholder="请输入菜单图标/可选项" type="text" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序(倒序)</label>
+            <div class="layui-input-block">
+                <input name="orderNumber" placeholder="请输入排序号" type="number" class="layui-input"/>
+            </div>
+        </div>
+
+        <div class="layui-form-item text-right">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+            <button class="layui-btn" lay-filter="authFormSubmit" lay-submit>保存</button>
+        </div>
+    </form>
+</script>
+<!-- 表格操作列 -->
+<script type="text/html" id="authTableBar">
+    {{#  if(d.type === 3){ }}
+    <a class="layui-btn layui-btn-xs layui-btn-disabled">下级</a>
+    {{#  }else{ }}
+    <a class="layui-btn layui-btn-xs" lay-event="add">下级</a>
+    {{#  }}}
+
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    {{#  if(d.isParent){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled">删除</a>
+    {{#  }else{ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    {{#  }}}
+</script>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'table', 'admin', 'config', 'treetable', 'laytpl', 'form'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var admin = layui.admin;
+        var config = layui.config;
+        var treetable = layui.treetable;
+        var laytpl = layui.laytpl;
+        var form = layui.form;
+
+        // 渲染表格
+        function renderAuthTable() {
+            treetable.render({
+                treeColIndex: 1,
+                treeSpid: -1,
+                treeIdName: 'authorityId',
+                treePidName: 'parentId',
+                method: 'GET',
+                elem: '#authTable',
+                url: config.base_server + 'authority',
+                cellMinWidth: 100,
+                cols: [[
+                    {type: 'numbers', title: '序号'},
+                    {field: 'authorityName', minWidth: 200, title: '名称'},
+                    {field: 'authority', title: '权限标识'},
+                    {field: 'className', title: 'CSS'},
+                    {field: 'menuUrl', title: '访问路径'},
+                    {field: 'orderNumber', minWidth: 80, align: 'center', title: '排序'},
+                    {
+                        minWidth: 80, align: 'center', templet: function (d) {
+                            if (d.type == 0) {
+                                return '<span class="layui-badge layui-bg-cyan">系统</span>';
+                            } else if (d.type == 1) {
+                                return '<span class="layui-badge layui-bg-blue">目录</span>';
+                            } else if (d.type == 2) {
+                                return '<span class="layui-badge layui-bg-orange">菜单</span>';
+                            } else {
+                                return '<span class="layui-badge layui-bg-danger">按钮</span>';
+                            }
+                        }, title: '类型'
+                    },
+                    {templet: '#authTableBar', minWidth: 120, align: 'center', title: '操作'}
+                ]]
+            });
+        }
+
+        renderAuthTable();
+        // 添加按钮点击事件
+        $('#authBtnAdd').click(function () {
+            showEditModel();
+        });
+
+        // 工具条点击事件
+        table.on('tool(authTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'add') { // 增加
+                showEditModel(obj.data, null);
+            } else if (layEvent === 'edit') { // 修改
+                showEditModel(null, data);
+            } else if (layEvent === 'del') { // 删除
+                doDelete(obj.data.id);
+            }
+        });
+
+        // 删除
+        function doDelete(authorityId) {
+            layer.confirm('确定删除此权限吗？', {
+                skin: 'layui-layer-admin'
+            }, function () {
+                layer.load(2);
+                admin.req('authority/role', {
+                    authorityId: authorityId
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        renderAuthTable();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'delete');
+            });
+        }
+
+        // 显示表单弹窗
+        function showEditModel(superiorAuthority, authority) {
+            admin.open({
+                type: 1,
+                title: authority ? '修改菜单' : '添加菜单',
+                content: laytpl(document.getElementById('authorityModel').innerHTML).render({
+                    superiorAuthority: superiorAuthority || {},
+                    authority: authority || {}
+                }),
+                success: function (layero, index) {
+                    if (authority) {
+                        form.val('authForm', authority);
+                    }
+                    $(layero).children('.layui-layer-content').css('overflow', 'visible');  // 禁止出现滚动条
+                }
+            });
+        }
+
+        // 表单提交事件
+        form.on('submit(authFormSubmit)', function (data) {
+            layer.load(2);
+            admin.req('authority/role', data.field, function (data) {
+                layer.closeAll('loading');
+                admin.putTempData('notify', data);
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                    admin.closeDialog('#authForm');
+                    renderAuthTable();
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, data.field.id ? "PUT" : "POST");
+            return false;
+        });
+        // 搜索按钮点击事件
+        $('#authBtnSearch').click(function () {
+            debugger
+            var keyword = $('#authEdtSearch').val();
+            var $tds = $('#authTable').next('.treeTable').find('.layui-table-body tbody tr td');
+            if (!keyword) {
+                $tds.css('background-color', 'transparent');
+                layer.msg("请输入关键字", {icon: 5});
+                return;
+            }
+            var searchCount = 0;
+            $tds.each(function () {
+                $(this).css('background-color', 'transparent');
+                if ($(this).text().indexOf(keyword) >= 0) {
+                    $(this).css('background-color', 'rgba(250,230,160,0.5)');
+                    if (searchCount == 0) {
+                        var wrapperDOM = '.layui-body>.layui-fluid';
+                        if (config.pageTabs) {
+                            wrapperDOM = '.layui-tab-item.layui-show';
+                        }
+                        $(wrapperDOM).stop(true);
+                        $(wrapperDOM).animate({scrollTop: $(this).offset().top - 150}, 500);
+                    }
+                    searchCount++;
+                }
+            });
+            if (searchCount == 0) {
+                layer.msg("没有匹配结果", {icon: 5});
+            } else {
+                treetable.expandAll('#authTable');
+            }
+        });
+
+    });
+</script>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html class="bg-white">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>添加/修改Ship</title>
+    <base href="${ctxPath}">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+</head>
+
+<body>
+
+<form id="shipForm" lay-filter="shipForm" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+                                    <div class="layui-form-item">
+                <label class="layui-form-label">船名</label>
+                <div class="layui-input-block">
+                    <input name="name" placeholder="请输入船名" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">英文名</label>
+                <div class="layui-input-block">
+                    <input name="nameEn" placeholder="请输入英文名" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">MMSI</label>
+                <div class="layui-input-block">
+                    <input name="mmsi" placeholder="请输入MMSI" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">船舶类型</label>
+                <div class="layui-input-block">
+                    <input name="shipType" placeholder="请输入船舶类型" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">作业类型</label>
+                <div class="layui-input-block">
+                    <input name="fishingType" placeholder="请输入作业类型" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">公司</label>
+                <div class="layui-input-block">
+                    <input name="company" placeholder="请输入公司" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">出厂日期</label>
+                <div class="layui-input-block">
+                    <input name="madeDate" placeholder="请输入出厂日期" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">国籍</label>
+                <div class="layui-input-block">
+                    <input name="nationality" placeholder="请输入国籍" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">IMO number</label>
+                <div class="layui-input-block">
+                    <input name="imo" placeholder="请输入IMO number" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">呼号</label>
+                <div class="layui-input-block">
+                    <input name="callsign" placeholder="请输入呼号" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">船舶注册号</label>
+                <div class="layui-input-block">
+                    <input name="regNo" placeholder="请输入船舶注册号" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">国籍证书编号</label>
+                <div class="layui-input-block">
+                    <input name="nationCerNo" placeholder="请输入国籍证书编号" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">渔船编号</label>
+                <div class="layui-input-block">
+                    <input name="fisheryNo" placeholder="请输入渔船编号" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">总吨</label>
+                <div class="layui-input-block">
+                    <input name="totalTon" placeholder="请输入总吨" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">FFA VID</label>
+                <div class="layui-input-block">
+                    <input name="ffaVid" placeholder="请输入FFA VID" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">WCPFC认证号</label>
+                <div class="layui-input-block">
+                    <input name="wcpfcCerNo" placeholder="请输入WCPFC认证号" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">船长</label>
+                <div class="layui-input-block">
+                    <input name="captain" placeholder="请输入船长" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">入渔许可证编号</label>
+                <div class="layui-input-block">
+                    <input name="fishingPermitNo" placeholder="请输入入渔许可证编号" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">船东</label>
+                <div class="layui-input-block">
+                    <input name="shipowner" placeholder="请输入船东" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">航行宝编号</label>
+                <div class="layui-input-block">
+                    <input name="sailbox" placeholder="请输入航行宝编号" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">创建时间</label>
+                <div class="layui-input-block">
+                    <input name="createTime" placeholder="请输入创建时间" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">创建者</label>
+                <div class="layui-input-block">
+                    <input name="creator" placeholder="请输入创建者" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">修改时间</label>
+                <div class="layui-input-block">
+                    <input name="updateTime" placeholder="请输入修改时间" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">修改者</label>
+                <div class="layui-input-block">
+                    <input name="updator" placeholder="请输入修改者" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+    </div>
+</form>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script>
+    layui.use(['layer', 'form', 'formSelects', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+
+        var url = 'add';
+        // 回显user数据
+        var ship = admin.getTempData('t_ship');
+        if (ship) {
+            url = 'update';
+            form.val('shipForm', ship);
+        }
+
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            layer.load(2);
+            $.post(url, data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    top.layer.msg(data.msg, {icon: 1});
+                    admin.putTempData('formOk', true);  // 操作成功刷新表格
+                    // 关闭当前iframe弹出层
+                    parent.layer.close(parent.layer.getFrameIndex(window.name));
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            });
+            return false;
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!-- 关闭Tab时顶部标题 -->
+<div class="layui-body-header">
+    <span class="layui-body-header-title">admin风格的弹窗</span>
+    <span class="layui-breadcrumb pull-right">
+        <a href="#/">首页</a>
+        <a><cite>admin风格的弹窗</cite></a>
+    </span>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">效果演示</div>
+        <div class="layui-card-body text-center" style="padding: 30px 0px;">
+            <button id="dialogBtn1" class="layui-btn">表单弹窗</button>
+            <button id="dialogBtn2" class="layui-btn">最大最小化</button>
+            <button id="dialogBtn3" class="layui-btn">确认弹窗</button>
+            <br><br>
+            <button id="dialogBtn4" class="layui-btn layui-btn-normal">更改主题弹窗标题颜色也会跟着变</button>
+        </div>
+    </div>
+
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <pre id="codeDialog1" class="layui-code" lay-title="代码">
+            </pre>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'admin', 'code'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var admin = layui.admin;
+
+        $('#dialogBtn1').click(function () {
+            admin.open({
+                id: 'pswDialog',
+                title: '修改密码',
+                shade: 0,
+                url: 'components/tpl/password.html'
+            });
+        });
+
+        $('#dialogBtn2').click(function () {
+            admin.open({
+                type: 2,
+                title: '百度一下',
+                shade: 0,
+                maxmin: true,
+                resize: true,
+                area: ['640px', '480px'],
+                content: 'https://baidu.com'
+            });
+        });
+
+        $('#dialogBtn3').click(function () {
+            layer.confirm('确认删除吗？', {
+                skin: 'layui-layer-admin'
+            }, function (index) {
+                layer.close(index);
+                layer.msg('点击了确定');
+            });
+        });
+
+        $('#dialogBtn4').click(function () {
+            layer.confirm('确认删除吗？', {
+                skin: 'layui-layer-admin',
+                shade: 0
+            }, function (index) {
+                layer.close(index);
+                layer.msg('点击了确定');
+            });
+
+            admin.popupRight({
+                url: 'components/tpl/theme.html'
+            });
+        });
+
+        // 加载代码文档
+        $.get('components/plugin/dialog1.code', function (res) {
+            $('#codeDialog1').text(res);
+            layui.code({about: false, encode: true});
+        });
+
+    });
+</script>

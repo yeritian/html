@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title></title>
+    <base href="${ctxPath}">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+</head>
+
+<body>
+
+<!-- 页面加载loading -->
+<% include("../layout/loading.html"){} %>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline" style="width: 120px;">
+                        <select id="sltKey">
+                            <option value="">-搜索条件-</option>
+                                                                <option value="dic_id">${field.comment}</option>
+                                                    <option value="name">${field.comment}</option>
+                                                    <option value="is_delete">${field.comment}</option>
+                                                    <option value="sort_no">${field.comment}</option>
+                                                    <option value="description">${field.comment}</option>
+                                                    <option value="create_time">创建时间</option>
+                                                    <option value="creator">创建者</option>
+                                                    <option value="update_time">修改时间</option>
+                                                    <option value="updator">修改者</option>
+                                            </select>
+                    </div>
+                    <div class="layui-inline">
+                        <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                        <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
+                    </div>
+                </div>
+            </div>
+
+            <table class="layui-table" id="dicDataTable" lay-filter="dicDataTable"></table>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#dicDataTable',
+            url: 'dicData/list',
+            page: true,
+            cols: [[
+                {type: 'checkbox'},{type: 'numbers'},
+                {field: 'dicId', sort: true, title: '${field.comment}'},
+                {field: 'name', sort: true, title: '${field.comment}'},
+                {field: 'isDelete', sort: true, title: '${field.comment}'},
+                {field: 'sortNo', sort: true, title: '${field.comment}'},
+                {field: 'description', sort: true, title: '${field.comment}'},
+                {field: 'createTime', sort: true, title: '创建时间'},
+                {field: 'creator', sort: true, title: '创建者'},
+                {field: 'updateTime', sort: true, title: '修改时间'},
+                {field: 'updator', sort: true, title: '修改者'},
+                    {align: 'center', toolbar: '#tableBar', title: '操作'}
+            ]]
+        });
+
+        // 添加按钮点击事件
+        $('#btnAdd').click(function () {
+            showEditModel();
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            table.reload('dicDataTable', {where: {searchKey: key, searchValue: value}});
+        });
+
+        // 工具条点击事件
+        table.on('tool(dicDataTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            }else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }
+        });
+
+        // 删除
+        function doDelete(obj) {
+            top.layer.confirm('确定要删除吗？', function () {
+                layer.load(2);
+                $.post('dicData/delete', {
+                    dicDataId: obj.data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                });
+            });
+        }
+
+        // 导出excel
+        $('#btnExp').click(function () {
+            var checkRows = table.checkStatus('dicDataTable');
+            if (checkRows.data.length == 0) {
+                layer.msg('请选择要导出的数据', {icon: 2});
+            } else {
+                table.exportFile(ins1.config.id, checkRows.data, 'xls');
+            }
+        });
+
+        // 显示表单弹窗
+        function showEditModel(data) {
+            admin.putTempData('t_dicData', data);
+            admin.putTempData('formOk', false);
+            top.layui.admin.open({
+                type: 2,
+                title: data ? '修改DicData' : '添加DicData',
+                area: ['380px', '392px'],
+                content: 'base/dicData/editForm',
+                end: function () {
+                    admin.getTempData('formOk') && table.reload('dicDataTable');  // 成功刷新表格
+                }
+            });
+        }
+
+    });
+</script>
+
+</body>
+</html>

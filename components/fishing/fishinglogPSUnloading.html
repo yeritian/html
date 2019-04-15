@@ -1,0 +1,419 @@
+
+    <style>
+        .layui-form-item {
+            margin-bottom: 0;
+            margin-top: 20px;
+        }
+
+        .layui-form-item .layui-inline {
+            margin-bottom: 25px;
+            margin-right: 0;
+        }
+        .layui-form-label {
+            padding: 9px 0px;
+            width: 180px;
+        }
+        .layui-input-block {
+            margin-left: 190px;
+        }
+        #logDiv input{
+            border-width: 0px;
+            border-bottom-width: 1px;
+        }
+
+    </style>
+
+
+<!-- 加载动画，移除位置在common.js中 -->
+<!--<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>-->
+
+<!-- 正文开始 -->
+<div class="layui-fluid" id="logDiv">
+	<div class="layui-tab">
+        <ul class="layui-tab-title">
+            <li id="modifyLi" class="layui-this">修改后日志</li>
+            <li id="yuanshi" style="display: none;">原始日志</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-form">
+                            <div class="layui-form-item layui-row">
+                                <div class="layui-form-item layui-row">
+                                    <div class="layui-inline layui-col-md4">
+				                        <label class="layui-form-label">船名:</label>
+					                        <div class="layui-input-block">
+					                            <input id="shipName" type="text"  readonly="readonly" class="layui-input"/>
+					                        </div>
+					                    </div>
+					
+					                    <div class="layui-inline layui-col-md4">
+					                        <label class="layui-form-label">日期:</label>
+					                        <div class="layui-input-block">
+					                            <input id="logDate" type="text"  readonly="readonly" class="layui-input"/>
+					                        </div>
+					                    </div>
+					
+					                    <div class="layui-inline layui-col-md4">
+					                        <label class="layui-form-label">活动类型:
+					                        </label>
+					                        <div class="layui-input-block">
+					                            <input id="actionTypeStr" type="text"  readonly="readonly" class="layui-input"/>
+					                        </div>
+					                    </div>
+					
+					                    <div class="layui-inline layui-col-md4">
+					                        <label class="layui-form-label">经度:</label>
+					                        <div class="layui-input-block">
+					                            <input id="lonStr" type="text"  readonly="readonly" class="layui-input"/>
+					                        </div>
+					                    </div>
+					
+					                    <div class="layui-inline layui-col-md4">
+					                        <label class="layui-form-label">纬度:</label>
+					                        <div class="layui-input-block">
+					                            <input id="latStr" type="text"  readonly="readonly" class="layui-input"/>
+					                        </div>
+					                    </div>
+					
+					                    <div class="layui-inline layui-col-md4">
+					                        <label class="layui-form-label">开始时间:</label>
+					                        <div class="layui-input-block">
+					                            <input id="startTime" type="text"  readonly="readonly" class="layui-input"/>
+					                        </div>
+					                    </div>
+					
+					                    <div class="layui-inline layui-col-md4">
+					                        <label class="layui-form-label">结束时间:</label>
+					                        <div class="layui-input-block">
+					                            <input id="endTime" type="text"  readonly="readonly" class="layui-input"/>
+					                        </div>
+					                    </div>
+					
+					                    <div class="layui-inline layui-col-md4">
+					                        <label class="layui-form-label">船舶或目的地:</label>
+					                        <div class="layui-input-block">
+					                            <input id="unloadingDest" type="text"  readonly="readonly" class="layui-input"/>
+					                        </div>
+					                    </div>
+					                    <div class="layui-inline layui-col-md4">
+					                        <label class="layui-form-label">船舶呼号:</label>
+					                        <div class="layui-input-block">
+					                            <input id="unloadingCallsign" type="text"  readonly="readonly" class="layui-input"/>
+					                        </div>
+					                    </div>
+					
+					                    <div class="layui-inline layui-col-md4">
+					                        <label class="layui-form-label">鲣鱼转载量(吨):</label>
+					                        <div class="layui-input-block">
+					                            <input id="unloadingSkipjack" type="text"  readonly="readonly" class="layui-input"/>
+					                        </div>
+					                    </div>
+					
+					                    <div class="layui-inline layui-col-md4">
+					                        <label class="layui-form-label">黄鳍转载量(吨):</label>
+					                        <div class="layui-input-block">
+					                            <input id="unloadingYellowfin" type="text"  readonly="readonly" class="layui-input"/>
+					                        </div>
+					                    </div>
+					
+					                    <div class="layui-inline layui-col-md4">
+					                        <label class="layui-form-label">大目转载量(吨):</label>
+					                        <div class="layui-input-block">
+					                            <input id="unloadingBigeye" type="text"  readonly="readonly" class="layui-input"/>
+					                        </div>
+					                    </div>
+					
+					                    <div class="layui-inline layui-col-md4">
+					                        <label class="layui-form-label">混合转载量(吨):</label>
+					                        <div class="layui-input-block">
+					                            <input id="unloadingMix" type="text"  readonly="readonly" class="layui-input"/>
+					                        </div>
+					                    </div>
+					
+					                    <div class="layui-inline layui-col-md4">
+					                        <label class="layui-form-label">其他转载量(吨):</label>
+					                        <div class="layui-input-block">
+					                            <input id="unloadingOther" type="text"  readonly="readonly" class="layui-input"/>
+					                        </div>
+					                    </div>
+					
+					                    <div class="layui-inline layui-col-md4">
+					                        <label class="layui-form-label">不合格(吨):</label>
+					                        <div class="layui-input-block">
+					                            <input id="unloadingReject" type="text"  readonly="readonly" class="layui-input"/>
+					                        </div>
+					                    </div>
+	                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-form">
+                            <div class="layui-form-item layui-row">
+                                <div class="layui-form-item layui-row">
+                                    <div class="layui-inline layui-col-md4">
+			                        <label class="layui-form-label">船名:</label>
+			                        <div class="layui-input-block">
+			                            <input id="e_shipName" type="text"  readonly="readonly" class="layui-input"/>
+			                        </div>
+			                    </div>
+			
+			                    <div class="layui-inline layui-col-md4">
+			                        <label class="layui-form-label">日期:</label>
+			                        <div class="layui-input-block">
+			                            <input id="e_logDate" type="text"  readonly="readonly" class="layui-input"/>
+			                        </div>
+			                    </div>
+			
+			                    <div class="layui-inline layui-col-md4">
+			                        <label class="layui-form-label">活动类型:
+			                        </label>
+			                        <div class="layui-input-block">
+			                            <input id="e_actionTypeStr" type="text"  readonly="readonly" class="layui-input"/>
+			                        </div>
+			                    </div>
+			
+			                    <div class="layui-inline layui-col-md4">
+			                        <label class="layui-form-label">经度:</label>
+			                        <div class="layui-input-block">
+			                            <input id="e_lonStr" type="text"  readonly="readonly" class="layui-input"/>
+			                        </div>
+			                    </div>
+			
+			                    <div class="layui-inline layui-col-md4">
+			                        <label class="layui-form-label">纬度:</label>
+			                        <div class="layui-input-block">
+			                            <input id="e_latStr" type="text"  readonly="readonly" class="layui-input"/>
+			                        </div>
+			                    </div>
+			
+			                    <div class="layui-inline layui-col-md4">
+			                        <label class="layui-form-label">开始时间:</label>
+			                        <div class="layui-input-block">
+			                            <input id="e_startTime" type="text"  readonly="readonly" class="layui-input"/>
+			                        </div>
+			                    </div>
+			
+			                    <div class="layui-inline layui-col-md4">
+			                        <label class="layui-form-label">结束时间:</label>
+			                        <div class="layui-input-block">
+			                            <input id="e_endTime" type="text"  readonly="readonly" class="layui-input"/>
+			                        </div>
+			                    </div>
+			
+			                    <div class="layui-inline layui-col-md4">
+			                        <label class="layui-form-label">船舶或目的地:</label>
+			                        <div class="layui-input-block">
+			                            <input id="e_unloadingDest" type="text"  readonly="readonly" class="layui-input"/>
+			                        </div>
+			                    </div>
+			                    <div class="layui-inline layui-col-md4">
+			                        <label class="layui-form-label">船舶呼号:</label>
+			                        <div class="layui-input-block">
+			                            <input id="e_unloadingCallsign" type="text"  readonly="readonly" class="layui-input"/>
+			                        </div>
+			                    </div>
+			
+			                    <div class="layui-inline layui-col-md4">
+			                        <label class="layui-form-label">鲣鱼转载量(吨):</label>
+			                        <div class="layui-input-block">
+			                            <input id="e_unloadingSkipjack" type="text"  readonly="readonly" class="layui-input"/>
+			                        </div>
+			                    </div>
+			
+			                    <div class="layui-inline layui-col-md4">
+			                        <label class="layui-form-label">黄鳍转载量(吨):</label>
+			                        <div class="layui-input-block">
+			                            <input id="e_unloadingYellowfin" type="text"  readonly="readonly" class="layui-input"/>
+			                        </div>
+			                    </div>
+			
+			                    <div class="layui-inline layui-col-md4">
+			                        <label class="layui-form-label">大目转载量(吨):</label>
+			                        <div class="layui-input-block">
+			                            <input id="e_unloadingBigeye" type="text"  readonly="readonly" class="layui-input"/>
+			                        </div>
+			                    </div>
+			
+			                    <div class="layui-inline layui-col-md4">
+			                        <label class="layui-form-label">混合转载量(吨):</label>
+			                        <div class="layui-input-block">
+			                            <input id="e_unloadingMix" type="text"  readonly="readonly" class="layui-input"/>
+			                        </div>
+			                    </div>
+			
+			                    <div class="layui-inline layui-col-md4">
+			                        <label class="layui-form-label">其他转载量(吨):</label>
+			                        <div class="layui-input-block">
+			                            <input id="e_unloadingOther" type="text"  readonly="readonly" class="layui-input"/>
+			                        </div>
+			                    </div>
+			
+			                    <div class="layui-inline layui-col-md4">
+			                        <label class="layui-form-label">不合格(吨):</label>
+			                        <div class="layui-input-block">
+			                            <input id="e_unloadingReject" type="text"  readonly="readonly" class="layui-input"/>
+			                        </div>
+			                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   </div>
+</div>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'formSelects', 'admin', 'config', 'jquery', 'laydate', 'table'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var config = layui.config;
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+        var table = layui.table;
+
+        var log = admin.getTempData('t_fishinglog');
+        if (log) {
+            $("#shipName").val(log.shipName);
+            $("#logDate").val(log.logDate);
+            $("#actionTypeStr").val(log.actionTypeStr);
+            $("#startTime").val(log.startTime);
+            $("#lonStr").val(log.lonStr);
+            $("#latStr").val(log.latStr);
+            $("#endTime").val(log.endTime);
+
+            $("#unloadingDest").val(log.unloadingDest);
+            $("#unloadingCallsign").val(log.unloadingCallsign);
+            if(log.unloadingSkipjack != null){
+                $("#unloadingSkipjack").val(log.unloadingSkipjack/1000);
+            }
+            if(log.unloadingYellowfin != null){
+                $("#unloadingYellowfin").val(log.unloadingYellowfin/1000);
+            }
+            if(log.unloadingBigeye != null){
+                $("#unloadingBigeye").val(log.unloadingBigeye/1000);
+            }
+            if(log.unloadingMix != null){
+                $("#unloadingMix").val(log.unloadingMix/1000);
+            }
+            if(log.unloadingOther != null){
+                $("#unloadingOther").val(log.unloadingOther/1000);
+            }
+            if(log.unloadingReject != null){
+                $("#unloadingReject").val(log.unloadingReject/1000);
+            }
+            if(log.modifyLogId){
+            	$("#yuanshi").show();
+                $("#modifyLi").show();
+
+                admin.req('fishinglog/oneLog',{id:log.modifyLogId},function (data) {
+                    if(data.code == 200){
+                        var elog = data.data;
+                        $("#e_shipName").val(elog.shipName);
+                        $("#e_ogDate").val(elog.logDate);
+                        $("#e_actionTypeStr").val(elog.actionTypeStr);
+                        $("#e_startTime").val(elog.startTime);
+                        $("#e_lonStr").val(elog.lonStr);
+                        $("#e_latStr").val(elog.latStr);
+                        $("#e_endTime").val(elog.endTime);
+
+                        $("#e_unloadingDest").val(elog.unloadingDest);
+                        $("#e_unloadingCallsign").val(elog.unloadingCallsign);
+                        if(elog.unloadingSkipjack != null){
+                            $("#e_unloadingSkipjack").val(elog.unloadingSkipjack/1000);
+                        }
+                        if(elog.unloadingYellowfin != null){
+                            $("#e_unloadingYellowfin").val(elog.unloadingYellowfin/1000);
+                        }
+                        if(elog.unloadingBigeye != null){
+                            $("#e_unloadingBigeye").val(elog.unloadingBigeye/1000);
+                        }
+                        if(elog.unloadingMix != null){
+                            $("#e_unloadingMix").val(elog.unloadingMix/1000);
+                        }
+                        if(elog.unloadingOther != null){
+                            $("#e_unloadingOther").val(elog.unloadingOther/1000);
+                        }
+                        if(elog.unloadingReject != null){
+                            $("#e_unloadingReject").val(elog.unloadingReject/1000);
+                        }
+                    }
+                },"GET");
+                /*$.ajax({
+                	type:"GET",
+                	url: config.base_server + "fishinglog/oneLog",
+                	data: {
+                        id: log.modifyLogId,
+                        token: config.getToken().access_token
+                    },
+                    success: function(data){
+                    	if(data.code == 200){
+                    		var elog = data.data;
+                    		$("#e_shipName").val(elog.shipName);
+				            $("#e_ogDate").val(elog.logDate);
+				            $("#e_actionTypeStr").val(elog.actionTypeStr);
+				            $("#e_startTime").val(elog.startTime);
+				            $("#e_lonStr").val(elog.lonStr);
+				            $("#e_latStr").val(elog.latStr);
+				            $("#e_endTime").val(elog.endTime);
+				
+				            $("#e_unloadingDest").val(elog.unloadingDest);
+				            $("#e_unloadingCallsign").val(elog.unloadingCallsign);
+				            if(elog.unloadingSkipjack != null){
+				                $("#e_unloadingSkipjack").val(elog.unloadingSkipjack/1000);
+				            }
+				            if(elog.unloadingYellowfin != null){
+				                $("#e_unloadingYellowfin").val(elog.unloadingYellowfin/1000);
+				            }
+				            if(elog.unloadingBigeye != null){
+				                $("#e_unloadingBigeye").val(elog.unloadingBigeye/1000);
+				            }
+				            if(elog.unloadingMix != null){
+				                $("#e_unloadingMix").val(elog.unloadingMix/1000);
+				            }
+				            if(elog.unloadingOther != null){
+				                $("#e_unloadingOther").val(elog.unloadingOther/1000);
+				            }
+				            if(elog.unloadingReject != null){
+				                $("#e_unloadingReject").val(elog.unloadingReject/1000);
+				            }
+                    	}
+                    }
+                });*/
+            }else{
+            	$("#yuanshi").show();
+                $("#modifyLi").hide();
+            }
+        }
+
+        table.render({
+            elem: '#fish-table',
+            url: config.base_server + 'fishinglog/fish',
+            page: false,
+            where:{id:log.id,token: config.getToken().access_token},
+            cellMinWidth: 100,
+            cols: [[
+                {type: 'numbers'},
+                {field: 'fishName', align: 'center', sort: true, title: '鱼种名'},
+                {field: 'standardName', align: 'center', sort: true, title: '规格'},
+                {field: 'weight', align: 'center', sort: true, title: '捕获量'},
+                {field: 'unitName', align: 'center', sort: true, title: '单位'}
+            ]]
+        });
+
+    });
+</script>

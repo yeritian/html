@@ -1,0 +1,484 @@
+<style>
+    .layui-form-item {
+        margin-bottom: 0;
+        margin-top: 20px;
+    }
+
+    .layui-form-item .layui-inline {
+        margin-bottom: 25px;
+        margin-right: 0;
+    }
+
+    .layui-form-label {
+        padding: 9px 0px;
+        width: 120px;
+    }
+
+    .layui-input-block {
+        margin-left: 130px;
+    }
+
+    #logDiv input {
+        border-width: 0px;
+        border-bottom-width: 1px;
+    }
+
+    .layui-tab {
+        margin: 0px 0;
+    }
+
+</style>
+
+
+<!-- 加载动画，移除位置在common.js中 -->
+<!--<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>-->
+
+<!-- 正文开始 -->
+<div class="layui-fluid" id="logDiv">
+    <div class="layui-tab">
+        <ul class="layui-tab-title">
+            <li id="modifyLi" class="layui-this">修改后日志</li>
+            <li id="yuanshi" style="display: none;">原始日志</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-form">
+                            <div class="layui-form-item layui-row">
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">船名:</label>
+                                    <div class="layui-input-block">
+                                        <input id="shipName" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">围捕类型</label>
+                                    <div class="layui-input-block">
+                                        <input id="schoolCodeStr" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">鱼舱号:</label>
+                                    <div class="layui-input-block">
+                                        <input id="wellNum" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">放网时间:</label>
+                                    <div class="layui-input-block">
+                                        <input id="startTime" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">放网纬度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="startLat" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">放网经度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="startLon" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">收网时间:</label>
+                                    <div class="layui-input-block">
+                                        <input id="endTime" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">收网纬度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="endLat" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">收网经度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="endLon" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">鲣鱼:</label>
+                                    <div class="layui-input-block">
+                                        <input id="skipjack" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">黄鳍小(≤9Kg):</label>
+                                    <div class="layui-input-block">
+                                        <input id="yellowFinSmall" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">黄鳍大(＞9Kg):</label>
+                                    <div class="layui-input-block">
+                                        <input id="yellowFinBig" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">大目小(≤9Kg):</label>
+                                    <div class="layui-input-block">
+                                        <input id="bigEyeSmall" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">大目大(＞9Kg):</label>
+                                    <div class="layui-input-block">
+                                        <input id="bigEyeBig" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">是否漏网:</label>
+                                    <div class="layui-input-block">
+                                        <input id="isSlip" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-card">
+                            <div class="layui-card-header">捕获信息</div>
+                            <div class="layui-card-body">
+                                <table class="layui-table" id="fish-table" lay-filter="fish-table"></table>
+                            </div>
+                        </div>
+
+                        <div class="layui-card">
+                            <div class="layui-card-header">丢弃信息</div>
+                            <div class="layui-card-body">
+                                <table class="layui-table" id="discard-table" lay-filter="discard-table"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-form">
+                            <div class="layui-form-item layui-row">
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">船名:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_shipName" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">围捕类型</label>
+                                    <div class="layui-input-block">
+                                        <input id="schoolCodeStr" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">鱼舱号:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_wellNum" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">放网时间:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_startTime" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">放网纬度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_startLat" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">放网经度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_startLon" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">收网时间:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_endTime" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">收网纬度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_endLat" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">收网经度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_endLon" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">鲣鱼:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_skipjack" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">黄鳍小(≤9Kg):</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_yellowFinSmall" type="text" readonly="readonly"
+                                               class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">黄鳍大(＞9Kg):</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_yellowFinBig" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">大目小(≤9Kg):</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_bigEyeSmall" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">大目大(＞9Kg):</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_bigEyeBig" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">是否漏网:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_isSlip" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="layui-card">
+                            <div class="layui-card-header">捕获信息</div>
+                            <div class="layui-card-body">
+                                <table class="layui-table" id="e_fish-table" lay-filter="e_fish-table"></table>
+                            </div>
+                        </div>
+
+                        <div class="layui-card">
+                            <div class="layui-card-header">丢弃信息</div>
+                            <div class="layui-card-body">
+                                <table class="layui-table" id="e_discard-table" lay-filter="e_discard-table"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div style="text-align: center;margin-top: 30px;margin-bottom: 20px;">
+                <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'formSelects', 'admin', 'config', 'jquery', 'laydate', 'table', 'element'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var config = layui.config;
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+        var table = layui.table;
+
+        var log = admin.getTempData('t_fishinglog');
+
+        if (log) {
+            $("#shipName").val(log.shipName);
+            $("#logDate").val(log.logDate);
+            $("#hookSum").val(log.hookSum);
+            $("#startTime").val(log.startTime);
+            $("#startLon").val(log.startLonStr);
+            $("#startLat").val(log.startLatStr);
+            $("#endTime").val(log.endTime);
+            $("#endLon").val(log.endLonStr);
+            $("#endLat").val(log.endLatStr);
+            $("#schoolCodeStr").val(log.schoolCodeStr);
+            $("#wellNum").val(log.wellNum);
+            if (log.isSlip == 1) {
+                $("#isSlip").val('否');
+            } else if (log.isSlip == 0) {
+                $("#isSlip").val('是');
+            }
+            if (log.skipjack) {
+                $("#skipjack").val(log.skipjack / 1000);
+            }
+            if (log.yellowFinBig) {
+                $("#yellowFinBig").val(log.yellowFinBig / 1000);
+            }
+            if (log.yellowFinSmall) {
+                $("#yellowFinSmall").val(log.yellowFinSmall / 1000);
+            }
+            if (log.bigEyeSmall) {
+                $("#bigEyeSmall").val(log.bigEyeSmall / 1000);
+            }
+            if (log.bigEyeBig) {
+                $("#bigEyeBig").val(log.bigEyeBig / 1000);
+            }
+            if (log.waterDeep) {
+                $("#waterDeep").val(log.waterDeep / 100);
+            }
+            if (log.waterTemp) {
+                $("#waterTemp").val(log.waterTemp / 10);
+            }
+            if (log.modifyLogId) {
+                $("#yuanshi").show();
+                $("#modifyLi").show();
+                admin.req('fishinglog/oneLog', {id: log.modifyLogId}, function (data) {
+                    if (data.code == 200) {
+                        var elog = data.data;
+                        $("#e_shipName").val(log.shipName);
+                        $("#e_logDate").val(elog.logDate);
+                        $("#e_hookSum").val(elog.hookSum);
+                        $("#e_startTime").val(elog.startTime);
+                        $("#e_startLon").val(elog.startLonStr);
+                        $("#e_startLat").val(elog.startLatStr);
+                        $("#e_endTime").val(elog.endTime);
+                        $("#e_endLon").val(elog.endLonStr);
+                        $("#e_endLat").val(elog.endLatStr);
+                        $("#e_schoolCodeStr").val(elog.schoolCodeStr);
+                        $("#e_wellNum").val(elog.wellNum);
+                        if (elog.isSlip == 1) {
+                            $("#e_isSlip").val('否');
+                        } else if (elog.isSlip == 0) {
+                            $("#e_isSlip").val('是');
+                        }
+                        if (elog.skipjack) {
+                            $("#e_skipjack").val(elog.skipjack / 1000);
+                        }
+                        if (elog.yellowFinBig) {
+                            $("#e_yellowFinBig").val(elog.yellowFinBig / 1000);
+                        }
+                        if (elog.yellowFinSmall) {
+                            $("#e_yellowFinSmall").val(elog.yellowFinSmall / 1000);
+                        }
+                        if (elog.bigEyeSmall) {
+                            $("#e_bigEyeSmall").val(elog.bigEyeSmall / 1000);
+                        }
+                        if (elog.bigEyeBig) {
+                            $("#e_bigEyeBig").val(elog.bigEyeBig / 1000);
+                        }
+                        if (elog.waterDeep) {
+                            $("#e_waterDeep").val(elog.waterDeep / 100);
+                        }
+                        if (elog.waterTemp) {
+                            $("#e_waterTemp").val(elog.waterTemp / 10);
+                        }
+                        table.render({
+                            elem: '#e_fish-table',
+                            url: config.base_server + 'fishinglog/fish',
+                            page: false,
+                            limit: 1000,
+                            where: {id: elog.id, token: config.getToken().access_token},
+                            cellMinWidth: 100,
+                            cols: [[
+                                {type: 'numbers'},
+                                {field: 'fishName', align: 'center', sort: true, title: '鱼种名'},
+                                {field: 'standardName', align: 'center', sort: true, title: '规格'},
+                                {field: 'num', align: 'center', sort: true, title: '捕获数量'},
+                                {field: 'unitName', align: 'center', sort: true, title: '单位'}
+                            ]]
+                        });
+                        table.render({
+                            elem: '#e_discard-table',
+                            url: config.base_server + 'fishinglog/discard',
+                            page: false,
+                            limit: 1000,
+                            where: {id: elog.id, token: config.getToken().access_token},
+                            cellMinWidth: 100,
+                            cols: [[
+                                {type: 'numbers'},
+                                {field: 'fishName', align: 'center', sort: true, title: '鱼种名'},
+                                {field: 'weight', align: 'center', sort: true, title: '重量'},
+                                {field: 'sum', align: 'center', sort: true, title: '数量'},
+                                {field: 'reasonStr', align: 'center', sort: true, title: '原因'}
+                            ]]
+                        });
+                    }
+                }, 'GET');
+            } else {
+                $("#yuanshi").show();
+                $("#modifyLi").hide();
+            }
+        }
+
+        table.render({
+            elem: '#fish-table',
+            url: config.base_server + 'fishinglog/fish',
+            page: false,
+            where: {id: log.id, token: config.getToken().access_token},
+            cellMinWidth: 100,
+            cols: [[
+                {type: 'numbers'},
+                {field: 'fishName', align: 'center', sort: true, title: '鱼种名'},
+                {field: 'standardName', align: 'center', sort: true, title: '规格'},
+                {field: 'num', align: 'center', sort: true, title: '捕获数量'},
+                {field: 'unitName', align: 'center', sort: true, title: '单位'}
+            ]]
+        });
+
+        table.render({
+            elem: '#discard-table',
+            url: config.base_server + 'fishinglog/discard',
+            page: false,
+            limit: 1000,
+            where: {id: log.id, token: config.getToken().access_token},
+            cellMinWidth: 100,
+            cols: [[
+                {type: 'numbers'},
+                {field: 'fishName', align: 'center', sort: true, title: '鱼种名'},
+                {field: 'weight', align: 'center', sort: true, title: '重量'},
+                {field: 'sum', align: 'center', sort: true, title: '数量'},
+                {field: 'reasonStr', align: 'center', sort: true, title: '原因'}
+            ]]
+        });
+
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+<div class="layui-container" style="margin-top: 15px;">
+    <div id="root"></div>
+    <div id="root1"></div>
+    <div class="layui-btn-group"
+         style="position:relative;
+			     left:70%;
+			     margin-left:-200px;
+		         display: block;" >
+        <button class="layui-btn right">保存</button>
+    </div>
+</div>
+
+</body>
+
+<!-- js部分 -->
+<script>
+    layui.use(['transfer', 'admin', 'config'], function () {
+        var transfer = layui.transfer, $ = layui.$;
+        var admin = layui.admin;
+        var config = layui.config;
+        var data1;
+        var data2;
+        var operatorId = admin.getTempData('t_appBinding').id;
+        console.log(config.base_server)
+        //获取数据源
+        $.getJSON(
+            config.base_server + 'operator/getOperatorApp',
+            {	operatorId: operatorId,
+            	token: config.getToken().access_token
+            },
+            function (data) {
+                data1 = data["leftList"];
+                data2 = data["rightList"];
+
+                var tb1 = transfer.render({
+                    elem: "#root", //指定元素
+                    cols: cols, //表格列  支持layui数据表格所有配置
+                    data: [data1, data2], //[左表数据,右表数据[非必填]]
+                    tabConfig: tabConfig //表格配置项 支持layui数据表格所有配置
+                });
+
+                //transfer.get(参数1:初始化返回值,参数2:获取数据[all,left,right,l,r],参数:指定数据字段)
+                //获取数据
+                $('.right').on('click', function () {
+                    var appIds = transfer.get(tb1, 'right', 'id');
+                    update(appIds);
+                    layer.msg(appIds);
+                    //layer.msg(JSON.stringify(data))
+                });
+
+            });
+
+        function update(appIds) {
+//          $.getJSON(
+//              config.base_server + 'operator/updateOperatorApp',
+//              {operatorId: operatorId, appIds: appIds,token: config.getToken().access_token},
+//              function (data) {
+//                  layer.closeAll('loading');
+//                  if (data.code == 200) {
+//                      top.layer.msg(data.msg, {icon: 1});
+//                      admin.putTempData('formOk', true);  // 操作成功刷新表格
+//                      // 关闭当前iframe弹出层
+//                      parent.layer.close(parent.layer.getFrameIndex(window.name));
+//                  } else {
+//                      top.layer.msg(data.msg, {icon: 2});
+//                  }
+//              }
+//          )
+			var index=parent.layer.getFrameIndex(window.name);
+            $.ajax({
+            	type: 'put',
+            	url: config.base_server + 'operator/updateOperatorApp',
+            	data: {
+            		operatorId: operatorId,
+            		appIds: appIds,
+            		token: config.getToken().access_token
+            	},
+            	success: function(data){
+            		layer.closeAll('loading');
+                    if (data.code == 200) {
+//                  	admin.closeDialog('#appBindingForm');
+						parent.layer.closeAll(index);
+                        top.layer.msg(data.msg, {icon: 1});
+//                      admin.putTempData('formOk', true);  // 操作成功刷新表格
+                        // 关闭当前iframe弹出层
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));
+                    } else {
+                        top.layer.msg(data.msg, {icon: 2});
+                    }
+            	}
+            });
+        }
+
+        //表格列
+        var cols = [{type: 'checkbox', fixed: 'left'},
+            {field: 'id', title: 'ID', width: 100, sort: true},
+            {field: 'name', title: '应用名称'}];
+        //表格配置文件
+        var tabConfig = {'page': true, 'limit': 10, 'height': 400};
+
+
+    });
+
+</script>

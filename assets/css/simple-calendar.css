@@ -1,0 +1,168 @@
+.sc-calendar {
+  width: 100%;
+  text-align: center;
+  font-family: "Microsoft Yahei";
+  color: #333333;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-size: 14px;
+  background:#fff;
+}
+
+.sc-header {
+  height: 40px;
+  padding:10px 10px 0px 10px;
+  border-bottom:1px #ededed solid;
+  background:#f5f5f5; border-radius:3px 3px 0px 0px;
+}
+.sc-body {
+  clear: both;
+  padding:0px 8px;
+}
+.sc-week {
+  height:42px;
+  font-size: 14px;
+  color: #878787;
+}
+.sc-days { }
+.sc-item {
+  float: left;
+  width: 12.285%;
+  padding-top:5px;
+  margin:1%;
+  border:2px #fff solid;
+  box-sizing:border-box;
+  height:50px;
+  border-radius:5px;
+  position:relative;
+  cursor:pointer;
+}
+.sc-green{
+  background-color: #39de9a; border:2px #39de9a solid;
+}
+.sc-orange{
+  background-color: #ffa184; border:2px #ffa184 solid;
+}
+.sc-gray{
+  background-color: #ffffff; border:2px #878787 solid;
+}
+.sc-othermenth .day, .sc-othermenth .lunar-day {
+  color: #bfbfbf !important;
+}
+.sc-item .day {
+  font-size:18px; line-height:20px; text-align:center; font-weight:500; font-family:Arial;
+}
+.sc-item .lunar-day {
+  font-size: 12px;
+  font-weight: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height:18px; text-align:center;
+  color:#666666;
+}
+
+.sc-active-day { color:#ff0000;}
+
+.sc-festival .lunar-day {
+  color: #E00808;
+}
+
+.sc-week-item {
+  height: 42px;
+  line-height:42px;
+  float: left;
+  width: 14.285%;
+  overflow: hidden;
+  display: block;
+}
+.sc-item-small{
+  font-size: 10px !important;
+}
+
+.sc-actions {
+  float: left;
+  margin-right:10px;
+}
+.sc-actions:last-child {
+  float: right;
+  margin-right:0;
+}
+.sc-actions-big{
+  width: 50%;
+}
+.sc-header select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  color: #333;
+  font-size: 16px;
+  font-weight:bold;
+  border:none;
+  width:auto;
+  height:30px; line-height:30px;
+  padding:0 5px;
+  background:none;
+  cursor:pointer;
+  float:left;
+}
+.sc-header input {
+  border-color: rgba(0, 0, 0, 0);
+  padding: 0.2em;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  color: #545454;
+}
+.sc-actions .sc-yleft ,.sc-actions .sc-yright ,.sc-actions .sc-mleft ,.sc-actions .sc-mright{
+  display:block;
+  float:left;
+  width:30px;
+  height:30px;
+  cursor:pointer;
+  background:url(../images/common/calendar_btn.png) no-repeat;
+}
+.sc-actions .sc-yleft{
+  background-position:left top;
+}
+.sc-actions .sc-yleft:hover {
+  background-position:right top;
+}
+.sc-actions .sc-yright{
+  background-position:left bottom;
+}
+.sc-actions .sc-yright:hover {
+  background-position:right bottom;
+}
+.sc-actions .sc-mleft{
+  background-position:left top;
+}
+.sc-actions .sc-mleft:hover {
+  background-position:right top;
+}
+.sc-actions .sc-mright{
+  background-position:left bottom;
+}
+.sc-actions .sc-mright:hover {
+  background-position:right bottom;
+}
+
+
+.sc-return-today {
+  display: block;
+  background-color: #4285f4;
+  color:#fff;
+  border-radius:3px;
+  width: 6em;
+  font-size:14px;
+  height:30px; line-height:30px;
+  cursor:pointer;
+  margin: auto;
+}
+.sc-return-today:hover {background-color: #105edf; color:#fff;}
+
+.sc-time {
+  display: block;
+  font-size:14px;
+  height:30px; line-height:30px; border:1px #dce4e6 solid; border-radius:4px;
+}

@@ -1,0 +1,82 @@
+<style>
+	
+	.text-right {
+	   text-align: center;
+	}
+	
+</style>
+<form id="standardForm" lay-filter="standardForm" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+            <div class="layui-form-item">
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-block">
+                    <input name="name" placeholder="请输入名称" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">最小值(g/cm)</label>
+                <div class="layui-input-block">
+                    <input name="minv" placeholder="请输入最小值(g/cm)" type="text" class="layui-input" maxlength="50"
+                           />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">最大值(g/cm)</label>
+                <div class="layui-input-block">
+                    <input name="maxv" placeholder="请输入最大值(g/cm)" type="text" class="layui-input" maxlength="50"
+                          />
+                </div>
+            </div>
+             <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <input name="remark" placeholder="请输入备注" type="text" class="layui-input" maxlength="50" />
+                </div>
+            </div>
+
+     <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+    </div>
+</form>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'formSelects', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+
+        var url = 'add';
+        // 回显standard数据
+        var standard = admin.getTempData('t_standard');
+        if (standard) {
+            url = 'update';
+            form.val('standardForm', standard);
+        }
+
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            layer.load(2);
+            var theMethod = data.field.id?"PUT":"POST";
+            admin.req('standard',data.field,function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    // 关闭当前iframe弹出层
+                    admin.closeDialog('#standardForm');
+                    parent.layui.table.reload('standardTable',{page:{curr:1}});
+                    layer.msg(data.msg, {icon: 1});
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            },theMethod);/*'POST'*/
+            return false;
+        });
+    });
+</script>
+
+</body>
+</html>

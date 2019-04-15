@@ -1,0 +1,703 @@
+<!--123-->
+<style>
+    .layui-form-item {
+        margin-bottom: 0;
+        margin-top: 20px;
+    }
+
+    .layui-form-item .layui-inline {
+        margin-bottom: 25px;
+        margin-right: 0;
+    }
+
+    .layui-form-label {
+        padding: 9px 0px;
+        width: 120px;
+    }
+
+    .layui-input-block {
+        margin-left: 130px;
+    }
+
+    /* 防止下拉框的下拉列表被隐藏---必须设置--- */
+    .layui-table-cell {
+        overflow: visible !important;
+    }
+
+    /* 使得下拉框与单元格刚好合适 */
+    td .layui-form-select {
+        margin-top: -10px;
+        margin-left: -15px;
+        margin-right: -15px;
+    }
+
+    .layui-card-body {
+        position: relative;
+        padding: 10px 15px;
+        line-height: 24px;
+        height: 350px;
+    }
+
+    element.style {
+        height: 350px;
+    }
+
+    .layui-table-body {
+        position: relative;
+        overflow: visible;
+        margin-right: -1px;
+        margin-bottom: -1px;
+        height: 300px;
+    }
+
+    .layui-table-box {
+        position: relative;
+        overflow: visible
+    }
+
+    /*element.style {
+        height: auto;
+    }
+    element.style {
+        height: auto;
+    }*/
+</style>
+
+
+<!-- 加载动画，移除位置在common.js中 -->
+<!--<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>-->
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card" id="logDiv">
+        <div class="layui-card-header">日志信息</div>
+        <div class="layui-card-body">
+
+            <div class="layui-form">
+                <div class="layui-form-item layui-row">
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">船名:</label>
+                        <div class="layui-input-block">
+                            <input id="shipName" type="text" readonly="readonly" class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">围捕类型</label>
+                        <div class="layui-input-block">
+                            <select id="schoolCode" class="schoolCode" name="schoolCode" lay-verify="required"
+                                    lay-filter="schoolCode">
+                                <option value="1">Unassociated (free school)</option>
+                                <option value="2">Feeding on Baitfish (free school)</option>
+                                <option value="3">Drifting log, debris or dead animal</option>
+                                <option value="4">Drifting raft, FAD or payao</option>
+                                <option value="5">Anchored raft, FAD or payao</option>
+                                <option value="6">Live whale","Live whale shark</option>
+                                <option value="7">Other (please specify)</option>
+                                <option value="8">No tuna associated</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">鱼舱号:</label>
+                        <div class="layui-input-block">
+                            <input id="wellNum" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">放网时间:</label>
+                        <div class="layui-input-block">
+                            <input id="startTime" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">放网纬度:</label>
+                        <div class="layui-input-block">
+                            <input id="startLat" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">放网经度:</label>
+                        <div class="layui-input-block">
+                            <input id="startLon" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">收网时间:</label>
+                        <div class="layui-input-block">
+                            <input id="endTime" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">收网纬度:</label>
+                        <div class="layui-input-block">
+                            <input id="endLat" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">收网经度:</label>
+                        <div class="layui-input-block">
+                            <input id="endLon" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">鲣鱼:</label>
+                        <div class="layui-input-block">
+                            <input id="skipjack" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">黄鳍小(≤9Kg):</label>
+                        <div class="layui-input-block">
+                            <input id="yellowFinSmall" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">黄鳍大(＞9Kg):</label>
+                        <div class="layui-input-block">
+                            <input id="yellowFinBig" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">大目小(≤9Kg):</label>
+                        <div class="layui-input-block">
+                            <input id="bigEyeSmall" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">大目大(＞9Kg):</label>
+                        <div class="layui-input-block">
+                            <input id="bigEyeBig" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">是否漏网:</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="isSlip" value='0' title="是">
+                            <input type="radio" name="isSlip" value='1' title="否">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="layui-card">
+        <div class="layui-card-header">捕获信息<a class="layui-btn layui-btn-xs" id="add1"
+                                              style="position: absolute; right: 64px; top: 10px;">添加</a></div>
+        <div class="layui-card-body">
+            <table class="layui-table" id="fish-table" lay-filter="fish-table"></table>
+        </div>
+    </div>
+
+    <div class="layui-card">
+        <div class="layui-card-header">丢弃信息<a class="layui-btn layui-btn-xs" id="add2"
+                                              style="position: absolute; right: 64px; top: 10px;">添加</a></div>
+        <div class="layui-card-body">
+            <table class="layui-table" id="discard-table" lay-filter="discard-table"></table>
+        </div>
+    </div>
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <div class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</div>
+    </div>
+</div>
+
+<script type="text/html" id="tableBar1">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del1">删除</a>
+</script>
+<script type="text/html" id="tableBar2">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del2">删除</a>
+</script>
+
+<script type="text/html" id="fishTpl">
+    <select name="fishId" class="fish" lay-filter="fish" value="{{d.fishId}}">
+    </select>
+</script>
+<script type="text/html" id="standardTpl">
+    <select name="standardId" class="standard1" lay-filter="standard1" value="{{d.standardId}}">
+    </select>
+</script>
+<script type="text/html" id="unitTpl">
+    <select name="unitId" class="unit1" lay-filter="unit1" value="{{d.unitId}}">
+    </select>
+</script>
+
+<script type="text/html" id="dsfishTp">
+    <select name="fishId" class="dsfish" lay-filter="dsfish" value="{{d.fishId}}">
+    </select>
+</script>
+<script type="text/html" id="standardTp2">
+    <select name="standardId" class="standard2" lay-filter="standard2" value="{{d.standardId}}">
+    </select>
+</script>
+<script type="text/html" id="unitTp2">
+    <select name="unitId" class="unit2" lay-filter="unit2" value="{{d.unitId}}">
+    </select>
+</script>
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'formSelects', 'admin', 'config', 'jquery', 'laydate', 'table', 'common'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var config = layui.config;
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+        var table = layui.table;
+        var common = layui.common;
+
+        var log = admin.getTempData('t_fishinglog');
+        if (log) {
+            $("#shipName").val(log.shipName);
+            $("#logDate").val(log.logDate);
+            $("#hookSum").val(log.hookSum);
+            $("#startTime").val(log.startTime);
+            $("#startLon").val(log.startLonStr);
+            $("#startLat").val(log.startLatStr);
+            $("#endTime").val(log.endTime);
+            $("#endLon").val(log.endLonStr);
+            $("#endLat").val(log.endLatStr);
+            if (log.schoolCode != null) {
+                $("#schoolCode").val(log.schoolCode);
+                layui.form.render('select');
+            }
+            $("#wellNum").val(log.wellNum);
+            if (log.isSlip == 1) {
+                $("input[name='isSlip'][value= '1']").prop("checked", "true");
+                layui.form.render('radio');
+            } else if (log.isSlip == 0) {
+                $("input[name='isSlip'][value= '0']").prop("checked", "true");
+                layui.form.render('radio');
+            }
+            if (log.skipjack) {
+                $("#skipjack").val(log.skipjack / 1000);
+            }
+            if (log.yellowFinBig) {
+                $("#yellowFinBig").val(log.yellowFinBig / 1000);
+            }
+            if (log.yellowFinSmall) {
+                $("#yellowFinSmall").val(log.yellowFinSmall / 1000);
+            }
+            if (log.bigEyeSmall) {
+                $("#bigEyeSmall").val(log.bigEyeSmall / 1000);
+            }
+            if (log.bigEyeBig) {
+                $("#bigEyeBig").val(log.bigEyeBig / 1000);
+            }
+            if (log.waterDeep) {
+                $("#waterDeep").val(log.waterDeep / 100);
+            }
+            if (log.waterTemp) {
+                $("#waterTemp").val(log.waterTemp / 10);
+            }
+            //更新全部
+            //form.render();
+        }
+        var tableDataCatch = []; // 用于存放表格数据
+        var tableDataDiscard = []; // 用于存放表格数据
+        //获取捕获鱼种
+        admin.ajax({
+            url: config.base_server + 'fishinglog/fish',
+            data: {id: log.id, token: config.getToken().access_token},
+            dataType: 'json',
+            async: false,
+            type: 'GET',
+            success: function (result) {
+                tableDataCatch = result.data.list;
+            }
+        });
+        //获取丢弃鱼种
+        admin.ajax({
+            url: config.base_server + 'fishinglog/discard',
+            data: {id: log.id, token: config.getToken().access_token},
+            dataType: 'json',
+            async: false,
+            type: 'GET',
+            success: function (result) {
+                tableDataDiscard = result.data.list;
+            }
+        });
+        var myTableCatch = null;
+        var myTableDiscard = null;
+        //添加捕获鱼种
+        $('#add1').click(function () {
+            tableDataCatch.unshift({
+                LAY_TABLE_INDEX: tableDataCatch.length,
+                fishId: "",
+                fishName: "",
+                id: "",
+                num: null,
+                standardId: "",
+                standardName: "",
+                unitId: "",
+                unitName: ""
+            });
+            myTableCatch.reload({data: tableDataCatch});
+            myTableDiscard.reload({data: tableDataDiscard});
+        });
+        //添加丢弃鱼种
+        $('#add2').click(function () {
+            tableDataDiscard.unshift({
+                LAY_TABLE_INDEX: tableDataDiscard.length,
+                fishId: "",
+                fishName: "",
+                id: "",
+                sum: null,
+                reason:"",
+                reasonStr:"",
+                standardId: "",
+                standardName: "",
+                unitId: "",
+                unitName: ""
+            });
+            myTableCatch.reload({data: tableDataCatch});
+            myTableDiscard.reload({data: tableDataDiscard});
+        });
+        myTableCatch = table.render({
+            elem: '#fish-table',
+            data: tableDataCatch,
+            page: false,
+            limit: 1000,
+            height: 'auto',
+            cellMinWidth: 100,
+            done: function (res, curr, count) {
+                count || this.elem.next('.layui-table-view').find('.layui-table-header').css('overflow', 'auto');
+                layui.each($('select'), function (index, item) {
+                    var elem = $(item);
+                    elem.val(elem.data('value')).parents('div.layui-table-cell').css('overflow', 'visible');
+                });
+                admin.req('fishinglog/fishType', {id: log.shipId}, function (d) {
+                    if (d.code == 200) {
+                        $(".fish").each(function () {
+                            $(this).append("<option value=''>请选择鱼种</option>");
+                            for (var i = 0, j = d.data.list.length; i < j; i++) {
+                                if ($(this).attr("value") == d.data.list[i].id) {
+                                    $(this).append("<option selected='selected' value='" + d.data.list[i].id + "'>" + d.data.list[i].name + "</option>");
+                                } else {
+                                    $(this).append("<option value='" + d.data.list[i].id + "'>" + d.data.list[i].name + "</option>");
+                                }
+                            }
+                        });
+                        $(".schoolCode").val(log.schoolCode);
+                        layui.form.render('select');
+                    }
+                }, "GET");
+                admin.req('fishinglog/standard', {id: log.shipId}, function (d) {
+                    if (d.code == 200) {
+                        $(".standard1").each(function () {
+                            $(this).append("<option value=''>请选择规格</option>");
+                            for (var i = 0, j = d.data.list.length; i < j; i++) {
+                                if ($(this).attr("value") == d.data.list[i].id) {
+                                    $(this).append("<option selected='selected' value='" + d.data.list[i].id + "'>" + d.data.list[i].name + "</option>");
+                                } else {
+                                    $(this).append("<option value='" + d.data.list[i].id + "'>" + d.data.list[i].name + "</option>");
+                                }
+                            }
+                        });
+                        $(".schoolCode").val(log.schoolCode);
+                        layui.form.render('select');
+                    }
+                }, "GET");
+                admin.req('fishinglog/unit', {id: log.shipId}, function (d) {
+                    if (d.code == 200) {
+                        $(".unit1").each(function () {
+                            $(this).append("<option value=''>请选择单位</option>");
+                            for (var i = 0, j = d.data.list.length; i < j; i++) {
+                                if ($(this).attr("value") == d.data.list[i].id) {
+                                    $(this).append("<option selected='selected' value='" + d.data.list[i].id + "'>" + d.data.list[i].name + "</option>");
+                                } else {
+                                    $(this).append("<option value='" + d.data.list[i].id + "'>" + d.data.list[i].name + "</option>");
+                                }
+                            }
+                        });
+                        $(".schoolCode").val(log.schoolCode);
+                        layui.form.render('select');
+                    }
+                }, "GET");
+            },
+            cols: [[
+                {type: 'numbers'},
+                {field: 'fishId', title: '鱼种名', templet: '#fishTpl'},
+                {field: 'standardId', title: '规格', templet: '#standardTpl'},
+                {field: 'num', align: 'center', edit: 'text', title: '捕获数量'},
+                {field: 'unitId', title: '单位', templet: '#unitTpl'},
+                {align: 'center', width: 125, toolbar: '#tableBar1', title: '操作'}
+            ]]
+        });
+
+        myTableDiscard = table.render({
+            elem: '#discard-table',
+            data: tableDataDiscard,
+            page: false,
+            limit: 1000,
+            height: 'auto',
+            cellMinWidth: 100,
+            done: function (res, curr, count) {
+                count || this.elem.next('.layui-table-view').find('.layui-table-header').css('overflow', 'auto');
+                layui.each($('select'), function (index, item) {
+                    var elem = $(item);
+                    elem.val(elem.data('value')).parents('div.layui-table-cell').css('overflow', 'visible');
+                });
+                admin.req('fishinglog/fishType', {id: log.shipId}, function (d) {
+                    if (d.code == 200) {
+                        $(".dsfish").each(function () {
+                            $(this).append("<option value=''>请选择规格</option>");
+                            for (var i = 0, j = d.data.list.length; i < j; i++) {
+                                if ($(this).attr("value") == d.data.list[i].id) {
+                                    $(this).append("<option selected='selected' value='" + d.data.list[i].id + "'>" + d.data.list[i].name + "</option>");
+                                } else {
+                                    $(this).append("<option value='" + d.data.list[i].id + "'>" + d.data.list[i].name + "</option>");
+                                }
+                            }
+                        });
+                        $(".schoolCode").val(log.schoolCode);
+                        layui.form.render('select');
+                    }
+                }, "GET");
+                admin.req('fishinglog/standard', {id: log.shipId}, function (d) {
+                    if (d.code == 200) {
+                        $(".standard2").each(function () {
+                            $(this).append("<option value=''>请选择规格</option>");
+                            for (var i = 0, j = d.data.list.length; i < j; i++) {
+                                if ($(this).attr("value") == d.data.list[i].id) {
+                                    $(this).append("<option selected='selected' value='" + d.data.list[i].id + "'>" + d.data.list[i].name + "</option>");
+                                } else {
+                                    $(this).append("<option value='" + d.data.list[i].id + "'>" + d.data.list[i].name + "</option>");
+                                }
+                            }
+                        });
+                        $(".schoolCode").val(log.schoolCode);
+                        layui.form.render('select');
+                    }
+                }, "GET");
+                admin.req('fishinglog/unit', {id: log.shipId}, function (d) {
+                    if (d.code == 200) {
+                        $(".unit2").each(function () {
+                            $(this).append("<option value=''>请选择单位</option>");
+                            for (var i = 0, j = d.data.list.length; i < j; i++) {
+                                if ($(this).attr("value") == d.data.list[i].id) {
+                                    $(this).append("<option selected='selected' value='" + d.data.list[i].id + "'>" + d.data.list[i].name + "</option>");
+                                } else {
+                                    $(this).append("<option value='" + d.data.list[i].id + "'>" + d.data.list[i].name + "</option>");
+                                }
+                            }
+                        });
+                        $(".schoolCode").val(log.schoolCode);
+                        layui.form.render('select');
+                    }
+                }, "GET");
+            },
+            cols: [[
+                {type: 'numbers'},
+                {field: 'fishId', title: '鱼种名', templet: '#dsfishTp'},
+                {field: 'standardId', title: '规格', templet: '#standardTp2'},
+                {field: 'sum', align: 'center', edit: 'text', title: '数量'},
+                {field: 'unitId', title: '单位', templet: '#unitTp2'},
+                {field: 'reasonStr', align: 'center', edit: 'text', title: '原因'},
+                {align: 'center', width: 125, toolbar: '#tableBar2', title: '操作'}
+            ]]
+        });
+        form.on('select(fish)', function (data) {
+            var elem = $(data.elem);
+            var trElem = elem.parents('tr');
+            var tableData = table.cache['fish-table'];
+            tableData[trElem.data('index')][elem.attr('name')] = data.value;
+        });
+        form.on('select(standard1)', function (data) {
+            var elem = $(data.elem);
+            var trElem = elem.parents('tr');
+            var tableData = table.cache['fish-table'];
+            tableData[trElem.data('index')][elem.attr('name')] = data.value;
+        });
+        form.on('select(unit1)', function (data) {
+            var elem = $(data.elem);
+            var trElem = elem.parents('tr');
+            var tableData = table.cache['fish-table'];
+            tableData[trElem.data('index')][elem.attr('name')] = data.value;
+        });
+        form.on('select(dsfish)', function (data) {
+            var elem = $(data.elem);
+            var trElem = elem.parents('tr');
+            var tableData = table.cache['discard-table'];
+            tableData[trElem.data('index')][elem.attr('name')] = data.value;
+        });
+        form.on('select(standard2)', function (data) {
+            var elem = $(data.elem);
+            var trElem = elem.parents('tr');
+            var tableData = table.cache['discard-table'];
+            tableData[trElem.data('index')][elem.attr('name')] = data.value;
+        });
+        form.on('select(unit2)', function (data) {
+            var elem = $(data.elem);
+            var trElem = elem.parents('tr');
+            var tableData = table.cache['discard-table'];
+            tableData[trElem.data('index')][elem.attr('name')] = data.value;
+        });
+
+        // 工具条点击事件
+        table.on('tool(fish-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (obj.event === 'del1') { //删除
+                doDelete1(obj);
+            }
+        });
+        table.on('tool(discard-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (obj.event === 'del2') { //删除
+                doDelete2(obj);
+            }
+        });
+
+        // 删除
+        function doDelete1(obj) {
+            var index = top.layer.confirm('确定要删除吗？', function () {
+                obj.del();
+                top.layer.close(index);
+            });
+        }
+
+        // 删除
+        function doDelete2(obj) {
+            var index = top.layer.confirm('确定要删除吗？', function () {
+                obj.del();
+                top.layer.close(index);
+            });
+        }
+
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            layer.load(2);
+            var ulog = {};
+            ulog.id = log.id;
+            ulog.shipId = log.shipId;
+            ulog.logType = log.logType;
+            ulog.actionType = log.actionType;
+            ulog.lonStr = log.lonStr;
+            ulog.latStr = log.latStr;
+            ulog.createTimeStr = log.createTime;
+            ulog.logRecordType = log.logRecordType;
+            ulog.logDateStr = log.logDate;
+            ulog.hookSum = $("#hookSum").val();
+            ulog.startTimeStr = $("#startTime").val();
+            ulog.startLonStr = $("#startLon").val();
+            ulog.startLatStr = $("#startLat").val();
+            ulog.endTimeStr = $("#endTime").val();
+            ulog.endLonStr = $("#endLon").val();
+            ulog.endLatStr = $("#endLat").val();
+            ulog.schoolCode = $("#schoolCode").val();
+            ulog.isSlip = $("input[name='isSlip']:checked").val()
+            ulog.wellNum = $("#wellNum").val();
+            if (parseFloat($("#skipjack").val()) || (parseFloat($("#skipjack").val()) == 0)) {
+                ulog.skipjack = parseFloat($("#skipjack").val()) * 1000;
+            }
+            if (parseFloat($("#yellowFinBig").val()) || (parseFloat($("#yellowFinBig").val()) == 0)) {
+                ulog.yellowFinBig = parseFloat($("#yellowFinBig").val()) * 1000;
+            }
+            if (parseFloat($("#yellowFinSmall").val()) || (parseFloat($("#yellowFinSmall").val()) == 0)) {
+                ulog.yellowFinSmall = parseFloat($("#yellowFinSmall").val()) * 1000;
+            }
+            if (parseFloat($("#bigEyeSmall").val()) || (parseFloat($("#bigEyeSmall").val()) == 0)) {
+                ulog.bigEyeSmall = parseFloat($("#bigEyeSmall").val()) * 1000;
+            }
+            if (parseFloat($("#bigEyeBig").val()) || (parseFloat($("#bigEyeBig").val()) == 0)) {
+                ulog.bigEyeBig = parseFloat($("#bigEyeBig").val()) * 1000;
+            }
+            if (parseFloat($("#waterDeep").val()) || (parseFloat($("#waterDeep").val()) == 0)) {
+                ulog.waterDeep = parseFloat($("#waterDeep").val()) * 100;
+            }
+            if (parseFloat($("#waterTemp").val()) || (parseFloat($("#waterTemp").val()) == 0)) {
+                ulog.waterTemp = parseFloat($("#waterTemp").val()) * 10;
+            }
+            for (var i = 0, j = table.cache['fish-table'].length; i < j; i++) {
+                layer.closeAll('loading'); //关闭加载层
+                if (table.cache['fish-table'][i].fishId != '') {
+                    ulog['catches[' + i + '].fishId'] = table.cache['fish-table'][i].fishId;
+                } else {
+                    layer.msg("请选择捕获鱼种", {icon: 2});
+                    return false;
+                }
+                if (table.cache['fish-table'][i].standardId != '') {
+                    ulog['catches[' + i + '].standardId'] = table.cache['fish-table'][i].standardId;
+                } else {
+                    layer.msg("请选择捕获鱼种规格", {icon: 2});
+                    return false;
+                }
+                if (table.cache['fish-table'][i].num != null && !common.isNull(table.cache['fish-table'][i].num)) {
+                    ulog['catches[' + i + '].num'] = table.cache['fish-table'][i].num;
+                } else {
+                    layer.msg("请输入捕获鱼种数量", {icon: 2});
+                    return false;
+                }
+                if (table.cache['fish-table'][i].unitId != '') {
+                    ulog['catches[' + i + '].unitId'] = table.cache['fish-table'][i].unitId;
+                } else {
+                    layer.msg("请选择捕获鱼种单位", {icon: 2});
+                    return false;
+                }
+            }
+            for (var i = 0, j = table.cache['discard-table'].length; i < j; i++) {
+                layer.closeAll('loading'); //关闭加载层
+                if (table.cache['discard-table'][i].fishId != '') {
+                    ulog['discards[' + i + '].fishId'] = table.cache['discard-table'][i].fishId;
+                } else {
+                    layer.msg("请选择丢弃鱼种", {icon: 2});
+                    return false;
+                }
+                if (table.cache['discard-table'][i].standardId != '') {
+                    ulog['discards[' + i + '].standardId'] = table.cache['discard-table'][i].standardId;
+                } else {
+                    layer.msg("请选择丢弃鱼种规格", {icon: 2});
+                    return false;
+                }
+                if (table.cache['discard-table'][i].sum != null && !common.isNull(table.cache['discard-table'][i].sum)) {
+                    ulog['discards[' + i + '].sum'] = table.cache['discard-table'][i].sum;
+                } else {
+                    layer.msg("请输入丢弃鱼种数量", {icon: 2});
+                    return false;
+                }
+                if (table.cache['discard-table'][i].unitId != '') {
+                    ulog['discards[' + i + '].unitId'] = table.cache['discard-table'][i].unitId;
+                } else {
+                    layer.msg("请选择丢弃鱼种单位", {icon: 2});
+                    return false;
+                }
+                ulog['discards[' + i + '].reason'] = table.cache['discard-table'][i].reason;
+                ulog['discards[' + i + '].reasonStr'] = table.cache['discard-table'][i].reasonStr;
+
+            }
+            admin.req('fishinglog/updateLog', ulog, function (data) {
+                parent.layer.closeAll();
+                if (data.code == 200) {
+                    parent.layui.table.reload('fishinglogTable');
+                    top.layer.msg(data.msg, {icon: 1});
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            }, "POST");
+            return true;
+        });
+
+    });
+</script>

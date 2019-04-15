@@ -1,0 +1,598 @@
+<style>
+    .layui-form-item {
+        margin-bottom: 0;
+        margin-top: 20px;
+    }
+
+    .layui-form-item .layui-inline {
+        margin-bottom: 25px;
+        margin-right: 0;
+    }
+
+    .layui-form-label {
+        padding: 9px 0px;
+        width: 180px;
+    }
+
+    .layui-input-block {
+        margin-left: 190px;
+    }
+
+    #logDiv input {
+        border-width: 0px;
+        border-bottom-width: 1px;
+    }
+
+    .layui-tab {
+        margin: 0px 0;
+    }
+
+</style>
+
+
+<!-- 加载动画，移除位置在common.js中 -->
+<!--<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>-->
+
+<!-- 正文开始 -->
+<div class="layui-fluid" id="logDiv">
+    <div class="layui-tab">
+        <ul class="layui-tab-title">
+            <li id="modifyLi" class="layui-this">修改后日志</li>
+            <li id="yuanshi" style="display: none;">原始日志</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-form">
+                            <div class="layui-form-item layui-row">
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">船名:</label>
+                                    <div class="layui-input-block">
+                                        <input id="shipName" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">网次:</label>
+                                    <div class="layui-input-block">
+                                        <input id="netNum" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">渔具规格:</label>
+                                    <div class="layui-input-block">
+                                        <input id="gearStandard" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">放网时间:</label>
+                                    <div class="layui-input-block">
+                                        <input id="startTime" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">放网位置纬度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="startLat" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">放网位置经度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="startLon" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">起网时间:</label>
+                                    <div class="layui-input-block">
+                                        <input id="endTime" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">起网位置纬度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="endLat" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">起网位置经度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="endLon" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">天气状况:</label>
+                                    <div class="layui-input-block">
+                                        <input id="weatherStr" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">海况:</label>
+                                    <div class="layui-input-block">
+                                        <input id="seaConditionStr" type="text" readonly="readonly"
+                                               class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">曳纲长度(米):</label>
+                                    <div class="layui-input-block">
+                                        <input id="ropeLength" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">拖速(节):</label>
+                                    <div class="layui-input-block">
+                                        <input id="dragSpeed" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">开始捕捞时网位(米):</label>
+                                    <div class="layui-input-block">
+                                        <input id="netLoc" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">网口垂直高度(米):</label>
+                                    <div class="layui-input-block">
+                                        <input id="netHeight" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">网口水平扩张(米):</label>
+                                    <div class="layui-input-block">
+                                        <input id="netExpand" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">鱼群水深(米):</label>
+                                    <div class="layui-input-block">
+                                        <input id="waterDeep" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">鱼群所处水层温度(℃):</label>
+                                    <div class="layui-input-block">
+                                        <input id="waterTemp" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">能见度(海里):</label>
+                                    <div class="layui-input-block">
+                                        <input id="visibility" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">风向(度):</label>
+                                    <div class="layui-input-block">
+                                        <input id="windDirection" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">风速(m/s):</label>
+                                    <div class="layui-input-block">
+                                        <input id="windVelocity" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">气温(℃):</label>
+                                    <div class="layui-input-block">
+                                        <input id="airTemp" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">浪向(度):</label>
+                                    <div class="layui-input-block">
+                                        <input id="waveDir" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">浪高(m):</label>
+                                    <div class="layui-input-block">
+                                        <input id="waveHeight" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-card">
+                            <div class="layui-card-header">鱼种信息</div>
+                            <div class="layui-card-body">
+                                <table class="layui-table" id="fish-table" lay-filter="fish-table"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-form">
+                            <div class="layui-form-item layui-row">
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">船名:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_shipName" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">网次:</label>
+                                    <div class="layui-input-block">
+                                        <input id="netNum" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">渔具规格:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_gearStandard" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">放网时间:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_startTime" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">放网位置纬度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_startLat" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">放网位置经度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_startLon" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">起网时间:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_endTime" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">起网位置纬度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_endLat" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">起网位置经度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_endLon" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">天气状况:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_weatherStr" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">海况:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_seaConditionStr" type="text" readonly="readonly"
+                                               class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">曳纲长度(米):</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_ropeLength" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">拖速(节):</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_dragSpeed" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">开始捕捞时网位(米):</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_netLoc" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">网口垂直高度(米):</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_netHeight" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">网口水平扩张(米):</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_netExpand" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">鱼群水深(米):</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_waterDeep" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">鱼群所处水层温度(℃):</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_waterTemp" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">能见度(海里):</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_visibility" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">风向(度):</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_windDirection" type="text" readonly="readonly"
+                                               class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">风速(m/s):</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_windVelocity" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">气温(℃):</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_airTemp" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">浪向(度):</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_waveDir" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">浪高(m):</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_waveHeight" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-card">
+                            <div class="layui-card-header">鱼种信息</div>
+                            <div class="layui-card-body">
+                                <table class="layui-table" id="e_fish-table" lay-filter="e_fish-table"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div style="text-align: center;margin-top: 30px;margin-bottom: 20px;">
+                <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'formSelects', 'admin', 'config', 'jquery', 'laydate', 'table', 'element'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var config = layui.config;
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+        var table = layui.table;
+
+        var log = admin.getTempData('t_fishinglog');
+        if (log) {
+            $("#shipName").val(log.shipName);
+            $("#logDate").val(log.logDate);
+            $("#netNum").val(log.netNum);
+            $("#startTime").val(log.startTime);
+            $("#startLon").val(log.startLonStr);
+            $("#startLat").val(log.startLatStr);
+            $("#endTime").val(log.endTime);
+            $("#endLon").val(log.endLonStr);
+            $("#endLat").val(log.endLatStr);
+            $("#machineHookSum").val(log.machineHookSum);
+            $("#weatherStr").val(log.weatherStr);
+            $("#seaConditionStr").val(log.seaConditionStr);
+            if (log.ropeLength) {
+                $("#ropeLength").val(log.ropeLength / 100);
+            }
+            if (log.dragSpeed) {
+                $("#dragSpeed").val(log.dragSpeed / 10);
+            }
+            if (log.netLoc) {
+                $("#netLoc").val(log.netLoc / 100);
+            }
+            if (log.netHeight) {
+                $("#netHeight").val(log.netHeight / 100);
+            }
+            if (log.netExpand) {
+                $("#netExpand").val(log.netExpand / 100);
+            }
+            if (log.waterDeep) {
+                $("#waterDeep").val(log.waterDeep / 100);
+            }
+            if (log.waterTemp) {
+                $("#waterTemp").val(log.waterTemp / 10);
+            }
+            if (log.gearStandard) {
+                $("#gearStandard").val(log.gearStandard);
+            }
+            if (log.visibility) {
+                $("#visibility").val(log.visibility / 100);
+            }
+            if (log.windDirection) {
+                $("#windDirection").val(log.windDirection / 10);
+            }
+            if (log.windVelocity) {
+                $("#windVelocity").val(log.windVelocity / 10);
+            }
+            if (log.airTemp) {
+                $("#airTemp").val(log.airTemp / 10);
+            }
+            if (log.waveDir) {
+                $("#waveDir").val(log.waveDir / 10);
+            }
+            if (log.waveHeight) {
+                $("#waveHeight").val(log.waveHeight / 100);
+            }
+            if (log.modifyLogId) {
+                $("#modifyLi").show();
+                admin.req('fishinglog/oneLog', {id: log.modifyLogId}, function (data) {
+                    if (data.code == 200) {
+                        var elog = data.data;
+                        $("#e_shipName").val(log.shipName);
+                        $("#e_logDate").val(elog.logDate);
+                        $("#e_netNum").val(elog.netNum);
+                        $("#e_startTime").val(elog.startTime);
+                        $("#e_startLon").val(elog.startLonStr);
+                        $("#e_startLat").val(elog.startLatStr);
+                        $("#e_endTime").val(elog.endTime);
+                        $("#e_endLon").val(elog.endLonStr);
+                        $("#e_endLat").val(elog.endLatStr);
+                        $("#e_machineHookSum").val(elog.machineHookSum);
+                        $("#e_weatherStr").val(elog.weatherStr);
+                        $("#e_seaConditionStr").val(elog.seaConditionStr);
+                        if (elog.ropeLength) {
+                            $("#e_ropeLength").val(elog.ropeLength / 100);
+                        }
+                        if (elog.dragSpeed) {
+                            $("#e_dragSpeed").val(elog.dragSpeed / 10);
+                        }
+                        if (elog.netLoc) {
+                            $("#e_netLoc").val(elog.netLoc / 100);
+                        }
+                        if (elog.netHeight) {
+                            $("#e_netHeight").val(elog.netHeight / 100);
+                        }
+                        if (elog.netExpand) {
+                            $("#e_netExpand").val(elog.netExpand / 100);
+                        }
+                        if (elog.waterDeep) {
+                            $("#e_waterDeep").val(elog.waterDeep / 100);
+                        }
+                        if (elog.waterTemp) {
+                            $("#e_waterTemp").val(elog.waterTemp / 10);
+                        }
+                        if (elog.gearStandard) {
+                            $("#e_gearStandard").val(elog.gearStandard);
+                        }
+                        if (elog.visibility) {
+                            $("#e_visibility").val(elog.visibility / 100);
+                        }
+                        if (elog.windDirection) {
+                            $("#e_windDirection").val(elog.windDirection / 10);
+                        }
+                        if (elog.windVelocity) {
+                            $("#e_windVelocity").val(elog.windVelocity / 10);
+                        }
+                        if (elog.airTemp) {
+                            $("#e_airTemp").val(elog.airTemp / 10);
+                        }
+                        if (elog.waveDir) {
+                            $("#e_waveDir").val(elog.waveDir / 10);
+                        }
+                        if (elog.waveHeight) {
+                            $("#e_waveHeight").val(elog.waveHeight / 100);
+                        }
+                        table.render({
+                            elem: '#e_fish-table',
+                            url: config.base_server + 'fishinglog/fish',
+                            page: false,
+                            limit: 1000,
+                            where: {id: elog.id, token: config.getToken().access_token},
+                            cellMinWidth: 100,
+                            cols: [[
+                                {type: 'numbers'},
+                                {field: 'fishName', align: 'center', sort: true, title: '鱼种名'},
+                                {field: 'standardName', align: 'center', sort: true, title: '规格'},
+                                {field: 'num', align: 'center', sort: true, title: '捕获数量'},
+                                {field: 'unitName', align: 'center', sort: true, title: '单位'}
+                            ]]
+                        });
+                    }
+                }, 'GET');
+            } else {
+                $("#yuanshi").show();
+                $("#modifyLi").hide();
+            }
+
+        }
+
+        table.render({
+            elem: '#fish-table',
+            url: config.base_server + 'fishinglog/fish',
+            page: false,
+            limit: 1000,
+            where: {id: log.id, token: config.getToken().access_token},
+            cellMinWidth: 100,
+            cols: [[
+                {type: 'numbers'},
+                {field: 'fishName', align: 'center', sort: true, title: '鱼种名'},
+                {field: 'standardName', align: 'center', sort: true, title: '规格'},
+                {field: 'num', align: 'center', sort: true, title: '捕获数量'},
+                {field: 'unitName', align: 'center', sort: true, title: '单位'}
+            ]]
+        });
+
+    });
+</script>
+
+</body>
+</html>

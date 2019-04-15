@@ -1,0 +1,586 @@
+
+    <style>
+        .layui-form-item {
+            margin-bottom: 0;
+            margin-top: 20px;
+        }
+
+        .layui-form-item .layui-inline {
+            margin-bottom: 25px;
+            margin-right: 0;
+        }
+        .layui-form-label {
+            padding: 9px 0px;
+            width: 180px;
+        }
+        .layui-input-block {
+            margin-left: 190px;
+        }
+        /* 防止下拉框的下拉列表被隐藏---必须设置--- */
+        .layui-table-cell {            overflow: visible !important;        }
+        /* 使得下拉框与单元格刚好合适 */
+        td .layui-form-select{
+            margin-top: -10px;
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+    </style>
+
+
+<!-- 加载动画，移除位置在common.js中 -->
+<!--<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>-->
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card" id="logDiv">
+        <div class="layui-card-header">日志信息</div>
+        <div class="layui-card-body">
+
+            <div class="layui-form">
+                <div class="layui-form-item layui-row">
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">船名:</label>
+                        <div class="layui-input-block">
+                            <input id="shipName" type="text"  readonly="readonly" class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">网次:</label>
+                        <div class="layui-input-block">
+                            <input id="netNum" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">渔具规格:</label>
+                        <div class="layui-input-block">
+                            <input id="gearStandard" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">放网时间:</label>
+                        <div class="layui-input-block">
+                            <input id="startTime" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+                    
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">放网位置纬度:</label>
+                        <div class="layui-input-block">
+                            <input id="startLat" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">放网位置经度:</label>
+                        <div class="layui-input-block">
+                            <input id="startLon" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">起网时间:</label>
+                        <div class="layui-input-block">
+                            <input id="endTime" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+                    
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">起网位置纬度:</label>
+                        <div class="layui-input-block">
+                            <input id="endLat" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">起网位置经度:</label>
+                        <div class="layui-input-block">
+                            <input id="endLon" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+                    
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">天气状况:</label>
+                        <div class="layui-input-block">
+                            <select id="weather" name="weather" lay-filter="weather">
+                                <option value="0">晴</option>
+                                <option value="1">多云</option>
+                                <option value="2">阴</option>
+                                <option value="3">阵雨</option>
+                                <option value="4">雷阵雨</option>
+                                <option value="5">小雨</option>
+                                <option value="6">中雨</option>
+                                <option value="7">大雨</option>
+                                <option value="8">暴雨</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">海况:</label>
+                        <div class="layui-input-block">
+                            <select id="seaCondition" name="seaCondition" lay-filter="seaCondition">
+                                <option value="0">轻浪</option>
+                                <option value="1">中浪</option>
+                                <option value="2">大浪</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">曳纲长度(米):</label>
+                        <div class="layui-input-block">
+                            <input id="ropeLength" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">拖速(节):</label>
+                        <div class="layui-input-block">
+                            <input id="dragSpeed" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">开始捕捞时网位(米):</label>
+                        <div class="layui-input-block">
+                            <input id="netLoc" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">网口垂直高度(米):</label>
+                        <div class="layui-input-block">
+                            <input id="netHeight" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">网口水平扩张(米):</label>
+                        <div class="layui-input-block">
+                            <input id="netExpand" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">鱼群水深(米):</label>
+                        <div class="layui-input-block">
+                            <input id="waterDeep" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">鱼群所处水层温度(℃):</label>
+                        <div class="layui-input-block">
+                            <input id="waterTemp" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">能见度(海里):</label>
+                        <div class="layui-input-block">
+                            <input id="visibility" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">风向(度):</label>
+                        <div class="layui-input-block">
+                            <input id="windDirection" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">风速(m/s):</label>
+                        <div class="layui-input-block">
+                            <input id="windVelocity" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">气温(℃):</label>
+                        <div class="layui-input-block">
+                            <input id="airTemp" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">浪向(度):</label>
+                        <div class="layui-input-block">
+                            <input id="waveDir" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md4">
+                        <label class="layui-form-label">浪高(m):</label>
+                        <div class="layui-input-block">
+                            <input id="waveHeight" type="text"  class="layui-input"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="layui-card">
+        <div class="layui-card-header">捕获信息<a class="layui-btn layui-btn-xs" id="add"
+                                              style="position: absolute; right: 64px; top: 10px;">添加</a></div>
+        <div class="layui-card-body">
+            <table class="layui-table" id="fish-table" lay-filter="fish-table"></table>
+        </div>
+    </div>
+    <div class="layui-form-item text-center">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+    </div>
+</div>
+
+<script type="text/html" id="tableBar1">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script type="text/html" id="fishTpl">
+    <select name="fishId" class="fish" lay-filter="fish" value="{{d.fishId}}">
+    </select>
+</script>
+
+<script type="text/html" id="standardTpl">
+    <select name="standardId" class="standard" lay-filter="standard" value="{{d.standardId}}">
+    </select>
+</script>
+
+
+<script type="text/html" id="unitTpl">
+    <select name="unitId" class="unit" lay-filter="unit" value="{{d.unitId}}">
+    </select>
+</script>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'formSelects', 'admin', 'config', 'jquery', 'laydate', 'table','common'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var config = layui.config;
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+        var table = layui.table;
+        var common = layui.common;
+
+        var log = admin.getTempData('t_fishinglog');
+        if (log) {
+            $("#shipName").val(log.shipName);
+            $("#logDate").val(log.logDate);
+            $("#netNum").val(log.netNum);
+            $("#startTime").val(log.startTime);
+            $("#startLon").val(log.startLonStr);
+            $("#startLat").val(log.startLatStr);
+            $("#endTime").val(log.endTime);
+            $("#endLon").val(log.endLonStr);
+            $("#endLat").val(log.endLatStr);
+            $("#machineHookSum").val(log.machineHookSum);
+            $("#weather").val(log.weather);
+            $("#seaCondition").val(log.seaCondition);
+            if(log.ropeLength){
+                $("#ropeLength").val(log.ropeLength/100);
+            }
+            if(log.dragSpeed){
+                $("#dragSpeed").val(log.dragSpeed/10);
+            }
+            if(log.netLoc){
+                $("#netLoc").val(log.netLoc/100);
+            }
+            if(log.netHeight){
+                $("#netHeight").val(log.netHeight/100);
+            }
+            if(log.netExpand){
+                $("#netExpand").val(log.netExpand/100);
+            }
+            if(log.waterDeep){
+                $("#waterDeep").val(log.waterDeep/100);
+            }
+            if(log.waterTemp){
+                $("#waterTemp").val(log.waterTemp/10);
+            }
+            if(log.gearStandard){
+                $("#gearStandard").val(log.gearStandard);
+            }
+            if(log.visibility){
+                $("#visibility").val(log.visibility/100);
+            }
+            if(log.windDirection){
+                $("#windDirection").val(log.windDirection/10);
+            }
+            if(log.windVelocity){
+                $("#windVelocity").val(log.windVelocity/10);
+            }
+            if(log.airTemp){
+                $("#airTemp").val(log.airTemp/10);
+            }
+            if(log.waveDir){
+                $("#waveDir").val(log.waveDir/10);
+            }
+            if(log.waveHeight){
+                $("#waveHeight").val(log.waveHeight/100);
+            }
+        }
+
+        var tableData = []; // 用于存放表格数据
+        admin.ajax({
+            url: config.base_server + 'fishinglog/fish',
+            data: {id: log.id, token: config.getToken().access_token},
+            dataType: 'json',
+            async: false,
+            type: 'GET',
+            success: function (result) {
+                tableData = result.data.list;
+            }
+        });
+
+        var mytable = null;
+
+        $('#add').click(function () {
+            tableData.unshift({
+                LAY_TABLE_INDEX: tableData.length,
+                fishId: "",
+                fishName: "",
+                id: "",
+                num: null,
+                standardId: "",
+                standardName: "",
+                unitId: "",
+                unitName: ""
+            });
+            mytable.reload({data: tableData});
+        });
+
+       /* mytable = table.render({
+            elem: '#fish-table',
+            data:tableData,
+            page: false,
+            cellMinWidth: 100,
+            cols: [[
+                {type: 'numbers'},
+                {field: 'fishName', align: 'center', sort: true, title: '鱼种名'},
+                {field: 'standardName', align: 'center', sort: true, title: '规格'},
+                {field: 'num', align: 'center', sort: true, title: '捕获数量'},
+                {field: 'unitName', align: 'center', sort: true, title: '单位'}
+            ]]
+        });*/
+
+        mytable = table.render({
+            elem: '#fish-table',
+            data:tableData,
+            page: false,
+            limit:1000,
+            height:300,
+            cellMinWidth: 100,
+            done: function (res, curr, count) {
+                count || this.elem.next('.layui-table-view').find('.layui-table-header').css('overflow', 'auto');
+                layui.each($('select'), function (index, item) {
+                    var elem = $(item);
+                    elem.val(elem.data('value')).parents('div.layui-table-cell').css('overflow', 'visible');
+                });
+                admin.req('fishinglog/fishType', {id: log.shipId}, function (d) {
+                    if (d.code == 200) {
+                        $(".fish").each(function () {
+                            $(this).append("<option value=''>请选择鱼种</option>");
+                            for (var i = 0, j = d.data.list.length; i < j; i++) {
+                                if ($(this).attr("value") == d.data.list[i].id) {
+                                    $(this).append("<option selected='selected' value='" + d.data.list[i].id + "'>" + d.data.list[i].name + "</option>");
+                                } else {
+                                    $(this).append("<option value='" + d.data.list[i].id + "'>" + d.data.list[i].name + "</option>");
+                                }
+                            }
+                        });
+                        layui.form.render('select');
+                    }
+                }, "GET");
+                admin.req('fishinglog/standard', {id: log.shipId}, function (d) {
+                    if (d.code == 200) {
+                        $(".standard").each(function () {
+                            $(this).append("<option value=''>请选择规格</option>");
+                            for (var i = 0, j = d.data.list.length; i < j; i++) {
+                                if ($(this).attr("value") == d.data.list[i].id) {
+                                    $(this).append("<option selected='selected' value='" + d.data.list[i].id + "'>" + d.data.list[i].name + "</option>");
+                                } else {
+                                    $(this).append("<option value='" + d.data.list[i].id + "'>" + d.data.list[i].name + "</option>");
+                                }
+                            }
+                        });
+                        layui.form.render('select');
+                    }
+                }, "GET");
+                admin.req('fishinglog/unit', {id: log.shipId}, function (d) {
+                    if (d.code == 200) {
+                        $(".unit").each(function () {
+                            $(this).append("<option value=''>请选择单位</option>");
+                            for (var i = 0, j = d.data.list.length; i < j; i++) {
+                                if ($(this).attr("value") == d.data.list[i].id) {
+                                    $(this).append("<option selected='selected' value='" + d.data.list[i].id + "'>" + d.data.list[i].name + "</option>");
+                                } else {
+                                    $(this).append("<option value='" + d.data.list[i].id + "'>" + d.data.list[i].name + "</option>");
+                                }
+                            }
+                        });
+                        form.render('select');
+                    }
+                }, "GET");
+            },
+            cols: [[
+                {type: 'numbers'},
+                {field: 'fishId', title:'鱼种名', templet: '#fishTpl' },
+                {field: 'standardId', title:'规格', templet: '#standardTpl'},
+                {field: 'num', align: 'center',edit:'text', title: '捕获数量'},
+                {field: 'unitId', title:'单位', templet: '#unitTpl'},
+                {align: 'center',width:125, toolbar: '#tableBar1', title: '操作'}
+            ]]
+        });
+
+        form.on('select(standard)', function (data) {
+            var elem = $(data.elem);
+            var trElem = elem.parents('tr');
+            var tableData = table.cache['fish-table'];
+            tableData[trElem.data('index')][elem.attr('name')] = data.value;
+        });
+        form.on('select(fish)', function (data) {
+            var elem = $(data.elem);
+            var trElem = elem.parents('tr');
+            var tableData = table.cache['fish-table'];
+            tableData[trElem.data('index')][elem.attr('name')] = data.value;
+        });
+        form.on('select(unit)', function (data) {
+            var elem = $(data.elem);
+            var trElem = elem.parents('tr');
+            var tableData = table.cache['fish-table'];
+            tableData[trElem.data('index')][elem.attr('name')] = data.value;
+        });
+
+        // 工具条点击事件
+        table.on('tool(fish-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }
+        });
+
+        // 删除
+        function doDelete(obj) {
+            var index = top.layer.confirm('确定要删除吗？', function () {
+                obj.del();
+                top.layer.close(index);
+            });
+        }
+
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            layer.load(2);
+            var ulog = {};
+            ulog.id=log.id;
+            ulog.shipId=log.shipId;
+            ulog.logType=log.logType;
+            ulog.actionType=log.actionType;
+            ulog.lonStr=log.lonStr;
+            ulog.latStr=log.latStr;
+            ulog.createTimeStr = log.createTime;
+            ulog.logRecordType = log.logRecordType;
+            ulog.logDateStr = log.logDate;
+            ulog.netNum=$("#netNum").val();
+            ulog.startTimeStr=$("#startTime").val();
+            ulog.startLonStr=$("#startLon").val();
+            ulog.startLatStr=$("#startLat").val();
+            ulog.endTimeStr=$("#endTime").val();
+            ulog.endLonStr=$("#endLon").val();
+            ulog.endLatStr=$("#endLat").val();
+            ulog.machineHookSum = $("#machineHookSum").val();
+            ulog.weather = $("#weather").val();
+            ulog.seaCondition = $("#seaCondition").val();
+            ulog.gearStandard = $("#gearStandard").val();
+            if(parseFloat($("#ropeLength").val()) || (parseFloat($("#ropeLength").val())==0)){
+                ulog.ropeLength=parseFloat($("#ropeLength").val())*100;
+            }
+            if(parseFloat($("#dragSpeed").val()) || (parseFloat($("#dragSpeed").val())==0)){
+                ulog.dragSpeed=parseFloat($("#dragSpeed").val())*10;
+            }
+            if(parseFloat($("#netLoc").val()) || (parseFloat($("#netLoc").val())==0)){
+                ulog.netLoc=parseFloat($("#netLoc").val())*100;
+            }
+            if(parseFloat($("#netHeight").val()) || (parseFloat($("#netHeight").val())==0)){
+                ulog.netHeight=parseFloat($("#netHeight").val())*100;
+            }
+            if(parseFloat($("#netExpand").val()) || (parseFloat($("#netExpand").val())==0)){
+                ulog.netExpand=parseFloat($("#netExpand").val())*100;
+            }
+            if(parseFloat($("#waterDeep").val()) || (parseFloat($("#waterDeep").val())==0)){
+                ulog.waterDeep=parseFloat($("#waterDeep").val())*100;
+            }
+            if(parseFloat($("#waterTemp").val()) || (parseFloat($("#waterTemp").val())==0)){
+                ulog.waterTemp=parseFloat($("#waterTemp").val())*10;
+            }
+            if(parseFloat($("#visibility").val()) || (parseFloat($("#visibility").val())==0)){
+                ulog.visibility=parseFloat($("#visibility").val())*100;
+            }
+            if(parseFloat($("#windDirection").val()) || (parseFloat($("#windDirection").val())==0)){
+                ulog.windDirection=parseFloat($("#windDirection").val())*10;
+            }
+            if(parseFloat($("#windVelocity").val()) || (parseFloat($("#windVelocity").val())==0)){
+                ulog.windVelocity=parseFloat($("#windVelocity").val())*10;
+            }
+            if(parseFloat($("#airTemp").val()) || (parseFloat($("#airTemp").val())==0)){
+                ulog.airTemp=parseFloat($("#airTemp").val())*10;
+            }
+            if(parseFloat($("#waveDir").val()) || (parseFloat($("#waveDir").val())==0)){
+                ulog.waveDir=parseFloat($("#waveDir").val())*10;
+            }
+            if(parseFloat($("#waveHeight").val()) || (parseFloat($("#waveHeight").val())==0)){
+                ulog.waveHeight=parseFloat($("#waveHeight").val())*100;
+            }
+            for(var i = 0, j = table.cache['fish-table'].length;i<j;i++){
+                layer.closeAll('loading'); //关闭加载层
+                if (table.cache['fish-table'][i].fishId != '') {
+                    ulog['catches[' + i + '].fishId'] = table.cache['fish-table'][i].fishId;
+                } else {
+                    layer.msg("请选择鱼种", {icon: 2});
+                    return false;
+                }
+                if (table.cache['fish-table'][i].standardId != '') {
+                    ulog['catches[' + i + '].standardId'] = table.cache['fish-table'][i].standardId;
+                } else {
+                    layer.msg("请选择规格", {icon: 2});
+                    return false;
+                }
+                if (table.cache['fish-table'][i].num != null && !common.isNull(table.cache['fish-table'][i].num)) {
+                    ulog['catches[' + i + '].num'] = table.cache['fish-table'][i].num;
+                } else {
+                    layer.msg("请输入数量", {icon: 2});
+                    return false;
+                }
+                if (table.cache['fish-table'][i].unitId != '') {
+                    ulog['catches[' + i + '].unitId'] = table.cache['fish-table'][i].unitId;
+                } else {
+                    layer.msg("请选择单位", {icon: 2});
+                    return false;
+                }
+            }
+            admin.req('fishinglog/updateLog', ulog, function (data) {
+                parent.layer.closeAll();
+                if (data.code == 200) {
+                    parent.layui.table.reload('fishinglogTable');
+                    top.layer.msg(data.msg, {icon: 1});
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            }, "POST");
+            return false;
+        });
+
+    });
+</script>

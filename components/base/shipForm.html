@@ -1,0 +1,272 @@
+<style>
+    .layui-form-item {
+        margin-bottom: 0;
+        margin-top: 20px;
+    }
+
+    .layui-form-item .layui-inline {
+        margin-bottom: 25px;
+        margin-right: 0;
+    }
+    .layui-form-label {
+        padding: 9px 0px;
+        width: 180px;
+    }
+    .layui-input-block {
+        margin-left: 190px;
+    }
+</style>
+<form id="shipForm" lay-filter="shipForm" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+    <!-- 加载动画，移除位置在common.js中 -->
+    <!--<div class="page-loading">
+        <div class="rubik-loader"></div>
+    </div>-->
+
+    <!-- 正文开始 -->
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header">基本信息</div>
+            <div class="layui-card-body">
+
+                <div class="layui-form">
+                    <div class="layui-form-item layui-row">
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">船名:</label>
+                            <div class="layui-input-block">
+                                <input name="name" type="text" placeholder="请输入船名" maxlength="50" class="layui-input"  lay-verify="required" required/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">英文名:</label>
+                            <div class="layui-input-block">
+                                <input name="nameEn" type="text" placeholder="请输入英文名" maxlength="50" class="layui-input"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">公司名称: </label>
+                            <div class="layui-input-block">
+                                <select name="companyId" id="comp" lay-verify="required"  lay-search="">
+                                    <option value="">直接选择或搜索</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">MMSI</label>
+                            <div class="layui-input-block">
+                                <input name="mmsi" placeholder="请输入MMSI" type="text" class="layui-input" maxlength="9" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">船舶类型</label>
+                            <div class="layui-input-block">
+                                <select name="shipType" id="shipType">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">作业类型:</label>
+                            <div class="layui-input-block">
+                                <select name="fishingType" id="fishingType">
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">出厂日期</label>
+                            <div class="layui-input-block">
+                                <input id="madeDate" name="madeDate" type="text" placeholder="请选择出厂日期"
+                                       class="layui-input date-icon"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card">
+            <div class="layui-card-header">扩展信息</div>
+            <div class="layui-card-body">
+
+                <div class="layui-form">
+                    <div class="layui-form-item layui-row">
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">国籍:</label>
+                            <div class="layui-input-block">
+                                <select name="nationality" id="nationality">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">IMO:</label>
+                            <div class="layui-input-block">
+                                <input name="imo" type="text" placeholder="请输入IMO" class="layui-input"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">呼号</label>
+                            <div class="layui-input-block">
+                                <input name="callsign" type="text" placeholder="请输入呼号" class="layui-input"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">船舶注册号</label>
+                            <div class="layui-input-block">
+                                <input name="regNo" type="text" placeholder="请输入船舶注册号" class="layui-input"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">国籍证书编号:</label>
+                            <div class="layui-input-block">
+                                <input id="nationCerNo" name="nationCerNo" type="text" placeholder="请输入国籍证书编号" class="layui-input"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">渔船编号:</label>
+                            <div class="layui-input-block">
+                                <input id="fisheryNo" name="fisheryNo" type="text" placeholder="请输入渔船编号" class="layui-input"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card">
+            <div class="layui-card-header">附属信息</div>
+            <div class="layui-card-body">
+
+                <div class="layui-form">
+                    <div class="layui-form-item layui-row">
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">总吨:</label>
+                            <div class="layui-input-block">
+                                <input id="totalTon" name="totalTon" type="text" placeholder="请输入总吨" class="layui-input"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">FFA VID:</label>
+                            <div class="layui-input-block">
+                                <input id="ffaVid" name="ffaVid" type="text" placeholder="请输入FFA VID" class="layui-input"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">WCPFC认证号:</label>
+                            <div class="layui-input-block">
+                                <input id="wcpfcCerNo" name="wcpfcCerNo" type="text" placeholder="请输入WCPFC认证号" class="layui-input"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">船长:</label>
+                            <div class="layui-input-block">
+                                <input id="captain" name="captain" type="text" placeholder="请输入船长" class="layui-input"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">入渔许可证编号:</label>
+                            <div class="layui-input-block">
+                                <input id="fishingPermitNo" name="fishingPermitNo" type="text" placeholder="请输入入渔许可证编号" class="layui-input"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">船东:</label>
+                            <div class="layui-input-block">
+                                <input id="shipowner" name="shipowner" type="text" placeholder="请输入船东" class="layui-input"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6">
+                            <label class="layui-form-label">航行宝编号:</label>
+                            <div class="layui-input-block">
+                                <input id="sailbox" name="sailbox" type="text" placeholder="请输入航行宝编号" class="layui-input"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <div style="text-align: center;margin-top: 30px;margin-bottom: 20px;">
+                    <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+                    <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'formSelects', 'admin','jquery', 'config', 'laydate'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var $ = layui.jquery;
+        var config = layui.config;
+        var laydate = layui.laydate;
+        
+
+        var url = 'add';
+        // 回显user数据
+        var ship = admin.getTempData('t_ship');
+        if (ship) {
+            url = 'update';
+            form.val('shipForm', ship);
+            showDic(5,'shipType',ship.shipType);
+            showDic(6,'fishingType',ship.fishingType);
+            showDic(2,'nationality',ship.nationality);
+        }else {
+            showDic(5,'shipType');
+            showDic(6,'fishingType');
+            showDic(2,'nationality');
+        }
+        laydate.render({
+            elem: '#madeDate'
+        });
+
+        //公司名称添加到下拉框中
+        $.ajax({
+        	type:"get",
+        	url:config.base_server + 'ship/getCompany?token=' + config.getToken().access_token,
+        	success: function(data){
+        		$.each(data, function (index, item) {
+        			console.log(item.name)
+                    $('#comp').append("<option value=" + item.id + ">" + item.name + "</option>");// 下拉菜单里添加元素
+					form.render('select');
+//              	重新渲染 固定写法
+        		});
+        		if(ship.id!=null){
+                    $("#comp").find("option[value="+ship.companyId+"]").prop("selected",true);
+                }
+        		if(ship.id!=null){
+                    $("#nationality").find("option[value="+ship.companyId+"]").prop("selected",true);
+                }
+        		form.render("select");
+        	}
+        });
+
+
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            layer.load(2);
+            var theMethod = data.field.id?"PUT":"POST";
+            admin.req('ship',data.field,function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    // 关闭当前iframe弹出层
+                    admin.closeDialog('#shipForm');
+                    parent.layui.table.reload('shipTable',{page:{curr:1}});
+                    layer.msg(data.msg, {icon: 1});
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            },theMethod);/*'POST'*/
+            return false;
+        });
+    });
+</script>

@@ -1,0 +1,555 @@
+<style type="text/css">
+    .dtree-nav-item {
+        line-height: 33px;
+        padding-left: 16px;
+    }
+
+
+</style>
+
+<!-- 关闭Tab时顶部标题 -->
+<div class="layui-body-header">
+    <span class="layui-breadcrumb pull-right">
+    	<span class="layui-body-header-title">我的文件</span>
+        <a href="#/">首页</a>
+        <a><cite>我的文件</cite></a>
+    </span>
+</div>
+
+
+<!-- 正文开始 -->
+<div class="layui-fluid" >
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-md2">
+            <div class="layui-card">
+                <div class="layui-card-body" id="toolbarDiv" >
+                    <!--<ul class="layui-nav layui-layout-left" id="navigationBarBtnList">-->
+                        <!--<li class="layui-nav-item" id="lay_unselect" >-->
+                            <!--<a ew-event="flexible" title="侧边伸缩"><i class="layui-icon layui-icon-shrink-right"></i></a>-->
+                        <!--</li>-->
+                    <!--<div class="sidebar">侧边栏</div>-->
+                    <!--<button type="button">Menu</button>-->
+                    <!--<li class="layui-nav-item" lay-unselect>
+                        <a ew-event="refresh" title="刷新"><i class="layui-icon layui-icon-refresh-3"></i></a>
+                    </li>-->
+                        <!--<li class="layui-nav-item" id="monitor"><a nav-bind="xt1">船舶监控</a></li>
+                        <li class="layui-nav-item" id="sysSetting"><a nav-bind="xt2">系统管理</a></li>-->
+                    <!--</ul>-->
+                    <ul id="demoTree1" class="dtree" data-id="0"></ul>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md10" >
+            <div class="layui-card">
+                <div class="layui-card-body">
+
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item" style="display:flex;align-items: center">
+                            <div style="margin:0 10px">
+                                <li class="layui-nav-item" id="lay_unselect"  >
+                                    <a   title="侧边伸缩"><i class="layui-icon layui-icon-shrink-right"></i></a>
+                                </li>
+                            </div>
+                            <div class="layui-inline" style="width: 120px;">
+                                <select id="sltKey" >
+                                    <option value="">-搜索条件-</option>
+                                    <option value="author">作者</option>
+                                    <option value="source">文件来源(组织)</option>
+                                    <option value="year">文件年份</option>
+                                    <option value="submitter">提交者</option>
+                                    <option value="upload_time ">上传时间</option>
+                                    <option value="filename">文件名称</option>
+                                    <option value="filetype">文件类型</option>
+                                    <option value="filesize">文件大小</option>
+                                    <!--<option value="downloads">下载次数</option>-->
+                                </select>
+                            </div>
+
+                            <div class="layui-inline">
+                                <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索
+                                </button>
+                                <!--<button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>-->
+                                <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出
+                                </button>
+                            </div>
+                            <!--文件上传-->
+                            <div class="layui-inline">
+                                <!--<button id="selectButton" type="button" class="layui-btn layui-btn-normal" >选择文件</button><input class="layui-upload-file" type="file" accept="undefined" name="file">-->
+                                <button id="uploadBtn" type="button" class="layui-btn"><i class="layui-icon"></i>文件上传
+                                   <!-- <input type="hidden" name="selectKey" id="selectKey">-->
+                                </button>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <table class="layui-table" id="uploadTable" lay-filter="uploadTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="downlaod">文件下载</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" >删除</a>
+</script>
+
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'config', 'index', 'dtree'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var config = layui.config;
+        var index = layui.index;
+        var dtree = layui.dtree;
+        var selectKey = 1;
+        var Current="";
+        var dele=2;
+        var dload=3;
+        var permission=4;
+        // var Currentyear="";
+        form.render('select');
+        $(document).ready(function(){
+            $("#uploadBtn").click(function() {
+                /*      $.ajax({
+                    // type : config.type ? config.type : "POST",
+                    // headers : config.headers,
+                    // url : config.url,
+                    url: config.base_server + 'upload/disYearName',
+                    // dataType : config.dataType ? config.dataType : "json",
+                    // data : data,
+                    async : async,
+                    //TODO
+            });*/
+                    admin.req('/upload/disYearName', {Current:Current}, function (res) {
+                    if (res.code == 200) {
+                        admin.putTempData('Current', res.data.Current);
+
+                    } else {
+                        // DTree1.changeTreeNodeAdd(false); // 配套使用,失败使用
+                    }
+                }, "get");
+            });
+        });
+
+        $('#lay_unselect').on('click',function (){
+            // $('.layui-fluid').css('transform','translate(-250px,0)')
+            $('.layui-col-md2').toggle()
+            // $('.layui-col-md2').addClass('admin-nav-mini')
+            $('.layui-col-md10').toggleClass('layui-col-md12')
+        })
+        var DTree1 = dtree.render({
+            elem: "#demoTree1",
+            obj: $("#demoTree1"),
+            type: "all",
+            initLevel: "2",
+            //     url: 'components/base/uploadForm.html',
+                url: config.base_server + "upload/display" +"?token="+ config.getToken().access_token,  //异步接口
+            // url: config.base_server + "upload/display",  //异步接口
+            //data:menuTree,
+            method: 'GET',
+            dot: false,
+            toolbar: true,
+            toolbarScroll: "#toolbarDiv", //划重点，默认加载必须配置，属性含义请参考文档
+            toolbarLoad: "node",  // 表示工具栏加载的节点，  可选的值还有：noleaf（非最后一级）,leaf（最后一级节点）
+            toolbarStyle: {
+                title: "文件",
+                area: ["50%", "500px"]
+            },
+            formatter: {
+                title: function (data) {  // 示例给有子集的节点返回节点统计
+                    var s = data.title;
+                    if (data.children) {
+                        s += ' <span style=\'color:blue\'>(' + data.children.length + ')</span>';
+                    }
+                    return s;
+                }
+            },
+
+            toolbarFun: {
+                /*添加节点*/
+                addTreeNode: function (treeNode, $div) {
+                    console.log(treeNode);
+                   /* var findFolderName=0;
+                    if(findFolderName>0){
+                        alert("创建目录失败，文件名已存在");
+                    }*/
+                    // var re = /\D/;
+                    var content= treeNode.context;
+                    // alert(content);
+                    if(content!=null) {
+                        /*var returnvalue = re.test(content);
+                        if (returnvalue == true) {*/
+                            admin.req('/upload/addMenu',{nodeId:treeNode.nodeId,parentId:treeNode.parentId,context: treeNode.context}, function (res) {
+                          if (res.code == 200) {
+                              // console.log("123",res.title);
+
+
+                              // alert(res.data.number);
+                            /*  if (res.data.number && res.data.number>0){
+                                  layer.msg("创建目录失败，文件名已存在", {icon: 2})
+                                  return false;
+                              }*/
+                              if (res.data.permission==0) {
+                                  layer.msg("您暂无权限", {icon: 2})
+                                  return false;
+                              }
+                              treeNode.id=res.data.id;
+                              treeNode.title=treeNode.context;
+                               DTree1.changeTreeNodeAdd(treeNode); // 配套使用,添加成功后使用
+                              // $(".layui-laypage-btn")[0].click();
+                              // table.reload('uploadTable');
+                              // location.reload();
+                              // window.location.reload();
+                                }else{
+                                    DTree1.changeTreeNodeAdd(false); // 配套使用,失败使用
+                                }
+                            }, "get");
+                      /*  }else {
+                            // alert("目录名不能全为数字,请重新创建");
+                            layer.msg("目录名不能全为数字,请重新创建", {icon: 2});
+                            return false;
+                        }*/
+                    }
+                },
+                // DTree1.changeTreeNodeEdit("refresh"),
+                /*修改节点*/
+                 editTreeNode: function (treeNode, $div) {
+                     // treeNode.title=treeNode.context;
+                     // DTree1.changeTreeNodeEdit(false);//修改失败
+                     // DTree1.changeTreeNodeEdit("refresh");
+                     // return false;
+                  /*   if (treeNode.parentId=='-1'){
+                         treeNode.id=treeNode.nodeId;
+                         treeNode.title=treeNode.context;
+                         DTree1.changeTreeNodeAdd(treeNode); // 配套使用,添加成功后使用
+                         layer.msg('此文件夹不允许修改，请刷新后重试', {icon: 2});
+                         return false;
+                     }*/
+                     // var re = /\D/;
+                     //TODO 当前我的文件夹可被修改
+                     var content= treeNode.context;
+                     if(content!=null) {
+                        /* var returnvalue = re.test(content);
+                         if (returnvalue == true) {*/
+                        console.log(treeNode)
+                        console.log(treeNode.context);
+
+
+
+
+                             admin.req('/upload/updateMenu', {
+                                 context: treeNode.context,
+                                 parentId: treeNode.parentId,
+                                 nodeId: treeNode.nodeId
+                             }, function (res) {
+
+
+                                 if (res.code == 200) {
+                                     if (res.data.permission==0) {
+                                         layer.msg("您暂无权限", {icon: 2})
+                                         // treeNode.title=treeNode.nodeTitle;
+                                         DTree1.changeTreeNodeEdit(false);//修改失败
+                                         // DTree1.changeTreeNodeEdit(param/true/false/"refresh"); // 调用内置函数，修改节点后改变节点内容。传入false，则树不会发生变化
+                                         // DTree1.changeTreeNodeEdit("refresh");
+                                         // return false;
+                                     }else{
+                                         layer.msg(res.msg, {icon: 1});
+                                         DTree1.changeTreeNodeEdit("refresh");
+                                     }
+                                     DTree1.changeTreeNodeEdit("refresh");
+
+                                     /*if (res.data.number > 0) {
+                                         layer.msg("创建目录失败，文件名已存在，请刷新后重新命名", {icon: 2})
+                                         return false;
+                                     }*/
+
+                                     // alert(res.data.number);
+
+                                     DTree1.changeTreeNodeEdit(treeNode.nodeId); // 配套使用,同上
+
+                                 } else {
+                                     DTree1.changeTreeNodeEdit(false); // 配套使用,同上
+                                 }
+                             }, "get");
+                         /*}else{
+                             layer.msg("目录名不能全为数字,请刷新后重新命名", {icon: 2});
+                             return false;
+                         }*/
+                     }
+                },
+                /*删除节点*/
+                delTreeNode: function (treeNode, $div) {
+                    if (treeNode.parentId=='-1'){
+                        layer.msg('此文件夹不允许删除', {icon: 2});
+                        return false;
+                    }
+                    admin.req('/upload/deleteMenu',{context: treeNode.context,nodeId:treeNode.nodeId, parentId:treeNode.parentId}, function (res) {
+                        if (res.code == 200) {
+                            if (res.data.permission==0) {
+                                layer.msg("您暂无权限", {icon: 2})
+                                return false;
+                            }else{
+                                layer.msg(res.msg, {icon: 1});
+                            }
+
+                            DTree1.changeTreeNodeDel(treeNode.nodeId); // 配套使用,同上
+
+                        }else{
+                            DTree1.changeTreeNodeDel(false); // 配套使用,同上
+                        }
+                        // window.location.reload();
+                        $(".layui-laypage-btn")[0].click();
+                    }, "get");
+                },
+            }
+        });
+        dtree.on("node('demoTree1')", function (param) {
+            selectKey = param.param.nodeId;
+            // layer.msg(JSON.stringify(param.param));
+            var key = $('#sltKey').val();
+            console.log(key);
+            var value = $('#edtSearch').val();
+            table.reload('uploadTable', {where: {searchKey: key, searchValue: value, selectKey: selectKey},page:{curr:1}});
+        });
+        // 渲染表格
+        var ins1 = table.render({
+
+            elem: '#uploadTable',
+            url: config.base_server + 'upload/displaydoc',
+            where: {
+                token: config.getToken().access_token,
+                selectKey:selectKey
+            },
+            page: true,
+            cols: [[
+                // console.log("----------"+selectKey),
+
+                {fixed:'left', type: 'checkbox'}, {type: 'numbers' },
+                {field: 'source', sort: true, title: '文件来源（组织）',width:'10%'},
+                /*{
+                    sort: true, templet: function (d) {
+                        return util.toDateString(d.sellTime);
+                    }, title: '销售时间'
+                },*/
+
+                {field: 'filesize', sort: true, title: '文件大小',width:'10%'},
+                {
+                    sort: true, templet: function (d) {
+                        return util.toDateString(d.uploadTime);
+                    }, title: '上传时间',width:'10%'
+                },
+                {field: 'year', sort: true, title: '文件年份',width:'10%'},
+                {field: 'author', sort: true, title: '作者',width:'10%'},
+                {field: 'submitter', sort: true, title: '提交者',width:'10%'},
+                // {field: 'uploadTime ', sort: true, title: '上传时间'},
+                {field: 'filename', sort: true, title: '文件名称',width:'10%'},
+                {field: 'filetype', sort: true, title: '文件类型',width:'10%'},
+                {field: 'downloads', sort: true, title: '下载次数',width:'10%'},
+                {align: 'center', toolbar: '#tableBar', title: '操作',fixed:'right', width:200}
+            ]]
+        });
+
+        // 添加按钮点击事件
+        $('#btnAdd').click(function () {
+            showEditModel();
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var key = $('#sltKey').val();
+             var value = $('#edtSearch').val();
+             table.reload('uploadTable', {where: {searchKey: key, searchValue: value}});
+        });
+
+
+
+
+    // ,data.field
+    /*    $('#btnSearch').click(function () {
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            admin.req('upload/sect',{},function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    top.layer.msg(data.msg, {icon: 1});
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            },'GET');
+            table.reload('uploadTable', {where: {searchKey: key, searchValue: value}});
+        });
+*/
+
+
+        // 工具条点击事件
+        table.on('tool(uploadTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'edit') { // 上传文件
+                showEditModel(data);
+                // showuploadModel(data);
+            } else if (layEvent === 'downlaod') { //下载
+                downloadAuth(obj);
+                /* var a=obj.data.downloads+1;
+                obj.update({'downloads':a});
+                // window.location = config.base_server + 'upload/download?token=' + config.getToken().access_token + '&id=' + obj.data.id;
+
+
+               /!* admin.req('upload/delete', {
+                    id: obj.data.id
+                }, function (data) {
+
+                }, 'delete');*!/
+
+                window.location.href= config.base_server + 'upload/download?Authorization='+ config.getToken().access_token +'&id=' + obj.data.id;
+        */
+                // if ()
+            } else if(layEvent === 'del') { //删除
+                doDelete(obj);
+            }
+        });
+
+        // 文件下载
+        function downloadAuth(obj) {
+            /* var a=obj.data.downloads+1;
+             obj.update({'downloads':a});*/
+            // window.location = config.base_server + 'upload/download?token=' + config.getToken().access_token + '&id=' + obj.data.id;
+            admin.req('/upload/dloadAuth', {id: obj.data.id}, function (res) {
+                if (res.code == 200) {
+                    /*  if (res.data.dload==1){
+
+                      }*/
+                    if (res.data.dload==1){
+                        layer.msg("您暂无下载权限", {icon: 2});
+                        return false;
+                    }else{
+                        // top.layer.msg(data.msg, {icon: 1});
+                        layer.msg(res.msg, {icon: 1});
+                        // obj.del();
+                        var a=obj.data.downloads+1;
+                        obj.update({'downloads':a});
+                        // admin.putTempData('Current', res.data.Current);
+                        window.location.href= config.base_server + 'upload/download?Authorization='+ config.getToken().access_token +'&id=' + obj.data.id;
+
+                    }
+                } else {
+                    layer.msg(res.msg, {icon: 2});
+                    // DTree1.changeTreeNodeAdd(false); // 配套使用,失败使用
+                }
+            }, "get");
+
+        }
+
+
+
+        // 删除
+        function doDelete(obj) {
+            var index = top.layer.confirm('确定要删除吗？', {
+                skin: 'layui-layer-admin'
+            }, function () {
+                layer.load(2);
+                // $.post('upload/delete', {
+                admin.req('upload/delete', {
+                    id: obj.data.id
+                }, function (data) {
+                    // top.layer.close(index);
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        if (data.data.dele==1){
+                            layer.msg("您暂无删除权限", {icon: 2});
+                            return false;
+                        }else{
+                            // top.layer.msg(data.msg, {icon: 1});
+                            layer.msg(data.msg, {icon: 1});
+                            obj.del();
+                        }
+
+                    /*    layer.msg(data.msg, {icon: 1});
+                        obj.del();*/
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                    table.reload('uploadTable');
+                }, 'delete');
+            });
+        }
+
+        // 导出excel
+        $('#btnExp').click(function () {
+            var checkRows = table.checkStatus('uploadTable');
+            console.log("123",checkRows);
+
+            if (checkRows.data.length == 0) {
+                layer.msg('请选择要导出的数据', {icon: 2});
+            } else {
+                table.exportFile(ins1.config.id, checkRows.data, 'xls');
+            }
+        });
+
+        // 显示表单弹窗
+        function showEditModel(data) {
+            admin.putTempData('t_upload', data);
+            admin.putTempData('formOk', false);
+            top.layui.admin.open({
+                type: 2,
+                // title: data ? '重命名' : '重命名',
+                title: '修改文件信息',
+                area: ['380px', '392px'],
+                offset: '200px',
+                // components/base/companyForm.html
+                url: 'components/base/uploadForm.html',
+                // content: 'base/upload/editForm',
+                resize: true,
+                end: function () {
+                    admin.getTempData('formOk') && table.reload('uploadTable');  // 成功刷新表格
+                }
+            });
+        }
+
+        // 添加按钮点击事件
+        $('#uploadBtn').click(function () {
+            showuploadModel();
+        });
+        // 点击文件上传按钮弹窗
+        function showuploadModel(data) {
+            // console.log(selectKey)
+            if(selectKey==0){
+                // alert("请选择文件目录");
+                layer.msg("请选择文件目录", {icon: 1});
+            }else {
+                admin.putTempData('t_upload', data);
+                admin.putTempData('selectKey', selectKey);
+                admin.putTempData('formOk', false);
+                top.layui.admin.open({
+                    type: 2,
+                    // title: data ? '添加文件上传' : '添加文件上传',
+                    title: '添加文件上传',
+                    area: ['450px', '520px'],
+                    offset: '200px',
+                    url: 'components/base/uploadForm1.html',
+                    // content: 'base/upload/editForm',
+                    resize: true,
+
+                    end: function () {
+                        // console.log(selectKey)
+                        admin.getTempData('formOk') && table.reload('uploadTable');  // 成功刷新表格
+                    }
+
+                });
+            }
+        }
+
+    });
+</script>

@@ -1,0 +1,195 @@
+<!-- 关闭Tab时顶部标题 -->
+<div class="layui-body-header">
+    <span class="layui-body-header-title">右键菜单</span>
+    <span class="layui-breadcrumb pull-right">
+        <a href="#/">首页</a>
+        <a><cite>右键菜单</cite></a>
+    </span>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <button id="btnCtxMenu" class="layui-btn">请对我点击鼠标右键</button>
+            ，也可以对整个body点击鼠标右键，
+            <button id="btnCtxMenu2" class="layui-btn">也支持点击事件触发</button>
+            。
+
+            <pre id="codeCtxMenu" class="layui-code" lay-title="代码">
+            </pre>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'code', 'admin', 'contextMenu'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var admin = layui.admin;
+        var contextMenu = layui.contextMenu;
+
+        // 加载代码文档
+        $.get('components/plugin/contextMenu.code', function (res) {
+            $('#codeCtxMenu').text(res);
+            layui.code({about: false, encode: true});
+        });
+
+        // 重写右键菜单
+        contextMenu.bind('#btnCtxMenu', [{
+            name: '按钮菜单一',
+            click: function () {
+                layer.msg('点击了按钮菜单一', {icon: 1});
+            }
+        }, {
+            name: '按钮菜单二',
+            click: function () {
+                layer.msg('点击了按钮菜单二', {icon: 1});
+            }
+        }, {
+            icon: 'layui-icon layui-icon-more-vertical',
+            name: '按钮菜单三',
+            subs: [{
+                name: '按钮子菜单一',
+                click: function () {
+                    layer.msg('点击了按钮子菜单一', {icon: 1});
+                }
+            }, {
+                name: '按钮子菜单二',
+                click: function () {
+                    layer.msg('点击了按钮子菜单二', {icon: 1});
+                }
+            }, {
+                name: '按钮子菜单三',
+                subs: [{
+                    name: '按钮三级菜单一',
+                    click: function () {
+                        layer.msg('点击了按钮三级菜单一', {icon: 1});
+                    }
+                }, {
+                    name: '按钮三级菜单二',
+                    click: function () {
+                        layer.msg('点击了按钮三级菜单二', {icon: 1});
+                    }
+                }]
+            }]
+        }]);
+
+        // 重写右键菜单
+        contextMenu.bind('body', [{
+            icon: 'layui-icon layui-icon-refresh',
+            name: '刷新子页面',
+            click: function () {
+                admin.refresh();
+            }
+        }, {
+            name: '刷新主框架',
+            click: function () {
+                location.reload();
+            },
+            hr: true
+        }, {
+            icon: 'layui-icon layui-icon-snowflake',
+            name: '菜单一',
+            click: function () {
+                layer.msg('点击了菜单一', {icon: 1});
+            }
+        }, {
+            icon: 'layui-icon layui-icon-location',
+            name: '菜单二',
+            click: function () {
+                layer.msg('点击了菜单二', {icon: 1});
+            }
+        }, {
+            name: '菜单三',
+            subs: [{
+                name: '子菜单一',
+                click: function () {
+                    layer.msg('点击了子菜单一', {icon: 1});
+                }
+            }, {
+                name: '子菜单二',
+                click: function () {
+                    layer.msg('点击了子菜单二', {icon: 1});
+                }
+            }, {
+                name: '子菜单三',
+                subs: [{
+                    name: '三级菜单一',
+                    click: function () {
+                        layer.msg('点击了三级菜单一', {icon: 1});
+                    }
+                }, {
+                    name: '三级菜单二',
+                    subs: [{
+                        name: '四级菜单一',
+                        click: function () {
+                            layer.msg('点击了四级菜单一', {icon: 1});
+                        }
+                    }, {
+                        name: '四级菜单二',
+                        click: function () {
+                            layer.msg('点击了四级菜单二', {icon: 1});
+                        }
+                    }]
+                }]
+            }]
+        }, {
+            name: '菜单四',
+            click: function () {
+                layer.msg('点击了菜单四', {icon: 1});
+            }
+        }]);
+
+        // 直接使用show方法
+        $('#btnCtxMenu2').click(function (e) {
+            var x = $(this).offset().left;
+            var y = $(this).offset().top + $(this).outerHeight();
+            contextMenu.show([{
+                name: '按钮菜单一',
+                click: function () {
+                    layer.msg('点击了按钮菜单一', {icon: 1});
+                }
+            }, {
+                name: '按钮菜单二',
+                click: function () {
+                    layer.msg('点击了按钮菜单二', {icon: 1});
+                }
+            }, {
+                icon: 'layui-icon layui-icon-more-vertical',
+                name: '按钮菜单三',
+                subs: [{
+                    name: '按钮子菜单一',
+                    click: function () {
+                        layer.msg('点击了按钮子菜单一', {icon: 1});
+                    }
+                }, {
+                    name: '按钮子菜单二',
+                    click: function () {
+                        layer.msg('点击了按钮子菜单二', {icon: 1});
+                    }
+                }, {
+                    name: '按钮子菜单三',
+                    subs: [{
+                        name: '按钮三级菜单一',
+                        click: function () {
+                            layer.msg('点击了按钮三级菜单一', {icon: 1});
+                        }
+                    }, {
+                        name: '按钮三级菜单二',
+                        click: function () {
+                            layer.msg('点击了按钮三级菜单二', {icon: 1});
+                        }
+                    }]
+                }]
+            }], x, y);
+            if (e !== void 0) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+
+    });
+</script>

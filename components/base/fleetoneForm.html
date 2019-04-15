@@ -1,0 +1,262 @@
+<style>
+    .model-form {
+        font-size: x-small;
+    }
+
+    .layui-form-label0 {
+        font-weight: 700;
+    }
+
+    .layui-input-block {
+        width: 60%;
+    }
+</style>
+
+<form id="fleetoneForm" lay-filter="fleetoneForm" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+    <div class="layui-form-label">
+        <label class="layui-form-label0">服务器连接</label>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">服务器ip地址：</label>
+        <div class="layui-input-block">
+            <input name="serverIp" placeholder="请输入服务器ip" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">服务器端口号：</label>
+        <div class="layui-input-block">
+            <input name="serverPort" placeholder="请输入服务器端口号" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">客户端端口号：</label>
+        <div class="layui-input-block">
+            <input name="clientPort" placeholder="请输入客户端端口号" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密钥：</label>
+        <div class="layui-input-block">
+            <input name="keys" placeholder="请输入密钥" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">允许远程控制：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="remoteControl" value="0" title="允许">
+            <input type="radio" name="remoteControl" value="1" title="禁止">
+        </div>
+    </div>
+    <div class="layui-form-label">
+        <label class="layui-form-label0">APN</label>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block" id="IsPurchased">
+            <input type="radio" name="apn" value="0" title="SIM卡默认" lay-filter="aaa">
+            <input type="radio" name="apn" value="1" title="用户自定义" lay-filter="aaa">
+        </div>
+        <div class="layui-input-block">
+            <input name="positionApn" placeholder="请输入APN" type="text" class="layui-input" maxlength="50"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名：</label>
+        <div class="layui-input-block">
+            <input name="positionUsername" placeholder="请输入用户名" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码：</label>
+        <div class="layui-input-block">
+            <input name="positionPassword" placeholder="请输入密码" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-label">
+        <label class="layui-form-label0">间歇报告</label>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="intervalReport" value="0" title="允许">
+            <input type="radio" name="intervalReport" value="1" title="禁止">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">间歇时间：</label>
+        <div class="layui-input-block">
+            <input name="intervalTime" placeholder="请输入间歇时间" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-label">
+        <label class="layui-form-label0">距离报告</label>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="distanceReport" value="0" title="允许">
+            <input type="radio" name="distanceReport" value="1" title="禁止">
+        </div>
+    </div>
+    <div class="layui-form-label">
+        <label class="layui-form-label0">数据连接</label>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">数据连接：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="dataConnection" value="0" title="允许">
+            <input type="radio" name="dataConnection" value="1" title="禁止">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">自动开启：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="autoOpen" value="0" title="允许">
+            <input type="radio" name="autoOpen" value="1" title="禁止">
+        </div>
+    </div>
+    <div class="layui-form-label">
+        <label class="layui-form-label0">网络apn</label>
+        <input type="checkbox" name="open" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+    </div>
+    <div class="layui-form-item" id="hide1">
+        <div class="layui-input-block" id="IsPurchased2">
+            <input type="radio" name="netApn" value="0" title="SIM卡默认" lay-filter="bbb">
+            <input type="radio" name="netApn" value="1" title="用户自定义" lay-filter="bbb">
+        </div>
+        <div class="layui-input-block">
+            <input name="networkApn" placeholder="请输入网络apn" type="text" class="layui-input" maxlength="50"/>
+        </div>
+    </div>
+    <div class="layui-form-item" id="hide2">
+        <label class="layui-form-label">用户名：</label>
+        <div class="layui-input-block">
+            <input name="networkUsername" placeholder="请输入用户名" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item" id="hide3">
+        <label class="layui-form-label">密码：</label>
+        <div class="layui-input-block">
+            <input name="networkPassword" placeholder="请输入密码" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item text-center">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+    </div>
+</form>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'formSelects', 'config', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var formSelects = layui.formSelects;
+        var form = layui.form;
+        var config = layui.config;
+        var admin = layui.admin;
+
+        var url = 'box/addFleetone';
+        // 回显fleetone数据
+        var box = admin.getTempData('t_box');
+        if (box.fleetoneId != null) {
+            url = 'box/updateFleetone';
+            $.get(config.base_server + 'box/getFleetone?token=' + config.getToken().access_token, {fleetoneId: box.fleetoneId}, function (data) {
+                form.val('fleetoneForm', data);
+                $("input[name=remoteControl][value= " + data.remoteControl + "]").prop("checked", "true");
+                $("input[name=intervalReport][value= " + data.intervalReport + "]").prop("checked", "true");
+                $("input[name=distanceReport][value= " + data.distanceReport + "]").prop("checked", "true");
+                $("input[name=dataConnection][value= " + data.dataConnection + "]").prop("checked", "true");
+                $("input[name=autoOpen][value= " + data.autoOpen + "]").prop("checked", "true");
+                if (data.positionApn == "") {
+                    $("input[name=apn][value= '0']").prop("checked", "true");//SIM卡默认选中
+                    $("input[name='positionApn']").hide();//输入框隐藏
+                } else {
+                    $("input[name=apn][value= '1']").prop("checked", "true");//用户自定义选中
+                }
+                if (data.networkApn == "") {
+                    $("input[name=netApn][value= '0']").prop("checked", "true");//SIM卡默认选中
+                    $("input[name='networkApn']").hide();//输入框隐藏
+                } else {
+                    $("input[name=netApn][value= '1']").prop("checked", "true");//用户自定义选中
+                }
+                //网络apn默认隐藏
+                $("#hide1").hide();
+                $("#hide2").hide();
+                $("#hide3").hide();
+                //更新全部
+                form.render();
+            });
+        } else {
+            //网络apn默认隐藏
+            $("#hide1").hide();
+            $("#hide2").hide();
+            $("#hide3").hide();
+            form.render();
+        }
+
+        //监听apn单选框
+        form.on('radio(aaa)', function (data) {
+            if ($('#IsPurchased input[name="apn"]:checked ').val() == "0") {
+                $("input[name='positionApn']").hide();
+                $("input[name='positionApn']").val(null);
+            } else {
+                $("input[name='positionApn']").show();
+            }
+            form.render(); //更新全部
+        });
+        //监听网络apn单选框
+        form.on('radio(bbb)', function (data) {
+            if ($('#IsPurchased2 input[name="netApn"]:checked ').val() == "0") {
+                $("input[name='networkApn']").hide();
+                $("input[name='networkApn']").val(null);
+            } else {
+                $("input[name='networkApn']").show();
+            }
+            form.render(); //更新全部
+        });
+        //监听网络apn开关
+        form.on('switch(switchTest)', function (data) {
+            if (!this.checked) {
+                $("#hide1").hide();
+                $("#hide2").hide();
+                $("#hide3").hide();
+            } else {
+                $("#hide1").show();
+                $("#hide2").show();
+                $("#hide3").show();
+            }
+            layer.tips('温馨提示：重要数据，修改慎重！', data.othis)
+        });
+
+
+        // 表单提交事件
+
+        form.on('submit(btnSubmit)', function (data) {
+            //layer.load(2);
+            data.field.boxId = box.id;
+            var theMethod = box.fleetoneId ? "PUT" : "POST";
+            admin.req(url, data.field, function (data) {
+                if (data.code == 200) {
+                    // 关闭当前iframe弹出层
+                    admin.closeDialog('#fleetoneForm');
+                    parent.layui.table.reload('boxTable');
+
+                    layer.msg(data.msg, {icon: 1});
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            },theMethod);
+            return false;
+        });
+    });
+</script>

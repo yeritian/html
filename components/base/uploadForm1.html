@@ -1,0 +1,326 @@
+<form id="uploadForm" lay-filter="uploadForm" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">作者</label>
+        <div class="layui-input-block">
+            <input name="author" placeholder="请输入作者" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">文件来源（组织）</label>
+        <div class="layui-input-block">
+            <input name="source" placeholder="请输入文件来源（组织）" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">文件年份</label>
+        <div class="layui-input-block">
+            <input id="yearyyyy"  name="year" placeholder="yyyy" type="text" class="layui-input date-icon" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">提交者</label>
+        <div class="layui-input-block">
+            <input id="submitt" name="submitter" placeholder="请输入提交者" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <!--<div class="layui-form-item">
+        <label class="layui-form-label">上传时间</label>
+        <div class="layui-input-block">
+            <input name="uploadTime " placeholder="请输入上传时间" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">文件名称</label>
+        <div class="layui-input-block">
+            <input name="filename" placeholder="请输入文件名称" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">文件类型</label>
+        <div class="layui-input-block">
+            <input name="filetype" placeholder="请输入文件类型" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">文件大小</label>
+        <div class="layui-input-block">
+            <input name="filesize" placeholder="请输入文件大小" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">下载次数</label>
+        <div class="layui-input-block">
+            <input name="downloads" placeholder="请输入下载次数" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>-->
+
+    <!--文件上传-->
+    <div class="layui-upload ">
+
+        <div class="layui-upload-list" style="padding-left:30px">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th >文件名</th>
+                    <th>大小</th>
+                    <th>状态</th>
+                    <!--<th>操作</th>-->
+                </tr>
+                </thead>
+                <tbody id="demoList">
+                </tbody>
+            </table>
+        </div>
+        <button id="selectButton" type="button" class="layui-btn layui-btn-normal" style="margin-left:30px" >选择文件</button><input  class="layui-upload-file" type="file" accept="undefined" name="file">
+        <!--<button id="uploadBtnAction"  type="button" class="layui-btn"  ><i class="layui-icon"></i>文件上传</button>-->
+        <input type="hidden" name="fileName" id="fileName">
+        <input type="hidden" name="fileSize" id="fileSize">
+        <input type="hidden" name="fileType" id="fileType">
+        <input type="hidden" name="serverName" id="serverName">
+    </div>
+    <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+    </div>
+</form>
+<script>
+    layui.use(['layer', 'form', 'config','formSelects', 'admin','upload','laydate', 'table'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var upload = layui.upload;
+        var config = layui.config;
+        var laydate = layui.laydate;
+        var table = layui.table;
+
+        var url = 'add';
+        laydate.render({
+            elem: '#yearyyyy'
+            ,type: 'year'
+        });
+        // 回显upload数据
+        var uploading = admin.getTempData('t_upload');
+        var selectKey = admin.getTempData('selectKey');
+        var Current = admin.getTempData('Current');
+        // var cur=Current.split("|")[0];
+        // $("#submitt").text(Current);
+        console.log(Current);
+        console.log(selectKey)
+        if (uploading) {
+            url = 'update';
+            form.val('uploadForm', uploading);
+        }
+
+        //显示提交者和年份
+      /*  $().ready(function () {
+            console.log(Current);
+            $("#submitt").text(Current);
+        });
+*/
+        /*文件上传*/
+        var demoListView = $('#demoList')
+            , uploadListIns = upload.render({
+            elem: '#selectButton'
+            , url:config.base_server +  'upload/uploadFile',
+             accept: 'file'
+            , multiple: false
+            , auto: true
+            , size: 51200
+            , bindAction: '#uploadBtnAction'
+            , choose: function (obj) {
+             /*   if ($('#fileName').val()!=''||$('#fileName').val()!=null){
+                    layer.msg("一次只能上传一个文件", {icon: 2});
+                    return false;
+                }*/
+                var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                //读取本地文件
+                obj.preview(function (index, file, result) {
+                    var tr = $(['<tr id="upload-' + index + '">'
+                        , '<td >' + file.name + '</td>'
+                        , '<td>' + (file.size / 1024).toFixed(1) + 'kb</td>'
+                        , '<td>等待上传</td>'
+                    /*    , '<td>'
+                        , '<button class="layui-btn layui-btn-mini demo-reload layui-hide">重传</button>'
+                        , '<button class="layui-btn layui-btn-mini layui-btn-danger demo-delete">删除</button>'
+                        , '</td>'*/
+                        , '</tr>'].join(''));
+                    //单个重传
+                    tr.find('.demo-reload').on('click', function () {
+                        obj.upload(index, file);
+                    });
+                    //删除
+                    tr.find('.demo-delete').on('click', function () {
+                        delete files[index]; //删除对应的文件
+                        tr.remove();
+                        uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                    });
+
+                    demoListView.append(tr);
+
+                });
+            }
+            , done: function (res, index, upload) {
+                if (res.code == 0) { //上传成功
+                    /*将链接保存到表单的隐藏域*/
+                    // console.log(res)
+                    $('#fileName').val(res.fileName);
+                    $('#fileSize').val(res.fileSize);
+                    $('#fileType').val(res.fileType);
+                    $('#serverName').val(res.serverName);
+                    // $('#uploadBtnAction').hide();
+                    $('#selectButton').hide();
+                    var tr = demoListView.find('tr#upload-' + index)
+                        , tds = tr.children();
+                    tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+                    tds.eq(3).html(''); //清空操作
+                    return delete this.files[index]; //删除文件队列已经上传成功的文件
+                }
+                this.error(index, upload);
+            }
+            , error: function (index, upload) {
+                var tr = demoListView.find('tr#upload-' + index)
+                    , tds = tr.children();
+                tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+                    tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+            }
+        });
+
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+                // alert($('#fileName').val());
+            if ($('#fileName').val()==''){
+                layer.msg("请先上传文件", {icon: 2});
+                return false;
+            }
+            layer.load(2);
+            var theMethod = data.field.id?"PUT":"POST";
+            admin.req('upload?selectKey=' + selectKey,data.field,function (data) {
+                layer.closeAll('loading');
+                    if (data.code == 200) {
+                    // 关闭当前iframe弹出层
+                    admin.closeDialog('#uploadForm');
+                    // parent.layer.close(parent.layer.getFrameIndex(window.name));
+                    admin.putTempData('formOk', true);  // 操作成功刷新表格
+                    top.layer.msg(data.msg, {icon: 1});
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            },theMethod);
+            return false;
+        });
+      /*  $().ready(function () {
+
+
+        });*/
+        // 渲染文件上传提交者和年份
+       /* var ins1 = table.render({
+
+            elem: '#submitte',
+            url: config.base_server + 'upload/disYearName',
+            where: {
+                token: config.getToken().access_token,
+                selectKey:selectKey
+
+            },
+
+
+            // page: true,
+        /!*    cols: [[
+                // console.log("----------"+selectKey),
+
+                {type: 'checkbox'}, {type: 'numbers' },
+                {field: 'author', sort: true, title: '作者',width:'10%'},
+                {field: 'source', sort: true, title: '文件来源（组织）',width:'10%'},
+                /!*{
+                    sort: true, templet: function (d) {
+                        return util.toDateString(d.sellTime);
+                    }, title: '销售时间'
+                },*!/
+
+                {field: 'filesize', sort: true, title: '文件大小',width:'10%'},
+                {
+                    sort: true, templet: function (d) {
+                        return util.toDateString(d.uploadTime);
+                    }, title: '上传时间',width:'10%'
+                },
+                {field: 'year', sort: true, title: '文件年份',width:'10%'},
+                {field: 'submitter', sort: true, title: '提交者',width:'10%'},
+                // {field: 'uploadTime ', sort: true, title: '上传时间'},
+                {field: 'filename', sort: true, title: '文件名称',width:'10%'},
+                {field: 'filetype', sort: true, title: '文件类型',width:'10%'},
+                {field: 'downloads', sort: true, title: '下载次数',width:'10%'},
+                {align: 'center', toolbar: '#tableBar', title: '操作', width:200}
+            ]]*!/
+        });*/
+
+        $(document).ready(function(){
+            // $("#uploadBtn").click(function() {
+                /*      $.ajax({
+                    // type : config.type ? config.type : "POST",
+                    // headers : config.headers,
+                    // url : config.url,
+                    url: config.base_server + 'upload/disYearName',
+                    // dataType : config.dataType ? config.dataType : "json",
+                    // data : data,
+                    async : async,
+                    //TODO
+            });*/
+                admin.req('/upload/disYearName', {Current:Current}, function (res) {
+                    if (res.code == 200) {
+                        var curryear=res.data.Current.split("|")[0];
+                        var sub=res.data.Current.split("|")[1];
+                        console.log("111",sub);
+                        $("#submitt").val(sub);
+                        $("#yearyyyy").val(curryear);
+                        // admin.putTempData('Current', res.data.Current);
+                        // console.log("111",res.data.Current);
+                        // console.log(res.code);
+                        // console.log(res.data.Current);
+                        // Current= res.data.Current;
+                        // console.log(Current.split("|"));
+                        //  console.log(Current.split("|")[0]);
+
+                        // console.log(res.data.Currentyear);
+
+                        // console.log(res.data.id);
+                        // alert(111);
+                        // alert(res.data.number);
+                        /*  if (res.data.number && res.data.number>0){
+                              layer.msg("创建目录失败，文件名已存在", {icon: 2})
+                              return false;
+                          }*/
+                        /*      treeNode.id=res.data.id;
+                        treeNode.title=treeNode.context;*/
+                        // DTree1.changeTreeNodeAdd(treeNode); // 配套使用,添加成功后使用
+                        // $(".layui-laypage-btn")[0].click();
+                        // table.reload('uploadTable');
+                        // location.reload();
+                        // window.location.reload();
+                    } else {
+                        // DTree1.changeTreeNodeAdd(false); // 配套使用,失败使用
+                    }
+                }, "get");
+            // });
+        });
+
+
+
+
+
+
+
+    });
+</script>
+

@@ -1,0 +1,444 @@
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline" style="width: 120px;">
+                        <select id="sltKey">
+                            <option value="">-搜索条件-</option>
+                            <option value="observerinfoname">姓名</option>
+                            <option value="startobservedate">开始观察日期</option>
+                            <option value="endobservedate">结束观察日期</option>
+                            <option value="shipport">登船地点</option>
+                            <option value="shipname">船名</option>
+                            <option value="shipdate">登船时间</option>
+                            <option value="destinationport">登陆地点（离船）</option>
+                            <option value="disembarkdate">登陆日期</option>
+                            <option value="company">公司</option>
+                            <option value="years">年份</option>
+                           </select>
+                    </div>
+                    <div class="layui-inline">
+                        <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                    </div>
+                </div>
+            </div>
+
+            <table class="layui-table" id="observerinfoTable" lay-filter="observerinfoTable"></table>
+        </div>
+    </div>
+
+</div>
+
+<!-- 表单弹窗 -->
+<script type="text/html" id="observerinfoModel">
+    <form id="observerinfoForm" lay-filter="observerinfoForm" class="layui-form model-form">
+        <input name="observerinfoid" type="hidden"/>
+                     <div class="layui-form-item">
+                    <label class="layui-form-label">序号</label>
+                    <div class="layui-input-block">
+                        <input name="observerinfono" placeholder="请输入序号" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">观察海域</label>
+                    <div class="layui-input-block">
+                        <input name="observeoceanarea" placeholder="请输入观察海域" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">姓名</label>
+                    <div class="layui-input-block">
+                        <input name="observerinfoname" placeholder="请输入姓名" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+
+               <div class="layui-form-item">
+                      <label class="layui-form-label">类型</label>
+                 <div class="layui-input-block">
+                      <select  name="obfishtype"   >
+                          <option value=""></option>
+                         <option value="金枪鱼延绳钓">金枪鱼延绳钓</option>
+                         <option value="金枪鱼围网">金枪鱼围网</option>
+                          <option value="远洋鱿钓渔业">远洋鱿钓渔业</option>
+                          <option value="南极磷虾渔业">南极磷虾渔业</option>
+                          <option value="秋刀鱼渔业">秋刀鱼渔业</option>
+                          <option value="竹筴鱼渔业">竹筴鱼渔业</option>
+                          <option value="过洋性拖网渔业">过洋性拖网渔业</option>
+                          <option value="过洋性其他渔业">过洋性其他渔业</option>
+                          <option value="其他围网渔业">其他围网渔业</option>
+                          <option value="其他渔具渔业">其他渔具渔业</option>
+                      </select>
+                  </div>
+               </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">开始观察日期</label>
+                    <div class="layui-input-block">
+                        <input id="test" name="startobservedate" placeholder="请输入开始观察日期" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">结束观察日期</label>
+                    <div class="layui-input-block">
+                        <input id="test1" name="endobservedate" placeholder="请输入结束观察日期" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                  <div class="layui-form-item">
+                    <label class="layui-form-label">登船地点</label>
+                    <div class="layui-input-block">
+                        <input name="shipport" placeholder="请输入登船地点" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">船名</label>
+                    <div class="layui-input-block">
+                        <input name="shipname" placeholder="请输入船名" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">登船时间</label>
+                    <div class="layui-input-block">
+                        <input id="test2" name="shipdate" placeholder="请输入登船时间" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">登陆地点（离船）</label>
+                    <div class="layui-input-block">
+                        <input name="destinationport" placeholder="请输入登陆地点（离船）" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                  <div class="layui-form-item">
+                    <label class="layui-form-label">登陆日期</label>
+                    <div class="layui-input-block">
+                        <input id="test3" name="disembarkdate" placeholder="请输入登陆日期" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                  <div class="layui-form-item">
+                    <label class="layui-form-label">观察经纬度范围</label>
+                    <div class="layui-input-block">
+                        <input name="trapezerange" placeholder="请输入观察经纬度范围" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+
+                  <div class="layui-form-item">
+                    <label class="layui-form-label">公司</label>
+                    <div class="layui-input-block">
+                        <input id="company" name="company" placeholder="请输入公司" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">年份</label>
+                    <div class="layui-input-block">
+                        <input name="years" placeholder="请输入年份" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+
+                      <div class="layui-form-item text-right">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+            <button class="layui-btn" lay-filter="observerinfoFormSubmit" lay-submit>保存</button>
+        </div>
+    </form>
+</script>
+
+<!--详情表格-->
+
+<script type="text/html" id="observerinfoDetail">
+    <form id="observerinfoFormDetail" lay-filter="observerinfoFormDetail" class="layui-form model-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">序号</label>
+            <div class="layui-input-block">
+                <input name="observerinfono"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">观察海域</label>
+            <div class="layui-input-block">
+                <input name="observeoceanarea"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-block">
+                <input name="observerinfoname"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-block">
+                <input name="obfishtype"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">开始观察日期</label>
+            <div class="layui-input-block">
+                <input  name="startobservedate"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">结束观察日期</label>
+            <div class="layui-input-block">
+                <input  name="endobservedate"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">登船地点</label>
+            <div class="layui-input-block">
+                <input name="shipport"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">船名</label>
+            <div class="layui-input-block">
+                <input name="shipname"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">登船时间</label>
+            <div class="layui-input-block">
+                <input  name="shipdate"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">登陆地点（离船）</label>
+            <div class="layui-input-block">
+                <input name="destinationport"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">登陆日期</label>
+            <div class="layui-input-block">
+                <input  name="disembarkdate"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">观察经纬度范围</label>
+            <div class="layui-input-block">
+                <input name="trapezerange"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">公司</label>
+            <div class="layui-input-block">
+                <input  name="company"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">年份</label>
+            <div class="layui-input-block">
+                <input name="years" type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+    </form>
+</script>
+
+
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script>
+
+
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'config','formSelects','laytpl','index','laydate'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var config = layui.config;
+        var formSelects = layui.formSelects;
+        var laytpl = layui.laytpl;
+        var index = layui.index;
+        var laydate = layui.laydate;
+
+
+        form.render('select');
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#observerinfoTable',
+            url: config.base_server + 'observer/observerinfo/selectbufen',
+            page: true,
+            cols: [[
+
+                {field: 'observerinfono', sort: true, title: '序号',width:'6%',align: 'center'},
+                {field: 'observeoceanarea', title: '观察洋区',width:'6%',align: 'center'},
+                {field: 'observerinfoname',  title: '姓名',width:'5%',align: 'center'},
+                {field: 'company',  title: '公司',width:'8%',align: 'center'},
+                {field: 'years', title: '年份',width:'6%',align: 'center'},
+                {field: 'shipname',  title: '船名',width:'6%',align: 'center'},
+                {field: 'obfishtype',  title: '类型',width:'8%',align: 'center'},
+                {field: "counthooktimes",  title: '作业钩次',style:'cursor: pointer;color:#007DDB;',event:"counthooktimes",width:'6%',align: 'center'},
+                {field: "fthooktimes",  title: '观察期间渔获记录',style:'cursor: pointer;color:#007DDB;',event:"fthooktimes",width:'9%',align: 'center'},
+                {field: "hooklog",  title: '渔捞日志记录',style:'cursor: pointer;color:#007DDB;',event:"hooklog",width:'8%',align: 'center'},
+                {field: "obfishcatch",  title: '渔获量—捕捞努力量统计',style:'cursor: pointer;color:#007DDB;',event:"obfishcatch",width:'12%',align: 'center'},
+                {field: 'avgsinglebaskethook', sort: true, title: '单钩筐数HPB',width:'8%',align: 'center'},
+                {field: 'obbaskettotsum', sort: true, title: '总筐数',width:'6%',align: 'center'},
+                {field: 'obbasketnum', sort: true, title: '观察筐数',width:'6%',align: 'center'},
+                {field: 'startobservedate',sort: true,  title: '开始观察日期',width:'10%',align: 'center'},
+                {field: 'endobservedate',sort: true, title: '结束观察日期',width:'10%',align: 'center'},
+                {align: 'center', toolbar: '#tableBar', title: '操作',fixed:'right',width:'11%'}
+            ]]
+        });
+
+
+
+
+
+        // 添加按钮点击事件
+        $('#btnAdd').click(function () {
+            showEditModel();
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            table.reload('observerinfoTable', {where: {searchKey: key, searchValue: value}});
+        });
+        // 表单提交事件
+        form.on('submit(observerinfoFormSubmit)', function (data) {
+            layer.load(2);
+            var theMethod = data.field.observerinfoid?"PUT":"POST";
+            admin.req('observer/observerinfo', data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                    table.reload('observerinfoTable');
+                    admin.closeDialog('#observerinfoForm');
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, theMethod);
+            return false;
+        });
+        // 工具条点击事件
+        table.on('tool(observerinfoTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            }else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }else if(obj.event==='counthooktimes'){
+                index.openNewTab({
+                    //title: '页面传参',
+                    url: '#/observer/observerhooktime/p1=' + obj.data.observerinfoid //+ '/p2=' + 2 + '/p3=' + 3
+                });
+            }else if(obj.event==='fthooktimes'){
+                index.openNewTab({
+                    url: '#/observer/fishtail/p1=' + obj.data.observerinfoid
+                });
+            }else if(obj.event==='hooklog'){
+                index.openNewTab({
+                    url: '#/observer/seafishinglog/p1=' + obj.data.observerinfoid
+                });
+            }else if(obj.event==='obfishcatch'){
+                index.openNewTab({
+                    url: '#/observer/fishcatch/p1=' + obj.data.observerinfoid
+                });
+            }else if(obj.event ==='detail'){
+                showdetail(data);  //详情
+            }
+
+        });
+        // 删除
+        function doDelete(obj) {
+               //信息系检验
+            if (obj.data.counthooktimes==0&&obj.data.fthooktimes==0&&obj.data.hooklog==0&&obj.data.obfishcatch==0){
+
+                layer.confirm('确定要删除吗？', {
+                    skin: 'layui-layer-admin'
+                }, function (i) {
+                    layer.close(i);
+                    layer.load(2);
+                    admin.req('observer/observerinfo/'+ obj.data.observerinfoid, {}, function (data) {
+                        layer.closeAll('loading');
+                        if (data.code == 200) {
+                            layer.msg(data.msg, {icon: 1});
+                            obj.del();
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+                    }, 'delete');
+                });
+
+             }else{
+                layer.msg("此信息下存在信息不能删除,请先删除子信息",{icon: 2});
+            }
+
+        };
+
+        // 显示表单弹窗
+        function showEditModel(data) {
+            admin.open({
+                type: 1,
+                area:["400px","800px"],
+                title: data ? '修改观察员信息' : '添加观察员信息',
+                content: laytpl(document.getElementById('observerinfoModel').innerHTML).render(data||{}),
+                success: function (layero, index) {
+                    laydate.render({
+                        elem: '#test'
+                        ,type:'datetime'
+                    });
+                    laydate.render({
+                        elem: '#test1'
+                        ,type:'datetime'
+                    }); laydate.render({
+                        elem: '#test2'
+                        ,type:'datetime'
+                    });
+                    laydate.render({
+                        elem: '#test3'
+                        ,type:'datetime'
+                    });
+                    $('#observerinfoForm')[0].reset();
+                    if (data) {
+                        form.val('observerinfoForm', data);
+                    }
+                  //  $(layero).children('.layui-layer-content').css('overflow', 'visible');  // 禁止出现滚动条
+                }
+            });
+        }
+
+        /*详情*/
+        function showdetail(obj){
+            admin.req('observer/observerinfo/'+ obj.observerinfoid, {}, function (data){
+                admin.open({
+                    type: 1,
+                    title:'详情',
+                    area:['400px','800px'],
+                    btn: ['返回列表'],
+                    content:laytpl(document.getElementById('observerinfoDetail').innerHTML).render(data||{}),
+                    success: function (layero, index) {
+                        form.val('observerinfoFormDetail', data);
+                    },
+                    yes: function(index, layero){
+                        layer.close(index);
+                    },
+                    cancel: function(index){
+                        layer.close(index);
+                    }
+                });
+            },'put');
+        }
+
+    });
+</script>

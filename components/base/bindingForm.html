@@ -1,0 +1,110 @@
+<!-- 关闭Tab时顶部标题 -->
+<div class="layui-body-header">
+    <span class="layui-breadcrumb pull-right">
+    	<span class="layui-body-header-title">用户管理</span>
+        <a href="#/">首页</a>
+        <a><cite>用户管理</cite></a>
+    </span>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <form class="layui-form model-form">
+        <div class="layui-card">
+            <div class="layui-card-body">
+
+                <div class="layui-form toolbar">
+                    <div class="layui-form-item">
+                        <div class="layui-inline" style="width: 120px;">
+                            <select id="sltKey">
+                                <option value="">-搜索条件-</option>
+                                <option value="name">船名</option>
+                                <option value="mmsi">MMSI</option>
+                            </select>
+                        </div>
+                        <div class="layui-inline">
+                            <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                        </div>
+                        <div class="layui-inline">
+                            <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="layui-table" id="shipTable" lay-filter="shipTable"></table>
+
+            </div>
+        </div>
+        <div class="layui-form-item text-right">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+            <button class="layui-btn" id="bc" lay-filter="btnSubmit" lay-submit>保存</button>
+        </div>
+    </form>
+</div>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'config', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var config = layui.config;
+        var admin = layui.admin;
+        var selectedId = null;
+        form.render('select');
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#shipTable',
+            url: config.base_server + 'ship/list',
+            method: 'GET',
+            where: {
+                token: config.getToken().access_token
+            },
+            page: true,
+            cols: [[
+                {type: 'radio'}, {type: 'numbers'},
+                {field: 'name', sort: true, title: '船名'},
+                {field: 'mmsi', sort: true, title: 'MMSI'},
+                {field: 'company', sort: true, title: '公司'}
+            ]]
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            table.reload('shipTable', {where: {searchKey: key, searchValue: value}});
+        });
+
+        table.on('radio(shipTable)', function (obj) {
+            selectedId = obj.data.id;
+        });
+
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            if (selectedId) {
+                layer.load(2);
+                var operator = admin.getTempData('t_operator');
+                $.post(config.base_server + "operator/binding", {
+                    token: config.getToken().access_token,
+                    oid: operator.id,
+                    sid: selectedId
+                }, function (data) {
+                    parent.layer.closeAll();
+                    if (data.code == 200) {
+                        parent.layui.table.reload('operatorTable');
+                        top.layer.msg(data.msg, {icon: 1});
+                    } else {
+                        top.layer.msg(data.msg, {icon: 2});
+                    }
+                });
+            } else {
+                top.layer.msg("请选择船舶！", {icon: 1});
+            }
+            return false;
+        });
+    });
+</script>

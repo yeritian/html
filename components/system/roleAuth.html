@@ -1,0 +1,89 @@
+﻿<!-- zTree -->
+<link rel="stylesheet" href="assets/libs/zTree/css/zTreeStyle/zTreeStyle.css"/>
+
+<div style="height: 350px;overflow-y: auto;overflow-x: hidden;">
+    <input id="authRoleId" type="hidden" value="5">
+    <ul id="treeAuth" class="ztree" style="padding: 20px 0px 20px 40px;"></ul>
+</div>
+
+<div class="text-right" style="padding-top: 10px;padding-right: 25px;margin-bottom: 15px;">
+    <button class="layui-btn layui-btn-primary" ew-event="closeDialog">取消</button>
+    <button id="authTreeBtnSave" class="layui-btn">保存</button>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="assets/libs/jquery/jquery-3.2.1.min.js"></script>
+<!-- zTree -->
+<script type="text/javascript" src="assets/libs/zTree/js/jquery.ztree.all-3.5.min.js"></script>
+<script type="text/javascript" src="assets/module/layRouter.js"></script>
+<script>
+    layui.use(['layer', 'admin', 'config'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var admin = layui.admin;
+        var config = layui.config;
+        var router = layui.router;
+        var roleId = admin.getTempData('roleId');
+        layer.load(2);
+        var setting = {
+            check: {enable: true},
+            data: {
+                key: {
+                    name: 'authorityName'
+                }, simpleData: {
+                    enable: true,
+                    pIdKey: 'parentId',
+                    rootPId: '-1'
+                }
+            }
+        };
+        admin.req('authority',
+            {roleId: roleId},
+            function (data) {
+                //var jsonObj =
+                $("#authRoleId").val(roleId);
+                $.fn.zTree.init($('#treeAuth'), setting, data.data.list);
+                layer.closeAll('loading');
+            }, 'GET');
+
+
+        // 保存按钮点击事件
+        $('#authTreeBtnSave').click(function () {
+            layer.load(2);
+            var treeObj = $.fn.zTree.getZTreeObj('treeAuth');
+            var nodes = treeObj.getCheckedNodes(true);
+            var ids = new Array();
+            for (var i = 0; i < nodes.length; i++) {
+                ids[i] = nodes[i].id;
+            }
+            admin.req("role/authority",{
+                roleId: roleId,
+                authIds: JSON.stringify(ids)
+            },function (data) {
+                layer.closeAll('loading');
+                if (200 == data.code) {
+                    layer.msg(data.msg, {icon: 1});
+                    admin.closeDialog('#authTreeBtnSave');
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            },"PUT");
+            /*$.get('json/ok.json', {
+                roleId: roleId,
+                authIds: JSON.stringify(ids)
+            }, function (data) {
+                layer.closeAll('loading');
+                if (200 == data.code) {
+                    layer.msg(data.msg, {icon: 1});
+                    admin.closeDialog('#authTreeBtnSave');
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, 'json');*/
+
+        });
+    });
+</script>
+
+</body>
+</html>

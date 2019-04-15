@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html>
+<style>
+    .red{
+        background:#009688;
+        color:#009f95!important;
+    }
+</style>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>管理系统</title>
+    <link rel="icon" href="./assets/images/favicon.ico"/>
+    <link rel="stylesheet" href="./assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="assets/module/admin.css"/>
+    <link rel="stylesheet" href="./assets/module/formSelects/formSelects-v4.css"/>
+     <link rel="stylesheet" type="text/css" href="assets/css/css.css" />
+     <link rel="stylesheet" type="text/css" href="assets/css/swiper.css" />
+     <link rel="stylesheet" type="text/css" href="assets/css/index.css" />
+     <link rel="stylesheet" type="text/css" href="assets/css/simple-calendar.css" />
+	<link rel="stylesheet" href="assets/js/ztree/zTreeStyle/zTreeStyle.css" type="text/css">
+	<link href="assets/css/jquery.mCustomScrollbar.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/module/dtree/dtree.css"/>
+    <link rel="stylesheet" href="./assets/module/dtree/font/dtreefont.css"/>
+</head>
+
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin" id="index_all">
+    <!-- 头部 -->
+    <div class="layui-header">
+        <div class="layui-logo">
+            <img src="assets/images/logo.png"/>
+            <cite>&nbsp;远洋渔业数据中心&emsp;</cite>
+        </div>
+        <ul class="layui-nav layui-layout-left" id="navigationBarBtnList">
+            <li class="layui-nav-item" lay-unselect>
+                <a ew-event="flexible" title="侧边伸缩"><i class="layui-icon layui-icon-shrink-right"></i></a>
+            </li>
+            <li class="layui-nav-item" lay-unselect>
+                <a ew-event="refresh" title="刷新"><i class="layui-icon layui-icon-refresh-3"></i></a>
+            </li>
+            <li class="layui-nav-item" id="monitor"><a nav-bind="xt1">船舶监控</a></li>
+            <li class="layui-nav-item" id="sysSetting"><a nav-bind="xt2">系统管理</a></li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item" lay-unselect>
+                <a ew-event="message" title="消息"><i class="layui-icon layui-icon-notice"></i></a>
+            </li>
+            <li class="layui-nav-item" lay-unselect>
+                <a ew-event="note" title="便签"><i class="layui-icon layui-icon-note"></i></a>
+            </li>
+            <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                <a ew-event="fullScreen" title="全屏"><i class="layui-icon layui-icon-screen-full"></i></a>
+            </li>
+            <li class="layui-nav-item" lay-unselect>
+                <a style="display: inline;">
+                    <img src="assets/images/head.png" class="layui-nav-img">
+                    <cite id="huName"></cite>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd lay-unselect><a href="#/template/user-info">个人中心</a></dd>
+                    <dd lay-unselect><a id="setPsw">修改密码</a></dd>
+                    <hr>
+                    <dd lay-unselect><a id="btnLogout">退出</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item" lay-unselect>
+                <a ew-event="theme" title="设置"><i class="layui-icon layui-icon-more-vertical"></i></a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 侧边栏 -->
+    <div class="layui-side">
+        <div class="layui-side-scroll" id="menuList">
+            <!-- 系统二的菜单，加layui-hide隐藏 -->
+
+                <!-- ...省略代码... -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- 主体部分 -->
+    <div class="layui-body" id = 'Allwide'>
+        <div class="layui-tab" lay-allowClose="true" lay-filter="admin-pagetabs">
+            <ul class="layui-tab-title"></ul>
+            <div class="layui-tab-content"></div>
+        </div>
+        <div class="layui-icon admin-tabs-control layui-icon-prev" ew-event="leftPage"></div>
+        <div class="layui-icon admin-tabs-control layui-icon-next" ew-event="rightPage"></div>
+        <div class="layui-icon admin-tabs-control layui-icon-down">
+            <ul class="layui-nav admin-tabs-select" lay-filter="admin-pagetabs-nav">
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="javascript:;"></a>
+                    <dl class="layui-nav-child layui-anim-fadein">
+                        <dd ew-event="closeThisTabs" lay-unselect><a href="javascript:;">关闭当前标签页</a></dd>
+                        <dd ew-event="closeOtherTabs" lay-unselect><a href="javascript:;">关闭其它标签页</a></dd>
+                        <dd ew-event="closeAllTabs" lay-unselect><a href="javascript:;">关闭全部标签页</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+	<!--海图-->
+	 <div id="wrap" style="display: none;">
+  		<div id="main_wrap" style="width: 100%;height: 100%;">
+      		<div class="search_box">
+			    <div class="tree_t"></div>
+			    <input type="text" class="input" placeholder="请输入关键字...">
+			    <i class="input_clear"></i>
+			    <input type="submit" class="btn">
+			    <div class="left_tool_clo" title="收起"></div>
+		  	</div>
+		<div class="left_tool_open" title="展开"></div>
+
+  	 <!--搜索结果开始-->
+  <div class="search_result">
+    <div class="search_result_t"><b>船舶</b><span>共<i>5000</i>条</span></div>
+    <div class="search_result_m">
+      <ul>
+        <li><a href="javascript:$('.ship_details_box').show();">CHANGFENG 00188（412200188）</a></li>
+        <li><a href="javascript:$('.ship_details_box').show();">GAN YU YU 00128（926000128）</a></li>
+        <li><a href="javascript:$('.ship_details_box').show();">MINXIAYU00103（413000103）</a></li>
+        <li><a href="javascript:$('.ship_details_box').show();">MINHUIYU00111（800187818）</a></li>
+        <li><a href="javascript:$('.ship_details_box').show();">ZHE CANG YU 00111（416000111）</a></li>
+        <li><a href="javascript:$('.ship_details_box').show();">SUGANYU00136（926000136）</a></li>
+        <li><a href="javascript:$('.ship_details_box').show();">LUWEIGAOYU65009（412330000）</a></li>
+        <li><a href="javascript:$('.ship_details_box').show();">00057（413800057）</a></li>
+        <li><a href="javascript:$('.ship_details_box').show();">YU00067（412000067）</a></li>
+        <li><a href="javascript:$('.ship_details_box').show();">00000000000000000000（809780071）</a></li>
+      </ul>
+    </div>
+  </div>
+  <!--搜索结果结束-->
+
+  	 <!--船舶详情开始-->
+  <div class="ship_details_box">
+    <div class="ship_details_tit"><b>CHANGFENG 00188（412200188）</b><span class="back">返回</span></div>
+    <div class="ship_details_img"><img src="assets/images/common/1.jpg" /></div>
+    <div class="ship_details_con">
+      <div class="info">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" id = 'tables'>
+
+		</table>
+      </div>
+      <div class="info_open"></div>
+      <div class="info_clo"></div>
+      <div class="position_list">
+        <div class="position_list_t">
+        	 <div class="swiper-wrapper">
+            <div class="swiper-slide on"><span>最新位置</span></div>
+            <div class="swiper-slide"><span>441201922</span></div>
+            <div class="swiper-slide"><span>441201923</span></div>
+            <div class="swiper-slide"><span>441201924</span></div>
+            <div class="swiper-slide"><span>441201925</span></div>
+          </div>
+          <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+		 </div>
+        <div class="position_list_m">
+
+        </div>
+        <div class="position_list_m" style="display:none;">
+        2
+        </div>
+        <div class="position_list_m" style="display:none;">
+        3
+        </div>
+        <div class="position_list_m" style="display:none;">
+        4
+        </div>
+        <div class="position_list_m" style="display:none;">
+        5
+        </div>
+      </div>
+    <!--  <div class="history_list">
+        <div class="item">
+          <div class="tit">南昌港</div>
+          <div class="con con1"><span>01/15 16:10</span> 离港</div>
+          <div class="con"><span>平均/最大航速(km)：</span> 8.6/29.8</div>
+          <div class="con con2"><span>航行里程：</span> 2011.3nm<br><span>航  时：</span> 65天17时</div>
+          <div class="ship"></div>
+        </div>
+        多条DEMO
+        <div class="item">
+          <div class="tit">南昌港</div>
+          <div class="con con1"><span>01/15 16:10</span> 离港</div>
+          <div class="con"><span>平均/最大航速(km)：</span> 8.6/29.8</div>
+          <div class="con con2"><span>航行里程：</span> 2011.3nm<br><span>航  时：</span> 65天17时</div>
+          <div class="ship"></div>
+        </div>
+
+        <div class="line"></div>
+      </div>-->
+    </div>
+    <div class="history_time">
+    	<span>起始：</span>
+    	<input type="text" class="input" onclick="WdatePicker()" id = 'Beginning'><br>
+    	<span>终止：</span>
+    	<input type="text" class="input" onclick="WdatePicker()" id = 'Terminal'>
+    	<input type="submit" class="btn">
+    </div>
+    <div class="ship_details_foot">
+    	<a href="javascript:;"><i class="t1"></i>关注</a>
+    	<a href="javascript:;" class="ship_details_foot_btn2"><i class="t2"></i>捞渔日志</a>
+    	<a href="javascript:;" class="ship_details_foot_btn3"><i class="t3"></i>历史轨迹</a>
+    </div>
+  </div>
+  <!--船舶详情结束-->
+  	<!--历史轨迹开始-->
+  <div class="history_track">
+    <div class="history_track_t"><b>历史轨迹</b><span class="clo"></span></div>
+    <div class="history_track_m">
+      <div class="trail_list">
+        <div class="item">
+          <div class="l"><label class="checked"><input type="checkbox" name="id" value="1" checked></label></div>
+          <div class="m">龙达8801</div>
+          <div class="r"><a href="javascript:;" class="t1"></a><a href="#" class="t2"></a><a href="javascript:;" class="t3"></a></div>
+          <div class="clo"></div>
+        </div>
+        <!--<div class="item">
+          <div class="l"><label><input type="checkbox" name="id" value="2"></label></div>
+          <div class="m">rathiyamma1 malpe</div>
+          <div class="r"><a href="javascript:;" class="t1s"></a><a href="javascript:;" class="t2"></a><a href="javascript:;" class="t3"></a></div>
+          <div class="clo"></div>
+        </div>
+        <div class="item">
+          <div class="l"><label><input type="checkbox" name="id" value="3"></label></div>
+          <div class="m">CHANGFENG 00188</div>
+          <div class="r"><a href="javascript:;" class="t1s"></a><a href="javascript:;" class="t2"></a><a href="javascript:;" class="t3"></a></div>
+          <div class="clo"></div>
+        </div>
+        <div class="item">
+          <div class="l"><label><input type="checkbox" name="id" value="4"></label></div>
+          <div class="m">longda88123</div>
+          <div class="r"><a href="javascript:;" class="t1s"></a><a href="javascript:;" class="t2"></a><a href="javascript:;" class="t3"></a></div>
+          <div class="clo"></div>
+        </div>-->
+      </div>
+      <div class="trail_speed">
+        <div class="trail_speed_t"><a href="#" class="t1 on">正常</a><a href="#" class="t2">快速</a><a href="javascript:;" class="t3">特快</a></div>
+        <div class="trail_speed_m">
+          <a href="javascript:;" class="play"></a>
+          <a href="javascript:;" class="pause"></a>
+          <div class="con">
+          <p class="btn" style="width:50%;"><i></i></p>
+          <p class="bg"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--历史轨迹结束-->
+
+	 <!--捞渔日志开始-->
+  <div class="fishing_log">
+    <div class="fishing_log_tit"><b>捞渔日志</b><span class="back">返回</span></div>
+    <div class="fishing_log_con">
+      <div class="fishing_form">
+        <div class="tit">日期：</div>
+        <div class="con"><input type="text" class="input" value="2019-03-04" onclick="WdatePicker()"></div>
+      </div>
+      <div class="fishing_form">
+        <div class="tit">作业位置：</div>
+        <div class="table">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tbody>
+    <tr>
+      <th>开始时间</th>
+      <td><input type="text" class="input input_date" value="04:00" onclick="WdatePicker({dateFmt:'HH:mm'})"></td>
+      <th>结束时间</th>
+      <td><input type="text" class="input input_date" value="22:08" onclick="WdatePicker({dateFmt:'HH:mm'})"></td>
+    </tr>
+    <tr>
+      <th>开始经度</th>
+      <td>
+      <div class="m_radio"><label class="checked"><input type="radio" name="start_longitude" value="N" checked>N</label><label><input type="radio" name="start_longitude" value="S">S</label></div>
+      <div class="llbox"><input type="text" class="s_input" value="0"><i>°</i><input type="text" class="s_input" value="0"><i>'</i><input type="text" class="s_input" value="0"><i>"</i></div>
+      </td>
+      <th>结束经度</th>
+      <td>
+      <div class="m_radio"><label class="checked"><input type="radio" name="end_longitude" value="N" checked>N</label><label><input type="radio" name="end_longitude" value="S">S</label></div>
+      <div class="llbox"><input type="text" class="s_input" value="0"><i>°</i><input type="text" class="s_input" value="0"><i>'</i><input type="text" class="s_input" value="0"><i>"</i></div>
+      </td>
+    </tr>
+    <tr>
+      <th>开始纬度</th>
+      <td>
+      <div class="m_radio"><label class="checked"><input type="radio" name="start_latitude" value="N" checked>N</label><label><input type="radio" name="start_latitude" value="S">S</label></div>
+      <div class="llbox"><input type="text" class="s_input" value="0"><i>°</i><input type="text" class="s_input" value="0"><i>'</i><input type="text" class="s_input" value="0"><i>"</i></div>
+      </td>
+      <th>结束纬度</th>
+      <td>
+      <div class="m_radio"><label class="checked"><input type="radio" name="end_latitude" value="N" checked>N</label><label><input type="radio" name="end_latitude" value="S">S</label></div>
+      <div class="llbox"><input type="text" class="s_input" value="0"><i>°</i><input type="text" class="s_input" value="0"><i>'</i><input type="text" class="s_input" value="0"><i>"</i></div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+      </div>
+      <div class="fishing_form">
+        <div class="tit">钓机作业：</div>
+        <div class="table">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tbody>
+    <tr>
+      <th>作业台数</th>
+      <td><input type="text" class="input" value="22"></td>
+      <th>单根钓线钩数</th>
+      <td><input type="text" class="input" value="40"></td>
+    </tr>
+    <tr>
+      <th>作业水深</th>
+      <td><input type="text" class="input" value="85m"></td>
+      <th>机钓产量</th>
+      <td><input type="text" class="input" value="5080kg"></td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+      </div>
+      <div class="fishing_form">
+        <div class="tit">手钓作业：</div>
+        <div class="table">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tbody>
+    <tr>
+      <th>手钓人数</th>
+      <td><input type="text" class="input" value="35kg"></td>
+      <th>投钩水深</th>
+      <td><input type="text" class="input" value="60m"></td>
+    </tr>
+    <tr>
+      <th>手钓数量</th>
+      <td><input type="text" class="input" value="1080kg"></td>
+      <th></th>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+      </div>
+      <div class="fishing_form">
+        <div class="tit">总捕获量：</div>
+        <div class="con"><input type="text" class="input" value="6160kg"></div>
+      </div>
+      <div class="fishing_form">
+        <div class="tit">鱿鱼个体：</div>
+        <div class="table">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tbody>
+    <tr>
+      <th>平均体重</th>
+      <td><input type="text" class="input" value="25kg"></td>
+      <th>平均胸长</th>
+      <td><input type="text" class="input" value="18cm"></td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+      </div>
+      <div class="fishing_form">
+        <div class="tit">作业总时数：</div>
+        <div class="con"><input type="text" class="input" value="18h"></div>
+      </div>
+      <div class="fishing_form">
+        <div class="tit">表温：</div>
+        <div class="con"><input type="text" class="input" value="21℃"></div>
+      </div>
+      <div class="fishing_form">
+        <div class="tit">备注：</div>
+        <div class="con"><input type="text" class="input" value="备注内容..."></div>
+      </div>
+    </div>
+    <div class="fishing_log_foot"><a href="javascript:;" class="btn btn1">返 回</a><input type="submit" class="btn btn2" value="上报"></div>
+  </div>
+
+  <div class="fishing_date">
+    <div id="calendar_container"></div>
+    <div class="fishing_date_f"><span><i class="c1"></i>已上报</span><span><i class="c2"></i>未上报</span><span><i class="c3"></i>未填写</span></div>
+
+  </div>
+  <!--捞渔日志结束-->
+  	<!--船队列表开始-->
+  <div class="ztree_main">
+    <div class="ztree_main_t">
+      <ul>
+        <li class="on"><i class="i1"></i>船队</li>
+        <li><i class="i2"></i>项目</li>
+        <li><i class="i3"></i>关注</li>
+      </ul>
+      <div class="ztree_main_clo" title="关闭"></div>
+    </div>
+    <div class="ztree_main_m">
+      <div class="ztree_box">
+      	<ul id="treeDemo" class="ztree"></ul>
+
+      </div>
+      <div class="ztree_box" style="display:none;">2</div>
+      <div class="ztree_box" style="display:none;">3</div>
+    </div>
+  </div>
+  <!--船队列表结束-->
+  <div class="right_tool_open" title="展开"></div>
+  <div class="right_tool">
+    <div class="right_tool_clo" title="收起"></div>
+    <div class="rtool_nav">
+      <ul>
+        <li><a href="#" class = 'right_tool_btn1' title="电子方位"><i class="i1"></i></a></li>
+        <li><a href="#" class ='right_tool_btn2'title="测距"><i class="i2"></i></a></li>
+        <li><a href="#" class="right_tool_btn3" title="台风"><i class="i3"></i></a></li>
+        <li><a href="#" class="right_tool_btn4" title="标记"><i class="i4"></i></a></li>
+        <li><a href="#" class="right_tool_btn5" title="区域"><i class="i5"></i></a></li>
+      </ul>
+    </div>
+  </div>
+
+  	<!--台风开始-->
+  <div class="typhoon_box">
+    <div class="typhoon_box_t m_checkbox"><label class="checked"><input type="checkbox" checked>沿海气象</label></div>
+    <div class="typhoon_box_m">台风：当前无台风<a href="javascript:;" class="btn">历史台风</a></div>
+  </div>
+  <!--台风结束-->
+
+  <!--标记管理开始-->
+  <div class="mark_box mark_box1">
+    <div class="mark_box_t">
+      <div class="t">标记管理</div>
+      <a href="#" class="mark_add_btn1" title="添加标记" id = 'addtag'></a>
+      <a href="#" class="mark_add_btn2" title="添加框" id= 'addbox'></a>
+      <div class="clo"></div>
+    </div>
+    <div class="mark_box_m">
+      <div class="mark_list">
+        <div class="item">
+          <div class="tit">点</div>
+          <div class="con" id = 'dot'>
+
+          </div>
+        </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--标记管理结束-->
+
+  <!--区域管理开始-->
+  <div class="mark_box mark_box2">
+    <div class="mark_box_t">
+      <div class="t">区域管理</div>
+      <a href="javascript:" class="mark_add_btn2" title="添加区域" id='addarea'></a>
+      <div class="clo"></div>
+    </div>
+    <div class="mark_box_m">
+      <div class="mark_list mark_list2">
+        <div class="item">
+          <div class="con" id= 'areaAll'>
+
+              <!--<li><b>区域名称1</b><a href="#" class="view" title="查看"></a><a href="#" class="edit" title="编辑"></a><a href="#" class="del" title="删除"></a></li>
+              <li><b>区域名称2</b><a href="#" class="view" title="查看"></a><a href="#" class="edit" title="编辑"></a><a href="#" class="del" title="删除"></a></li>
+              <li><b>区域名称3</b><a href="#" class="view" title="查看"></a><a href="#" class="edit" title="编辑"></a><a href="#" class="del" title="删除"></a></li>
+              <li><b>区域名称4</b><a href="#" class="view" title="查看"></a><a href="#" class="edit" title="编辑"></a><a href="#" class="del" title="删除"></a></li>-->
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--区域管理结束-->
+
+
+  <!--地图控件开始-->
+  <div class="ranging_box" style="left:600px; bottom:230px;">
+    <div class="ico"><img src="assets/images/common/ranging_ico.png"></div>
+    <div class="m">起点</div>
+  </div>
+
+  <div class="ranging_box" style="left:600px; bottom:190px;">
+    <div class="ico"><img src="assets/images/common/ranging_ico.png"> <img src="assets/images/common/ranging_clo.png"></div>
+    <div class="m">总长：<b>33.7</b>公里</div>
+  </div>
+
+  <div class="location_box" style="left:600px; bottom:150px;">
+    <div class="ico"><img src="assets/images/common/ranging_ico.png"> <img src="assets/images/common/ranging_clo.png"> <img src="assets/images/common/ranging_ruler.png"></div>
+    <div class="m">距离：1636.00海里<br>方位：135.0000°</div>
+  </div>
+
+  <div class="location_box" style="left:600px; bottom:80px;">
+    <div class="ico"><img src="assets/images/common/ranging_ico.png"> <img src="assets/images/common/ranging_ruler.png"></div>
+    <div class="m">距离：1636.00海里<br>方位：135.0000°<br><span>鼠标单击结束</span></div>
+  </div>
+
+  <div class="ico_box" style="left:620px; bottom:430px;"><img src="assets/images/common/start.png" /></div>
+  <div class="ico_box" style="left:700px; bottom:180px;"><img src="assets/images/common/end.png" /></div>
+
+  <div class="map_main" id= 'map_main'>
+    <div class="scale">3000 km<br>2000 mi</div>
+    <div class="coordinate">74°57.56′ S 66°47.84′ W</div>
+    <div class="map_tool"><a href="#" class="enlarge"></a><a href="#" class="narrow"></a></div>
+    <div class="map_type" id = 'map_typeall'>
+      <ul>
+        <li style="display:none;"><a href="#" class="on"><i class="t1"></i><span>海图</span></a></li>
+        <li style="display:none;"><a href="#"><i class="t2"></i><span>地图</span></a></li>
+        <li><a href="#"><i class="t3"></i><span>卫星</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <!--地图控件结束-->
+
+  <!--添加标记点-->
+	<div id="addboxs">
+		<div class="user_sign_title" id = 'user_sign_title'>
+            <span class="upload_title_span" style="color: #fff;" id="uspan_sign_title" lg-type="lg" lg-value="mark_add">添加标记</span>
+            <a href="javascript:" class="user_markclose" onclick="custom_sign.closepoup();">
+              <img class="poup_delete" lg-type="tt" lg-value="close" title="关闭窗口" src="images/poup_win_close.png">
+            </a>
+        </div>
+        <div class="hisvoyagecotent" id="addBiaozhu" operatetype="add">
+        	<div class="" style="display: none;" id="addBiaozhuError">
+
+            </div>
+            <div class="group_content_div">
+              <span style="width:17%;" lg-type="lg" lg-value="mark_names">名称:</span>
+              <input type="text" class="up_po_custom_in" id="__markname" style="margin-top: 10px;width:66%;">
+              <input type="hidden" id="__markId">
+            </div>
+            <div id="point_sign_div">
+              <div class="group_content_div">
+                <div class="user_mark_valh">
+                  <span style="width:33%;" lg-type="lg" lg-value="mark_lat">纬度:</span>
+                  <input type="text" class="up_po_custom_in" id="marklatD">
+                  <span lg-type="lg" lg-value="mark_deg">度</span>
+                </div>
+                <div class="user_mark_valb">
+                  <input type="text" class="up_po_custom_in" id="marklatF">
+                  <span lg-type="lg" lg-value="mark_min">分</span>
+                </div>
+              </div>
+              <div class="group_content_div">
+                <div class="user_mark_valh">
+                  <span style="width:33%;" lg-type="lg" lg-value="mark_lng">经度:</span>
+                  <input type="text" class="up_po_custom_in" id="marklongD">
+                  <span lg-type="lg" lg-value="mark_deg">度</span>
+                </div>
+                <div class="user_mark_valb">
+                  <input type="text" class="up_po_custom_in" id="marklongF">
+                  <span lg-type="lg" lg-value="mark_min">分</span>
+                </div>
+              </div>
+            </div>
+            <div class="group_content_div" style="justify-content: space-around;">
+              <input type="button" value="取消" lg-value="group_cancel" style="background: #0000FF;" class="up_po_custom_in shipeditbutton" id = 'call'>
+              <input type="button" value="保存" lg-value="group_save" style="background: #0000FF;" class="up_po_custom_in shipeditbutton" id = 'save'>
+            </div>
+          </div>
+	</div>
+	<!--作者：offline时间：2019-04-09添加标记框 -->
+	<div class="user_sign_window movewindowcom body_unselect" style="position: fixed; width: 250px; display: none;background: #FFFFFF;z-index: 11;" id="user_sign_edit" box-display="dishide">
+          <div class="user_sign_title">
+            <span class="upload_title_span" style="color: #fff;" id="uspan_sign_title" lg-type="lg" lg-value="mark_add">添加标记</span>
+            <a href="javascript:" class="user_markclose">
+              <img class="poup_delete" lg-type="tt" lg-value="close" title="关闭窗口" src="images/poup_win_close.png">
+            </a>
+          </div>
+          <div class="hisvoyagecotent" id="user_sign_content" operatetype="add">
+            <div class="group_content_div">
+              <span style="width:20%;" lg-type="lg" lg-value="mark_names">名称:</span>
+              <input type="text" class="up_po_custom_in" id="sign_area_name_two" style="margin-top: 10px;width:67%;">
+            </div>
+            <div id="point_sign_div" style="display: none;">
+              <div class="group_content_div">
+                <div class="user_mark_valh">
+                  <span style="width:33%;" lg-type="lg" lg-value="mark_lat">纬度:</span>
+                  <input type="text" class="up_po_custom_in" id="user_signlatpre">
+                  <span lg-type="lg" lg-value="mark_deg">度</span>
+                </div>
+                <div class="user_mark_valb">
+                  <input type="text" class="up_po_custom_in" id="user_signlatnext">
+                  <span lg-type="lg" lg-value="mark_min">分</span>
+                </div>
+              </div>
+              <div class="group_content_div">
+                <div class="user_mark_valh">
+                  <span style="width:33%;" lg-type="lg" lg-value="mark_lng">经度:</span>
+                  <input type="text" class="up_po_custom_in" id="user_signlonpre">
+                  <span lg-type="lg" lg-value="mark_deg">度</span>
+                </div>
+                <div class="user_mark_valb">
+                  <input type="text" class="up_po_custom_in" id="user_signlonnext">
+                  <span lg-type="lg" lg-value="mark_min">分</span>
+                </div>
+              </div>
+            </div>
+            <div class="group_content_div">
+              <input type="button" value="取消" lg-value="group_cancel" style="margin-left:10px;" class="up_po_custom_in shipeditbutton" id = 'Flagbox'>
+              <input type="button" value="保存" lg-value="group_save" style="margin-left:40px;" class="up_po_custom_in shipeditbutton" id = 'Markboxsave'>
+            </div>
+          </div>
+        </div>
+  </div><!--mainer end-->
+</div>
+    <!-- 底部 -->
+    <!--<div class="layui-footer">
+        Copyright © 2018 <a href="https://easyweb.vip" target="_blank">英特讯</a> All rights reserved.
+        <span class="pull-right">Version 0.0.1</span>
+    </div>-->
+    <!-- 手机屏幕遮罩层 -->
+    <div class="site-mobile-shade"></div>
+</div>
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+<!-- 多系统按钮渲染模板 -->
+<script id="navigationBarBtn" type="text/html">
+    <li class="layui-nav-item {{ d.num == 0 ? 'layui-this':'' }}" id="monitor{{ d.id }}"><a nav-bind="{{ d.id }}">{{
+        d.name }}</a></li>
+</script>
+<!-- 侧边栏渲染模板 -->
+<script id="sideNav" type="text/html">
+    <!-- 系统一的菜单，每个ul都加nav-id -->
+    <ul nav-id="{{ d.id }}" class="layui-nav layui-nav-tree {{ d.num != 0 ? 'layui-hide':'' }}"
+        lay-filter="admin-side-nav" style="margin: 15px 0;">
+        {{# layui.each(d.menuVoList, function(index, item){ }}
+        <li class="layui-nav-item">
+            <a href="{{item.url}}"><i class="layui-icon {{item.icon}}"></i>&emsp;<cite>{{ item.name}}</cite></a>
+            {{# if(item.subMenus&&item.subMenus.length>0){ }}
+            <dl class="layui-nav-child">
+                {{# layui.each(item.subMenus, function(index, subItem){ }}
+                <dd>
+                    <a href="{{ subItem.url }}">{{ subItem.name }}</a>
+
+                    {{# if(subItem.subMenus&&subItem.subMenus.length>0){ }}
+                    <dl class="layui-nav-child">
+                        {{# layui.each(subItem.subMenus, function(index, thrItem){ }}
+                        <dd>
+                            <a href="{{ thrItem.url }}">{{ thrItem.name }}</a>
+
+
+                            {{# if(thrItem.subMenus&&thrItem.subMenus.length>0){ }}
+                            <dl class="layui-nav-child">
+                                {{# layui.each(thrItem.subMenus, function(index, fourItem){ }}
+                                <dd>
+                                    <a href="{{ fourItem.url }}">{{ fourItem.name }}</a>
+
+                                    {{# if(fourItem.subMenus&&fourItem.subMenus.length>0){ }}
+                                    <dl class="layui-nav-child">
+                                        {{# layui.each(fourItem.subMenus, function(index, fiveItem){ }}
+                                        <dd>
+                                            <a href="{{ fiveItem.url }}">{{ fiveItem.name }}</a>
+                                        </dd>
+                                        {{# }); }}
+                                    </dl>
+                                    {{# } }}
+
+                                </dd>
+                                {{# }); }}
+                            </dl>
+                            {{# } }}
+
+                        </dd>
+                        {{# }); }}
+                    </dl>
+                    {{# } }}
+                </dd>
+                {{# }); }}
+            </dl>
+            {{# } }}
+        </li>
+        {{# }); }}
+    </ul>
+</script>
+
+<!-- js部分 -->
+<script type="text/javascript" src="./assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="assets/libs/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="./assets/js/main.js"></script>
+<script type="text/javascript" src="assets/js/ship/html5.min.js"></script>
+<script type="text/javascript" src="./assets/js/ship/jquery.js"></script>
+<script type="text/javascript" src="./assets/module/dtree/dtree.js"></script>
+<script type="text/javascript" src="assets/libs/jquery/jquery.cookie.js"></script>
+<script type="text/javascript" src="assets/libs/zTree/js/jquery.ztree.all-3.5.min.js"></script>
+<script type="text/javascript" src="assets/js/ztree/js/jquery.ztree.core.js"></script>
+<script type="text/javascript" src="./assets/js/ship/main.js"></script>
+<script type="text/javascript" src = './assets/js/ship/swiper.min.js'></script>
+<script type="text/javascript" src = './assets/js/ship/simple-calendar.js'></script>
+<script type="text/javascript" src="assets/libs/jquery/jquery.select.js"></script>
+<script type="text/javascript" src="./assets/js/datepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="./assets/js/ship/jquery.mCustomScrollbar.concat.min.js"></script>
+<script type="text/javascript" src="assets/js/xslider.js"></script>
+<script type="text/javascript" src="assets/js/Home_all.js"></script>
+<script type="text/javascript" src="assets/js/map.js"></script>
+<script type="text/javascript" src="assets/js/gis_main.js"></script>
+<script>
+    layui.use(['layer', 'laydate', 'table', 'util', 'config','admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var util = layui.util;
+        var laydate = layui.laydate;
+        var config = layui.config;
+        var admin = layui.admin;
+        var token = config.getToken();
+        var addboxs = document.getElementById('addboxs')  //要拖动的盒子  添加标注
+        var Usersign = document.getElementById('user_sign_edit')  //添加标记  面
+        //var Somepictures = document.getElementById('Somepictures')  //图片的盒子
+        var map = new M.Map("map_main");
+        map.addFleetShips();
+        if (token) {
+            layui.link(config.base_server + "userCss?Authorization=" + token.access_token);
+        }
+        $(".ztree_box").mCustomScrollbar({
+					scrollInertia:150,
+					advanced:{
+						updateOnContentResize:true
+					}
+			});
+			$(".ship_details_con").mCustomScrollbar({
+					scrollInertia:150,
+					advanced:{
+						updateOnContentResize:true
+					}
+			});
+			$(".fishing_log_con").mCustomScrollbar({
+					scrollInertia:150,
+					advanced:{
+						updateOnContentResize:true
+					}
+			});
+        var setting = {
+			callback: {
+				onClick: zTreeOnClick
+			}
+		};
+		var zNodes = [
+					   {
+					   	name:"未分配",
+					   	open:true,
+					   	children:[
+					      			{
+					      				name:"雁鸣6805"
+					      			},
+					      			{
+					      				name:"雁鸣6806"
+					      			},
+					      			{
+					      				name:"雁鸣6807"
+					      			},
+					      			{
+					      				name:"雁鸣6808"
+					      			}
+					      		]
+					   	},
+					    {
+					    	name:"安哥拉",
+					    	open:true,
+					    	children:[
+					                   {
+					                   	 name:"龙达8801"
+					                   },
+					                   {
+					                   	 name:"龙达8802"
+					                   },
+					                   {
+					                   	 name:"龙达8803"
+					                   },
+					                   {
+					                   	 name:"龙达8804"
+					                    }
+					                ]
+					    },
+					    {
+					    	name:"赛丽爱妃",
+					    	open:true,
+					    	children:[
+					                   {
+					                   	 name:"福海1110"
+					                   },
+					                   {
+					                   	 name:"福海1111"
+					                   },
+					                   {
+					                   	 name:"福海1112"
+					                   },
+					                   {
+					                   	 name:"福海1113"
+					                    }
+					                ]
+					    }
+					 ];
+        zTreeObj = $.fn.zTree.init($("#treeDemo"), setting,zNodes );
+        //点击测距
+        $('.right_tool_btn2').on('click',function() {
+            map.startMeasure()
+        })
+        //点击电子方位  ;
+        $('.right_tool_btn1').on('click',function() {
+            map.startDirection()
+        });
+        $('#navigationBarBtnList').on('click','li',function () {
+            console.log($(this).addClass('red').siblings().removeClass('red'))
+        })
+		//点击添加标记
+		$('#addtag').on('click',function (e){
+			map.startDrawMark(name);//开始标注
+			$("#map_main").unbind("click").one('click',function(e) {
+				$('#addboxs').css({
+		         	'display':'block',
+		         	'left':e.pageX,
+		         	'top':e.pageY - 120
+		       })
+		         $('#user_signlatpre').val($('#latDu').text())
+		         $('#user_signlatnext').val($('#latFen').text())
+		         $('#user_signlonpre').val($('#lonDu').text())
+		         $('#user_signlonnext').val($('#lonFen').text())
+		         drag(addboxs)
+			})
+});
+
+		//点击标记管理中的点的 ‘查看’
+		$('#dot').on('click','.view',function(e) {
+			var id = $(this).prev().data('idea')
+			admin.req('/MapOfOcean/getMarkerById',{markerId:id},function (res) {
+			    map.addMark({id:"1",name:"测试加载1",lon:70.2768888888888889,lat:9.1348611111111111});
+
+			    console.info(DegreeConvertBack("9°8.4375'"));
+
+				console.log(res.location)
+//				map.addMark({id:res.id,name:res.name,lon:34.123,lat:55.1234});
+			},'GET')
+
+
+		})
+
+		function DegreeConvertBack(value)
+            { ///<summary>度分秒转换成为度</summary>
+                var du = value.split("°")[0];
+                var fen = value.split("°")[1].split("'")[0];
+                var miao = value.split("°")[1].split("'")[1].split('"')[0];
+
+                return Math.abs(du) + "." + (Math.abs(fen)/60);
+
+            }
+		//点击保存
+		$('#save').on('click',function() {
+			var name = $('#sign_area_name_one').val();
+			var location = $('#user_signlatpre').val() + ',' + $('#user_signlatnext').val() + '|' +$('#user_signlonpre').val() + ','+ $('#user_signlonnext').val()
+			$('#addboxs').hide()
+			admin.req('/MapOfOcean/addMarker',{location:location,type:0,name:name},function (res) {
+				console.log(res)
+			},'POST')
+		})
+		//点击标记管理中的添加框
+		$('#addbox').on('click',function() {
+			map.startDrawArea()  //绘制多边形
+			map.setDrawAreaEndFun(function (data) {
+				var alldata = data
+			    log(data);//数据格式[[经度1,纬度1],[经度2,纬度2],[经度3,纬度3]]
+			    //取消当前绘制时，可以调用如下语句
+			    //map.removeDrawedArea();
+			    $("#map_main").unbind("click").one('click',function(e) {
+			    	$('#user_sign_edit').css({
+		         	'display':'block',
+		         	'left':e.pageX,
+		         	'top':e.pageY
+		         })
+			    })
+			    //添加框中的保存
+				$('#Markboxsave').on('click',function () {
+					$('#user_sign_edit').hide();
+					var Marksavename = $('#sign_area_name_two').val();
+					//var Allsurface = encodeArray2D(alldata)
+//					admin.req('/MapOfOcean/addMarker',{location:Allsurface,name:Marksavename,type:1},function(res) {
+//							Pagerendering()
+//					},'POST')
+				})
+			})
+		})
+		//二维数组转坏为json字符串
+		function encodeArray2D(obj) {
+			var array = [];
+			for (var i = 0; i < obj.length; i++) {
+				array[i] = '[' + obj[i].join(',') + ']';
+			}
+			return '[' + array.join(',') + ']';
+		}
+		 // 函数中的参数分别为 cookie 的名称、值以及过期天数
+		function setCookie(c_name,value,expiredays){
+		    var exdate = new Date();
+		    exdate.setDate(exdate.getDate()+expiredays);
+		    document.cookie=c_name+ "=" +escape(value)+
+		    ((expiredays==null) ? "" : ";expires="+exdate.toGMTString())
+		  }
+
+		//地图切换
+		//点击左下角的海图  地图 卫星图  三个进行 页面的切换
+        var Allmap = $('.map_type ul li')
+		for(var i = 0;i < Allmap.length; i++ ){
+			$(Allmap[i]).attr('index',i)
+				Allmap[i].onclick= function () {
+				var index = $(this).attr('index')
+				if(index == 0){
+   				  	map.showSeaMap()  //显示海图
+   				  	 	$(this).addClass('on').parent().siblings().removeClass('on');
+   				  	 	$(this).show()
+   				  	 	$(this).siblings().hide()
+	   				}else if(index == 1){
+	   				  	map.showStreetMap()  //显示地图
+	   				  	 $(this).addClass('on').parent().siblings().removeClass('on');
+	   				  	 $(this).show()
+   				  	 	$(this).siblings().hide()
+	   				}else{
+	   				  	map.showSateMap()  //显示卫星图
+	   				  	 $(this).addClass('on').parent().siblings().removeClass('on');
+	   				  	 $(this).show()
+   				  	 	$(this).siblings().hide()
+	   				}
+			}
+		}
+
+/*        $('#btnLogout').click(function () {
+            layer.confirm('确定要退出吗？', {icon: 3,
+            	le: '提示'}, function (index) {
+                config.removeToken();
+                location.replace('login.html');
+                layer.close(index);
+            });
+        });*/
+
+/*        window.onbeforeunload = function(){     //页面刷新或关闭事件
+            if (!config.getToken()) {
+                return location.replace('login.html');
+            }
+        };*/
+
+/*        $("#index_all").mousedown(function(){
+            layer.msg('鼠标点击事件'+config.getToken().access_token, {icon: 1, time: 1000}); //1秒关闭
+            if (!config.getToken()) {
+                return location.replace('login.html');
+            }
+        });*/
+    });
+</script>
+</body>
+
+</html>

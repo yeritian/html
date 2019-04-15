@@ -1,0 +1,201 @@
+<!-- 关闭Tab时顶部标题 -->
+<div class="layui-body-header">
+    <span class="layui-breadcrumb pull-right">
+    	<span class="layui-body-header-title">用户管理</span>
+        <a href="#/">首页</a>
+        <a><cite>用户管理</cite></a>
+    </span>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline" style="width: 120px;">
+                        <select id="sltKey">
+                            <option value="">-搜索条件-</option>
+                                                    <option value="name">名称</option>
+                                                    <option value="mobile">手机号</option>
+                                            </select>
+                    </div>
+                    <div class="layui-inline">
+                        <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                        <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
+                    </div>
+                </div>
+            </div>
+
+            <table class="layui-table" id="operatorTable" lay-filter="operatorTable"></table>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="binding">绑定船舶</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="appBinding">应用权限</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'config', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var config = layui.config;
+        var admin = layui.admin;
+        form.render('select');
+
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#operatorTable',
+            url: config.base_server + 'operator/list',
+            method: 'GET',
+            where: {
+                token: config.getToken().access_token
+            },
+            page: true,
+            cols: [[
+                {type: 'checkbox'},{type: 'numbers'},
+                {field: 'mobile', sort: true, title: '登录名'},
+                {field: 'name', sort: true, title: '名称'},
+                {field: 'shipName', sort: true, title: '船舶'},
+                {align: 'center', toolbar: '#tableBar', title: '操作',width:300}
+            ]]
+        });
+
+        // 添加按钮点击事件
+        $('#btnAdd').click(function () {
+            showEditModel();
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            table.reload('operatorTable', {where: {searchKey: key, searchValue: value}});
+        });
+
+        // 工具条点击事件
+        table.on('tool(operatorTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            }else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }else if (obj.event === 'binding') { //绑定
+                showBingding(data);
+            }else if (obj.event === 'appBinding') { //应用权限
+                showAppBinding(data);
+            }
+        });
+        // 应用权限
+        function showAppBinding(data) {
+//          admin.putTempData('t_appBinding', data);
+//          admin.putTempData('formOk', false);
+//          top.layui.admin.open({
+//              type: 2,
+//              title: '应用授权',
+//              area: ['80%', '80%'],
+//              resize:true,
+//              content: 'base/operator/appBinding',
+//              end: function () {
+//                  admin.getTempData('formOk') && table.reload('operatorTable');  // 成功刷新表格
+//              }
+//          });
+            admin.putTempData('t_appBinding', data);
+            admin.open({
+                type: 2,
+                title: '应用授权',
+                area: ['80%', '80%'],
+//              offset: '150px',
+                url: 'components/base/appBindingForm.html',
+                resize: true,/**/
+                success: function (layero, index) {
+                    $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                }
+            });
+        }
+
+        // 绑定船舶
+        function showBingding(data) {
+            admin.putTempData('t_operator', data);
+            admin.open({
+                type: 2,
+                title: '绑定船舶',
+                area: ['580px', '492px'],
+//              offset: '150px',
+                url: 'components/base/bindingForm.html',
+                resize: true,/**/
+                success: function (layero, index) {
+                    $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                }
+            });
+        }
+
+        // 删除
+        function doDelete(obj) {
+            var index = top.layer.confirm('确定要删除吗？', {
+                skin: 'layui-layer-admin'
+            }, function () {
+                layer.load(2);
+                admin.req('operator/delete', {
+                    id: obj.data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'delete');
+            });
+        }
+
+        // 导出excel
+        $('#btnExp').click(function () {
+            var checkRows = table.checkStatus('operatorTable');
+            if (checkRows.data.length == 0) {
+                layer.msg('请选择要导出的数据', {icon: 2});
+            } else {
+                table.exportFile(ins1.config.id, checkRows.data, 'xls');
+            }
+        });
+
+        // 显示表单弹窗
+        function showEditModel(data) {
+        	admin.putTempData('t_operator', data);
+            admin.open({
+                type: 2,
+                title: data ? '修改Operator' : '添加Operator',
+                area: ['380px', '392px'],
+                offset: '200px',
+                url: 'components/base/operatorForm.html',
+                resize: true,/**/
+                success: function (layero, index) {
+                    $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                }
+            });
+        }
+
+    });
+</script>
+
+</body>
+</html>

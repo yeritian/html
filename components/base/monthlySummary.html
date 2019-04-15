@@ -1,0 +1,311 @@
+<style>
+    .layui-inline{
+        display:flex;
+        flex-wrap: wrap;
+    }
+    .layui_comm{
+        width:20%;
+        height:40px;
+        margin-left:20px;
+        padding-top: 20px;
+        display: flex;
+        align-items: center;
+    }
+    .layui_comm span{
+        flex:3;
+        text-align: center;
+    }
+    .layui_comm input{
+        flex: 7;
+    }
+</style>
+
+
+
+<link href="../../assets/libs/layui/css/layui.css" />
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline"  >
+                        <div class="layui_comm">
+                            <span> 公司名称：</span><input type="text" id="getCompanyName" class="layui-input" placeholder="输入公司名称" /></div>
+                        <div class="layui_comm"  >
+                            <span>作业类型：</span>
+                            <select id="getJobType"  >
+                                <option value="0">-请选择类型-</option>
+                                <option value="超低温">超低温</option>
+                                <option value="冰鲜钓">冰鲜钓</option>
+                                <option value="常温">常温</option>
+                                <option value="围网">围网</option>
+                            </select>
+                        </div>
+                        <div class="layui_comm"  >
+                            <span>作业洋区：</span><input type="text" id="getJobTheArea" class="layui-input" placeholder="输入作业洋区" /></div>
+                       <!-- <div class="layui_comm"  >
+                            <span>所属省份：</span><input type="text" id="getProvince" class="layui-input" placeholder="输入所属省份：" /></div>-->
+                        <div class="layui_comm" >
+                            <span>作业时间：</span>
+                            <div class="layui-input-inline">
+                                <input type="text" style="width: 187px;" class="layui-input" id="jobTime" placeholder="yyyy-MM" autocomplete="off" >
+                            </div>
+                        </div>
+                        <div class="layui_comm"  >
+                            <span>船名：</span><input type="text" id="getShipName" class="layui-input" placeholder="输入船名" /></div>
+                        <div class="layui_comm" >
+                            <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                            <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                            <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
+
+                            <button id="btnLead" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导入</button>
+                            <button id="butExportTemplate" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出上传文件的模板</button>
+                            <button id="deleteAllMonthly" class="layui-btn icon-btn"><i class="layui-icon"></i>批量删除</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <table class="layui-table" id="monthlyTable" lay-filter="monthlyTable"></table>
+        </div>
+    </div>
+
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <!--<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>-->
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="details">详情</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'config','formSelects','laytpl','laydate'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var config = layui.config;
+        var formSelects = layui.formSelects;
+        var laytpl = layui.laytpl;
+        var laydate = layui.laydate;
+
+        //常规用法
+        /*laydate.render({
+            elem: '#jobTime'
+        });*/
+
+        //年月选择器
+        laydate.render({
+            elem: '#jobTime'
+            ,type: 'month'
+        });
+
+        form.render('select');
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#monthlyTable',
+            url: config.base_server + 'monthly/getMonthly',
+            page: true,
+            cols: [[
+                {type: 'checkbox'},{type: 'numbers'},
+                {field: 'companyName', sort: true, title: '公司名称'},
+                {field: 'jobType', sort: true, title: '作业类型'},
+                {field: 'jobTheArea', sort: true, title: '作业洋区'},
+                {field: 'eez', sort: true, title: '公海EEZ'},
+                {field: 'jobTime', sort: true, title: '作业时间'},
+                {field: 'annotation', sort: true, title: '注释'},
+                {field: 'updateTime', sort: true, title: '修改时间'},
+                {align: 'center', toolbar: '#tableBar', title: '操作'}
+            ]]
+        });
+
+        // 添加按钮点击事件
+        $('#btnAdd').click(function () {
+            showEditModel();
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var companyName = $('#getCompanyName').val();
+            var jobType = $('#getJobType').val();
+            var jobTheArea = $('#getJobTheArea').val();
+            var province = $('#getProvince').val();
+            var jobTime = $('#getJobTime').val();
+            var shipName = $('#getShipName').val();
+            console.log(companyName)
+            //String companyName, String jobType, String jobTheArea, String province, String jobTime, String shipName
+            table.reload('monthlyTable', {where: {companyName: companyName, jobType: jobType, jobTheArea: jobTheArea, province: province, jobTime: jobTime, shipName: shipName}});
+        });
+        // 表单提交事件
+        form.on('submit(monthlyFormSubmit)', function (data) {
+            layer.load(2);
+            var theMethod = data.field.id?"PUT":"POST";
+            admin.req('base/monthly', data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                    table.reload('monthlyTable');
+                    admin.closeDialog('#monthlyForm');
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, theMethod);
+            return false;
+        });
+        // 工具条点击事件
+        table.on('tool(monthlyTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'details') { // 详情
+                detailsMonthly(data);
+            }else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }else if(obj.event === 'edit'){
+                editModel(data);
+            }
+        });
+        // 删除
+        function doDelete(obj) {
+            layer.confirm('确定要删除吗？', {
+                skin: 'layui-layer-admin'
+            }, function (i) {
+                layer.close(i);
+                layer.load(2);
+                admin.req('monthly/deleteMonthly', {id:obj.data.id}, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'GET');
+            });
+        };
+        // 导出excel
+        $('#btnExp').click(function () {
+            var checkRows = table.checkStatus('monthlyTable');
+            var ids = "";
+            for(var x = 0;x<checkRows.data.length;x++){
+                ids+=checkRows.data[x].id+",";
+            }
+            console.info(ids)
+
+            if(ids.length<1){
+                layer.msg("请选择要导出的数据", {icon: 2});
+                return;
+            }
+
+            window.location.href=config.base_server+"monthly/putExport?Authorization="+config.getToken().access_token+"&ids="+ids;
+
+        });
+
+
+        //详情表单弹窗
+        function detailsMonthly(data) {
+            admin.putTempData("id",data.id);
+            admin.open({
+                type: 2,
+                title:'详情Monthly',
+                area: ['450px', '1450px'],
+                offset: '200px',
+                url: 'components/base/monthlyForm2.html',
+                resize: true,
+                success: function (layero, index) {
+                    $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                }
+            });
+
+        }
+
+        //修改
+        function editModel(data) {
+            admin.putTempData("id",data.id);
+            admin.open({
+                type: 2,
+                title: '修改Monthly',
+                area: ['450px', '1750px'],
+                offset: '200px',
+                url: 'components/base/monthlyForm3.html',
+                resize: true,
+                success: function (layero, index) {
+                    $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                }
+            });
+
+        }
+
+        // 显示表单弹窗
+        function showEditModel(data) {
+            admin.open({
+                type: 2,
+                title: '添加Monthly',
+                area: ['450px', '1450px'],
+                offset: '200px',
+                url: 'components/base/monthlyForm.html',
+                resize: true,
+                success: function (layero, index) {
+                    $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                }
+            });
+
+        }
+
+        //上传文件
+        $('#btnLead').click(function () {
+            admin.open({
+                type: 2,
+                title: '上传文件',
+                area: ['450px', '300px'],
+                offset: '200px',
+                url: 'components/base/monthlyLoad.html',
+                resize: true,
+                success: function (layero, index) {
+                    $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                }
+            });
+
+        });
+
+        //模板导出
+        $('#butExportTemplate').on('click',function() {
+            // console.info(window)
+            // $('#butExportTemplate').click(function () {
+            // butExportTemp();
+            window.location.href=config.base_server+"monthly/butExportTemplate?Authorization="+config.getToken().access_token;
+        });
+
+        //批量删除
+        $('#deleteAllMonthly').click(function () {
+            var checkRows = table.checkStatus('monthlyTable');
+            var ids = "";
+            for(var x = 0;x<checkRows.data.length;x++){
+                ids+=checkRows.data[x].id+",";
+            }
+            console.info(ids)
+
+            if(ids.length<1){
+                layer.msg("请选择要删除的数据", {icon: 2});
+                return;
+            }
+
+            admin.req('monthly/deleteAllMonthly', {ids:ids}, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                    table.reload('monthlyTable');
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, 'GET');
+
+        });
+
+    });
+</script>

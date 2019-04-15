@@ -1,0 +1,349 @@
+<style>
+    .layui-form-item {
+        margin-bottom: 0;
+        margin-top: 20px;
+    }
+    .layui-form-item .layui-inline {
+        margin-bottom: 25px;
+        margin-right: 0;
+    }
+    .layui-form-label {
+        padding: 9px 0px;
+        width: 180px;
+    }
+    .layui-input-block {
+        margin-left: 190px;
+    }
+</style>
+<form id="shipForm" lay-filter="shipForm" class="layui-form model-form" style="padding: 0px">
+    <input name="id" type="hidden"/>
+    <!-- 加载动画，移除位置在common.js中 -->
+    <!--<div class="page-loading">
+        <div class="rubik-loader"></div>
+    </div>-->
+
+    <!-- 正文开始 -->
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header">鱼种信息</div>
+            <div class="layui-card-body">
+                    <div class="layui-form-item layui-row">
+                        <div class="layui-inline layui-col-md6">
+                            <table class="layui-hide" id="fishTable" lay-filter="fishTable"></table>
+                        </div>
+                        <div class="layui-inline layui-col-md6" style="padding-left: 30px;">
+                            <select name="fish" id="fish"></select>
+                            <button class="layui-btn icon-btn" id="btnFish" style="margin-top: 20px;float: right;">添加</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+        <div class="layui-card">
+            <div class="layui-card-header">规格信息</div>
+            <div class="layui-card-body">
+                <div class="layui-form-item layui-row">
+                    <div class="layui-inline layui-col-md6">
+                        <table class="layui-hide" id="standardTable" lay-filter="standardTable"></table>
+                    </div>
+                    <div class="layui-inline layui-col-md6" style="padding-left: 30px;">
+                        <select name="standard" id="standard"></select>
+                        <button class="layui-btn icon-btn" id="btnStandard" style="margin-top: 20px;float: right;">添加</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card">
+            <div class="layui-card-header">单位信息</div>
+            <div class="layui-card-body">
+                <div class="layui-form-item layui-row">
+                    <div class="layui-inline layui-col-md6">
+                        <table class="layui-hide" id="unitTable" lay-filter="unitTable"></table>
+                    </div>
+                    <div class="layui-inline layui-col-md6" style="padding-left: 30px;">
+                        <select name="unit" id="unit"></select>
+                        <button class="layui-btn icon-btn" id="btnUnit" style="margin-top: 20px;float: right;">添加</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <div style="text-align: center;margin-top: 30px;margin-bottom: 20px;">
+                    <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/html" id="tableBar2">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'formSelects', 'admin', 'config', 'jquery', 'laydate', 'table'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var config = layui.config;
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+        var table = layui.table;
+
+        var url = 'add';
+        // 回显user数据
+        var ship = admin.getTempData('t_ship');
+        table.render({
+            elem: '#fishTable',
+            url: config.base_server + 'ship/listFish?token=' + config.getToken().access_token,
+            cellMinWidth: 80, //全局定义常规单元格的最小宽度
+            height: 215, //固定值
+            where:{id:ship.id},
+            page:false,
+            cols: [[
+                {align: 'center',field:'name',  title: '鱼种名称'},
+                {align: 'center',width:150, toolbar: '#tableBar2', title: '操作'}
+            ]]
+        });
+        table.render({
+            elem: '#standardTable',
+            url: config.base_server + 'ship/listStandard?token=' + config.getToken().access_token,
+            cellMinWidth: 80, //全局定义常规单元格的最小宽度
+            height: 215, //固定值
+            where:{id:ship.id},
+            page:false,
+            cols: [[
+                {align: 'center',field:'name',  title: '规格名称'},
+                {align: 'center',width:150, toolbar: '#tableBar2', title: '操作'}
+            ]]
+        });
+        table.render({
+            elem: '#unitTable',
+            url: config.base_server + 'ship/listUnit?token=' + config.getToken().access_token,
+            cellMinWidth: 80, //全局定义常规单元格的最小宽度
+            height: 215, //固定值
+            where:{id:ship.id},
+            page:false,
+            cols: [[
+                {align: 'center',field:'name',  title: '单位名称'},
+                {align: 'center',width:150, toolbar: '#tableBar2', title: '操作'}
+            ]]
+        });
+
+
+        $(document).ready(function(){
+            initListFish();
+            initListSt();
+            initListunit();
+            }
+        )
+        //初始化鱼种信息下拉列表
+        function initListFish(){
+            $("#fish").empty();
+            // $.getJSON('/base/fish/listAll',function (data) {
+            $.getJSON(config.base_server + 'fish/listRemainFish?token=' + config.getToken().access_token,{id:ship.id},function (data) {
+                if(data.code == 200){
+                    $("#fish").append("<option value='' >请选择</option>");
+                    var fish = data.data;
+                    for(var i=0,j=fish.length;i<j;i++){
+                        $("#fish").append("<option value='"+fish[i].id+"'>"+fish[i].name+"</option>");
+                    }
+                    layui.form.render('select');
+                }
+            });
+
+        }
+        //规格信息
+        // $.getJSON('/base/standard/listAll',function (data) {
+        // 初始化规格下拉列表
+        function  initListSt(){
+            $("#standard").empty();
+            $.getJSON(config.base_server + 'standard/listRemainSt?token=' + config.getToken().access_token,{id:ship.id},function (data) {
+                if(data.code == 200){
+                    $("#standard").append("<option value=''>请选择</option>");
+                    var fish = data.data;
+                    for(var i=0,j=fish.length;i<j;i++){
+                        $("#standard").append("<option value='"+fish[i].id+"'>"+fish[i].name+"</option>");
+                    }
+                    layui.form.render('select');
+                }
+            });
+        }
+
+        //初始化单位下拉列表
+        function initListunit(){
+            $("#unit").empty();
+            // $.getJSON('/base/unit/listAll',function (data) {
+            $.getJSON(config.base_server + 'unit/listRemainUnit?token=' + config.getToken().access_token,{id:ship.id},function (data) {
+                if(data.code == 200){
+                    $("#unit").append("<option value='' >请选择</option>");
+                    var fish = data.data;
+                    for(var i=0,j=fish.length;i<j;i++){
+                        $("#unit").append("<option value='"+fish[i].id+"'>"+fish[i].name+"</option>");
+                    }
+                    layui.form.render('select');
+                }
+            });
+        }
+
+        //鱼种信息添加
+        $('#btnFish').click(function () {
+            $.post({
+            	url: config.base_server + "ship/addFish",
+            	data: {
+            		token: config.getToken().access_token,
+            		shipId: ship.id,
+            		fishId: $("#fish").val()
+            	},
+            	success: function(data){
+            		console.log(data)
+            		if(data.code == 200){
+		                layer.msg("添加成功！", {icon: 1});
+		                //刷新页面
+		                initListFish();
+		                table.reload('fishTable');
+		            }else{
+		                layer.msg("错误，添加失败！", {icon: 2});
+		            }
+            	}
+            });
+        });
+        //规格信息添加
+        $('#btnStandard').click(function () {
+			$.post({
+            	url: config.base_server + "ship/addStandard",
+            	data: {
+            		token: config.getToken().access_token,
+            		shipId:ship.id,
+            		standardId:$("#standard").val()
+            	},
+            	success: function(data){
+            		console.log(data)
+            		if(data.code == 200){
+		                layer.msg("添加成功！", {icon: 1});
+		                //刷新页面
+		                initListFish();
+		                table.reload('fishTable');
+		            }else{
+		                layer.msg("错误，添加失败！", {icon: 2});
+		            }
+            	}
+            });
+        });
+        //单位信息添加
+        $('#btnUnit').click(function () {
+			$.post({
+            	url: config.base_server + "ship/addUnit",
+            	data: {
+            		token: config.getToken().access_token,
+            		shipId:ship.id,
+            		unitId:$("#unit").val()
+            	},
+            	success: function(data){
+            		console.log(data)
+            		if(data.code == 200){
+		                layer.msg("添加成功！", {icon: 1});
+		                //刷新页面
+		                initListFish();
+		                table.reload('fishTable');
+		            }else{
+		                layer.msg("错误，添加失败！", {icon: 2});
+		            }
+            	}
+            });
+        });
+
+
+        table.on('tool(fishTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (obj.event === 'del') { //删除
+                doFishDelete(obj);
+            }
+        });
+        table.on('tool(standardTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (obj.event === 'del') { //删除
+                doStandardDelete(obj);
+            }
+        });
+        table.on('tool(unitTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (obj.event === 'del') { //删除
+                doUnitDelete(obj);
+            }
+        });
+
+        // 删除鱼种
+        function doFishDelete(obj) {
+            var index = top.layer.confirm('确定要删除吗？', {
+                skin: 'layui-layer-admin'
+            }, function () {
+                layer.load(2);
+                admin.req('ship/deleteFish', {
+                    shipId:ship.id,
+                    fishId: obj.data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'delete');
+            });
+        }
+
+        // 删除规格
+        function doStandardDelete(obj) {
+            var index = top.layer.confirm('确定要删除吗？', {
+                skin: 'layui-layer-admin'
+            }, function () {
+                layer.load(2);
+                admin.req('ship/deleteStandard', {
+                    shipId:ship.id,
+                    standardId: obj.data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'delete');
+            });
+        }
+
+        // 删除单位
+        function doUnitDelete(obj) {
+            var index = top.layer.confirm('确定要删除吗？', {
+                skin: 'layui-layer-admin'
+            }, function () {
+                layer.load(2);
+                admin.req('ship/deleteUnit', {
+                    shipId:ship.id,
+                    unitId: obj.data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'delete');
+            });
+        }
+    });
+
+</script>

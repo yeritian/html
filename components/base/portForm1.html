@@ -1,0 +1,188 @@
+<form id="portDetailForm" lay-filter="portDetailForm" class="layui-form model-form">
+    <div class="layui-btn-container">
+        <a class="layui-btn btn-add btn-default" id="btn-excel">选择Excel文件</a>
+        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+        <a class="layui-btn btn-add btn-default" id="btn-excel-sure">上传导入</a>
+    </div>   <!-- <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+    </div>-->
+</form>
+
+
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'config','formSelects','laytpl','upload'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var config = layui.config;
+        var formSelects = layui.formSelects;
+        var laytpl = layui.laytpl;
+        var upload = layui.upload;
+
+        var dada = layui.router().search.p1;
+        form.render('select');
+
+        upload.render({
+            elem: '#btn-excel',
+            // ,url: 'layer/excelparser?fileName=1'
+                url:config.base_server +  'base/port/fileUpload'
+            ,auto: false
+            ,multiple: false
+            ,bindAction: '#btn-excel-sure'
+            ,size: 5120 //最大允许上传的文件大小
+            ,accept: 'file' //允许上传的文件类型
+            // ,exts:'xlsx'|'xls'//只上传pdf文档
+            ,done: function(res){
+                console.log(res)
+                if(res.code == 1){//成功的回调
+
+                    //do something （比如将res返回的图片链接保存到表单的隐藏域）
+                    // $('#set-add-put input[name="fileName"]').val(res.data.fileName);
+
+                    layer.msg(res.msg, {
+                        icon: 1
+                    });
+                    table.reload('portTable');
+                    admin.closeDialog('#portDetailForm');
+                    // location.reload();
+                }else if(res.code==2){
+                    layer.msg(res.msg, {
+                        icon: 2
+                    });
+                    table.reload('portTable');
+                    admin.closeDialog('#portDetailForm');
+                }
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // 渲染表格
+    /*    var ins1 = table.render({
+
+            elem: '#portDetailTable',
+           url: config.base_server + 'base/portDetail',
+            where:{id: dada},
+            page: true,
+            cols: [[
+                {field: 'num', sort: true, title: '序号'},
+                {field: 'portName', sort: true, title: '港口名称'},
+                {field: 'chinaName', sort: true, title: '中文名'},
+                {field: 'englishName', sort: true, title: '英文名'},
+                {field: 'latinName', sort: true, title: '拉丁文'},
+                {field: 'abbreviation', sort: true, title: '缩写'},
+                {field: 'hl', sort: true, title: 'HL'},
+                {field: 'ltd', sort: true, title: 'LTD'},
+                {field: 'bl', sort: true, title: 'BL'},
+                {field: 'gpl', sort: true, title: 'GPL'},
+                {field: 'fl', sort: true, title: 'FL'},
+                {field: 'kg', sort: true, title: 'KG'},
+                {field: 'annotation', sort: true, title: '备注'},
+                 {align: 'center', toolbar: '#tableBar', title: '操作'}
+            ]]
+        });*/
+
+        // 添加按钮点击事件
+        $('#btnAdd').click(function () {
+            showEditModel();
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            table.reload('portDetailTable', {where: {searchKey: key, searchValue: value}});
+        });
+        // 表单提交事件
+        form.on('submit(portDetailFormSubmit)', function (data) {
+            layer.load(2);
+            var theMethod = data.field.id?"PUT":"POST";
+            admin.req('base/portDetail', data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                    table.reload('portDetailTable');
+                    admin.closeDialog('#portDetailForm');
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, theMethod);
+            return false;
+        });
+        // 工具条点击事件
+        table.on('tool(portDetailTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            }else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }
+        });
+        // 删除
+        function doDelete(obj) {
+            layer.confirm('确定要删除吗？', {
+                skin: 'layui-layer-admin'
+            }, function (i) {
+                layer.close(i);
+                layer.load(2);
+                admin.req('portDetail/delete/'+ obj.data.id, {}, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'delete');
+            });
+        };
+        // 导出excel
+        $('#btnExp').click(function () {
+            var checkRows = table.checkStatus('portDetailTable');
+            if (checkRows.data.length == 0) {
+                layer.msg('请选择要导出的数据', {icon: 2});
+            } else {
+                table.exportFile(ins1.config.id, checkRows.data, 'xls');
+            }
+        });
+
+        // 显示表单弹窗
+        function showEditModel(data) {
+            admin.open({
+                type: 1,
+                title: data ? '修改PortDetail' : '添加PortDetail',
+                content: laytpl(document.getElementById('portDetailModel').innerHTML).render(data||{}),
+                success: function (layero, index) {
+                    $('#portDetailForm')[0].reset();
+                    if (data) {
+                        form.val('portDetailForm', data);
+                    }
+                    $(layero).children('.layui-layer-content').css('overflow', 'visible');  // 禁止出现滚动条
+                }
+            });
+        }
+
+    });
+</script>

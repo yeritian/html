@@ -1,0 +1,190 @@
+<style>
+	.layui-form-label {
+	    float: left;
+	    display: block;
+	    padding: 9px 15px;
+	    width: 20%;
+	    font-weight: 400;
+	    line-height: 20px;
+	    text-align: right;
+	    font-size: 5px;
+	}
+	.layui-input, .layui-textarea {
+	    display: block;
+	    width: 80%;
+	    padding-left: 10px;
+	}
+	.text-right {
+	    text-align: center;
+	    width: 550px;
+	    background: #ffff;
+	    padding-top: 15px;
+	}
+	.layui-form-item:nth-child(12) {
+	    margin-bottom: 0px;
+	    clear: both;
+	}
+</style>
+<form id="companyForm" lay-filter="companyForm" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">公司名称</label>
+        <div class="layui-input-block">
+            <input name="name" placeholder="请输入公司名称" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">英文名</label>
+        <div class="layui-input-block">
+            <input name="nameEn" placeholder="请输入公司英文名" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">公司地址</label>
+        <div class="layui-input-block">
+            <input name="adress" placeholder="请输入公司地址" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">公司电话</label>
+        <div class="layui-input-block">
+            <input name="telephone" placeholder="公司电话" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">公司负责人</label>
+        <div class="layui-input-block">
+            <input name="companyLead" placeholder="公司负责人" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">公司技术负责人</label>
+        <div class="layui-input-block">
+            <input name="techLead" placeholder="请输入公司技术负责人" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">公司负责人电话</label>
+        <div class="layui-input-block">
+            <input name="companyLeadPhone" placeholder="请输入公司负责人电话" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">技术负责人电话</label>
+        <div class="layui-input-block">
+            <input name="techLeadPhone" placeholder="请输入公司技术负责人电话" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">公司邮箱</label>
+        <div class="layui-input-block">
+            <input name="email" placeholder="请输入公司邮箱" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">省份</label>
+        <div class="layui-input-inline">
+            <select name="province" lay-verify="required" lay-filter="provinceFilter" lay-search="">
+                <option value="">直接选择或搜索</option>
+                <option>山东</option>
+                <option>江苏</option>
+                <option>上海</option>
+                <option>浙江</option>
+                <option>安徽</option>
+                <option>福建</option>
+                <option>江西</option>
+                <option>广东</option>
+                <option>广西</option>
+                <option>海南</option>
+                <option>河南</option>
+                <option>湖南</option>
+                <option>湖北</option>
+                <option>北京</option>
+                <option>天津</option>
+                <option>河北</option>
+                <option>山西</option>
+                <option>内蒙古</option>
+                <option>宁夏</option>
+                <option>青海</option>
+                <option>陕西</option>
+                <option>甘肃</option>
+                <option>新疆</option>
+                <option>四川</option>
+                <option>贵州</option>
+                <option>云南</option>
+                <option>重庆</option>
+                <option>西藏</option>
+                <option>辽宁</option>
+                <option>吉林</option>
+                <option>黑龙江</option>
+                <option>香港</option>
+                <option>澳门</option>
+                <option>台湾</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <!--<input name="remark" placeholder="请输入备注" type="text" lay-verify="required"
+                      class="layui-textarea"></input>-->
+            <input name="remark" placeholder="请输入备注" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>         
+        </div>
+    </div>
+    <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+    </div>
+</form>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'formSelects', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        form.render('select');
+
+        var url = 'add';
+        // 回显company数据
+        var company = admin.getTempData('t_company');
+        if (company) {
+            url = 'update';
+            form.val('companyForm', company);
+        }
+
+        // 表单提交事件
+        
+        form.on('submit(btnSubmit)', function (data) {
+            layer.load(2);
+            var theMethod = data.field.id?"PUT":"POST";
+            admin.req('company',data.field,function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    // 关闭当前iframe弹出层
+                    admin.closeDialog('#companyForm');
+                    parent.layui.table.reload('companyTable',{page:{curr:1}});
+                    layer.msg(data.msg, {icon: 1});
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            },theMethod);/*'POST'*/
+            return false;
+        });
+    });
+</script>
+
+</body>
+</html>

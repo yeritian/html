@@ -1,0 +1,130 @@
+<link href="../../assets/libs/layui/css/layui.css" />
+
+<form class="layui-form model-form" id="monthlyLoad" lay-filter="monthlyLoad">
+    <!--<div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <input type="radio" name="sex" value="男" title="男" checked/>
+            <input type="radio" name="sex" value="女" title="女"/>
+        </div>
+    </div>-->
+    <div class="layui-form-item" pane="">
+        <label class="layui-form-label" style="width: 150px" >请选择公海EEZ：</label>
+        <div class="layui-input-block" style=" display: flex;align-items: center">
+            公海<input type="radio" name="eez" title="公海" value="公海" checked="" style = 'display:block;margin:0 10px;'>
+            EEZ<input type="radio" name="eez" title="EEZ" value="EEZ" style = 'display:block;margin:0 10px;'>
+        </div>
+    </div>
+    <!--<div class="layui-input-block" style="margin-left: 50px;">
+<!--<button id="butExportTemplate" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出上传文件的模板</button>
+    </div>-->
+    <div class="layui-input-block" style="margin-left: 175px;display: flex;align-items: center">
+        <button type="button" class="layui-btn layui-btn-normal" id="test8">选择文件</button>
+    </div>
+    <div class="layui-input-block" style="margin-left: 175px">
+        <button type="button" class="layui-btn" id="test9" style = 'margin:30px 0;'>确定</button>
+    </div>
+
+</form>
+<!-- 正文开始 -->
+<!--<form id="monthlyLoad" lay-filter="monthlyLoad" class="layui-form model-form">
+<div class="layui-fluid">
+        <div class="layui-form-item" style="align-content: center" >
+            <div class="layui-inline"  >
+                    <select id="leadEEZ" style="height: 38px;width: 200px;display: block;border-color: #e6e6e6" >
+                        <option value="0">-请选择公海EEZ-</option>
+                        <option value="公海">公海</option>
+                        <option value="EEZ">EEZ</option>
+                    </select>
+                </div>
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn layui-btn-normal" id="test8">选择文件</button>
+                    </div>
+            <button type="button" class="layui-btn" id="test9">确定</button>
+            </div>
+    </div>
+</div>
+</form>-->
+
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'config','formSelects','laytpl','laydate','upload'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var config = layui.config;
+        var formSelects = layui.formSelects;
+        var laytpl = layui.laytpl;
+        var laydate = layui.laydate;
+        var upload = layui.upload;
+
+        var eez = "公海";
+
+            $('input[type=radio][name=eez]').change(function() {
+                eez = this.value;
+
+                admin.req('monthly/getEEZ', {eez:eez}, function (data) {
+                    console.info(data)
+                }, 'GET');
+
+            });
+
+        /*$('input[name=eez]').change(function(){
+            console.info(this.value)
+            alert(this.value);
+
+        });*/
+
+        // var imgurl = getObjectURL($("#file")[0].files[0]);
+
+        //上传文件
+        upload.render({
+            elem: '#test8',
+            url: config.base_server + 'monthly/upload',
+            auto: false,
+            accept:'file',
+            bindAction: '#test9',
+            /*choose: function(obj){
+                //将每次选择的文件追加到文件队列
+                var files = obj.pushFile();
+                console.info(files);
+
+                //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+                obj.preview(function(index, file, result){
+                    console.log(file); //得到文件对象
+
+                    console.info(getObjectURL(file));
+
+                });
+            },*/
+            done: function(res){
+                if (res.code == 200) {
+                    // 关闭当前iframe弹出层
+                    admin.closeDialog('#monthlyLoad');
+                    parent.layui.table.reload('monthlyTable',{page:{curr:1}});
+                    layer.msg("导入成功", {icon: 1});
+                } else if(res.code == 10002) {
+                    layer.msg(res.data, {icon: 2});
+                }else{
+                    layer.msg("导入失败",{icon:2});
+                }
+            }
+        });
+
+
+        // 导出excel模板
+        $('#butExportTemplate').click(function () {
+            console.info(123);
+            // window.location.href=config.base_server+"monthly/butExportTemplate?Authorization="+config.getToken().access_token;
+            admin.req('monthly/butExportTemplate',{
+                token: config.getToken().access_token
+            },function (res) {
+                console.info(res)
+            },"GET");
+            // window.location.href=config.base_server+"monthly/butExportTemplate";
+        });
+
+    });
+</script>

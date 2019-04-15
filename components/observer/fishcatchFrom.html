@@ -1,0 +1,469 @@
+
+
+
+<div id="fishcatchFromi1d">
+    <!--<form id="fishcatchFromid" lay-filter="fishForm" class="layui-form model-form">-->
+
+    <div class="layui-form">
+        <label class="layui-form-label">钩次</label>
+        <div class="layui-input-block">
+            <input  id="obhks"  placeholder="请输入钩次"   type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+    <div>
+        <label class="layui-form-label">下钩日期</label>
+        <div class="layui-input-block">
+            <input  id="datehook"  placeholder="请输入下钩日期"  type="text" class="layui-input"  lay-verify="required" required/>
+        </div>
+    </div>
+    <div>
+        <label class="layui-form-label">观察筐数</label>
+        <div class="layui-input-block">
+            <input  id="obnum"  placeholder="请输入观察筐数" type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+    <div>
+        <label class="layui-form-label">总筐数</label>
+        <div class="layui-input-block">
+            <input  id="obtotsum" placeholder="请输入总筐数" type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+    <div>
+        <label class="layui-form-label">注释</label>
+        <div class="layui-input-block">
+            <input  id="remark" placeholder="请输入注释" type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+    <!--</form>-->
+
+    <table class="layui-table" id="fishcatchUpdate" lay-filter="fishcatchUpdate"></table>
+
+     <div id="addfishdiv">
+
+         <table border="1" >
+             <th>类型（鱼类）</th>
+             <th>观察产量-尾数</th>
+             <th>观察产量-重量</th>
+             <th>总产量-尾数</th>
+             <th>总产量-重量</th>
+             <tbody id="tabcc">
+                 <tr>
+                     <td><span>大眼金枪鱼</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                 </tr>
+                 <tr>
+                     <td><span >黄鳍金枪鱼</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                 </tr>
+                 <tr>
+                     <td><span >长鳍金枪鱼</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                 </tr>
+                 <tr>
+                     <td><span >金枪鱼</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                 </tr>
+                   <tr>
+                        <td><span >鲣鱼</span></td>
+                       <td><input  type="text"></td>
+                       <td><input  type="text"></td>
+                       <td><input  type="text"></td>
+                       <td><input  type="text"></td>
+                    </tr>
+                    <tr>
+                        <td><span >蓝枪鱼</span></td>
+                        <td><input  type="text"></td>
+                        <td><input  type="text"></td>
+                        <td><input  type="text"></td>
+                        <td><input  type="text"></td>
+                    </tr>
+                    <tr>
+                        <td><span >条纹四鳍旗鱼</span></td>
+                        <td><input  type="text"></td>
+                        <td><input  type="text"></td>
+                        <td><input  type="text"></td>
+                        <td><input  type="text"></td>
+                    </tr>
+                    <tr>
+                        <td><span >箭(剑)鱼</span></td>
+                        <td><input  type="text"></td>
+                        <td><input  type="text"></td>
+                        <td><input  type="text"></td>
+                        <td><input  type="text"></td>
+                    </tr>
+                    <tr>
+                        <td><span >锯鳞四鳍旗鱼</span></td>
+                        <td><input  type="text"></td>
+                        <td><input  type="text"></td>
+                        <td><input  type="text"></td>
+                        <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >旗鱼</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >白枪鱼</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >长鳍真鲨</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >镰状真鲨</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >大青鲨</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr>
+                    <tr>
+                        <td><span >尖吻青鲨(马加)</span></td>
+                        <td><input  type="text"></td>
+                        <td><input  type="text"></td>
+                        <td><input  type="text"></td>
+                        <td><input  type="text"></td>
+                    </tr>
+                    <tr>
+                        <td><span >长鳍青鲨(马加舅)</span></td>
+                        <td><input  type="text"></td>
+                        <td><input  type="text"></td>
+                        <td><input  type="text"></td>
+                        <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >大眼长尾鲨</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >鳄鲨</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr>
+                    <tr>
+                     <td><span >异鳞鲨</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >锤头双髻鲨</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >帆蜥鱼</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >凹尾长鳍乌鲂</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >红棱鲂</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >鲯鳅</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >沙氏刺鲅</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >异鳞蛇鲭</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >蛇鲭</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >斑点月鱼</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >日本福鲼</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >矛尾翻车鲀</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >翻车鲀</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >丽龟</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >棱皮龟</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >棘鳞蛇鲭</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >紫魟</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >小吻四鳍旗鱼</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >大盘短䲟</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >太平洋旗鱼</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >拟锤齿鲨观</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span >印度枪鱼</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr><tr>
+                        <td><span>长体翻车鲀</span></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                     <td><input  type="text"></td>
+                    </tr>
+             </tbody>
+         </table>
+
+    </div>
+
+     <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn"  id="addfish">保存</button>
+    </div>
+
+</div>
+
+
+<script>
+
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'config','formSelects','laytpl','laydate'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var config = layui.config;
+        var formSelects = layui.formSelects;
+        var laytpl = layui.laytpl;
+        var laydate = layui.laydate;
+
+        var fishupdata = admin.getTempData('fishupdata');
+        var  observerinfoid = fishupdata.observerinfoid;
+
+            if(observerinfoid!=null){
+                $("#obhks").val(fishupdata.obfishcatchhooks);
+                $("#datehook").val(fishupdata.obfishcatchdatehook);
+                $("#obnum").val(fishupdata.obbasketnum);
+                $("#obtotsum").val(fishupdata.obbaskettotsum);
+                 var obfishcatchid =fishupdata.obfishcatchid;
+                 $("#addfishdiv").css("display","none");
+                table.render({
+                    elem: '#fishcatchUpdate',
+                    url: config.base_server + 'observer/fishcatch/selectFishCatchById',
+                    where:{obfishcatchid:obfishcatchid},
+                    page: false,
+                    limit:1000,
+                    cellMinWidth: 100,
+                    cols: [[
+                        {type: 'numbers'},
+                        {field: 'chinesename',sort: true, title: '类型'},
+                        {field: 'obtrailnum',edit: 'text', sort: true, title: '观察尾数'},
+                        {field: 'oboutput',edit: 'text', sort: true, title: '观察产量'},
+                        {field: 'obtotletailnum',edit: 'text', sort: true, title: '总尾数'},
+                        {field: 'obtotleoutput',edit: 'text', sort: true, title: '总产量'}
+                    ]]
+                });
+
+                $("#addfish").click(function() {
+                    var  obhks = $("#obhks").val();
+                    var  datehook = $("#datehook").val();
+                    var  obnum = $("#obnum").val();
+                    var  obtotsum = $("#obtotsum").val();
+                    var  remark = $("#remark").val();
+
+                   admin.req("observer/fishcatch/updateFishCatch",{
+                       obfishcatchid:obfishcatchid,
+                       obhks:obhks,
+                       datehook:datehook,
+                       obnum:obnum,
+                       obtotsum:obtotsum,
+                       remark:remark,
+                       dateupdate:JSON.stringify(table.cache.fishcatchUpdate)
+                   },function (data) {
+
+                       if (data.code == 200) {
+                           layer.msg(data.msg, {icon: 1});
+                           table.reload('fishcatchTable');
+                       } else {
+                           layer.msg(data.msg, {icon: 2});
+                       }
+                   },"PUT");
+                   admin.closeDialog('#fishcatchUpdate');
+                });
+
+            }else{
+                     //显示添加,隐藏修改
+                $("#fishcatchUpdate").css("display","none");
+                $("#addfishdiv").css("display","block");
+                $("#addfish").click(function(){
+                    var tdArr = $("#tabcc").find('tr').children().length;//<td>长度
+                    var str = new Array();
+                    $("#tabcc").find("tr").each(function(){ //获取input中的值
+                        var tdArr = $(this).children();
+                        var sp = tdArr.eq(0).find('span').html();
+                        var tr1 = tdArr.eq(1).find('input').val();
+                        var tr2 = tdArr.eq(2).find('input').val();
+                        var tr3 = tdArr.eq(3).find('input').val();
+                        var tr4 = tdArr.eq(4).find('input').val();
+                        str.push(sp); str.push(tr1);str.push(tr2);str.push(tr3);str.push(tr4);
+                    });
+                   console.log(fishupdata);
+                    var  obhks = $("#obhks").val();
+                    var  datehook = $("#datehook").val();
+                    var  obnum = $("#obnum").val();
+                    var  obtotsum = $("#obtotsum").val();
+                    var  remark = $("#remark").val();
+
+
+                        //添加方法
+                        admin.req("observer/fishcatch/addFishCatch", {
+                            observerinfoid: fishupdata,
+                            obhks: obhks,
+                            datehook: datehook,
+                            obnum: obnum,
+                            obtotsum: obtotsum,
+                            remark: remark,
+                            addstr: JSON.stringify(str)
+                        }, function (data) {
+                            if (data.code == 200) {
+                                layer.msg(data.msg, {icon: 1});
+                                table.reload('fishcatchTable');
+                            } else {
+                                layer.msg(data.msg, {icon: 2});
+                            }
+                        }, "PUT");
+                        //关闭当前窗口
+                        admin.closeDialog('#fishcatchFromid');
+
+                })
+
+            }
+
+        //时间样式
+        laydate.render({
+            elem: '#datehook'
+            ,type:'datetime'
+        });
+
+
+    });
+    var obhks = document.getElementById('obhks');
+    var addfish = document.getElementById('addfish');
+    function isnull(val) {
+
+        var str = val.replace(/(^\s*)|(\s*$)/g, '');//去除空格;
+
+        if (str == '' || str == undefined || str == null) {
+            // console.log('空');
+            layer.msg("必填项不能为空", {icon: 2});
+            return false;
+        }
+    }
+
+    addfish.onclick = function () {
+        isnull( obhks.value );
+
+    }
+
+
+
+</script>
+
+
+
+

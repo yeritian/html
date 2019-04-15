@@ -1,0 +1,66 @@
+layui.use(['layer', 'contextMenu'], function () {
+    var layer = layui.layer;
+    var contextMenu = layui.contextMenu;
+    //
+    // 重写整个页面的鼠标右键菜单
+    contextMenu.bind('body', [{
+        icon: 'layui-icon layui-icon-snowflake',
+        name: '菜单一',
+        click: function () {
+            layer.msg('点击了菜单一', {icon: 1});
+        }
+    }, {
+        name: '菜单二',
+        click: function () {
+            layer.msg('点击了菜单二', {icon: 1});
+        }
+    }]);
+    //
+    // 重写某一个元素的鼠标右键菜单
+    contextMenu.bind('#div1', [{
+        icon: 'layui-icon layui-icon-snowflake',
+        name: '菜单一',
+        click: function () {
+            layer.msg('点击了菜单一', {icon: 1});
+        }
+    }]);
+    //
+    // 多级菜单，支持无限极，通过subs设置子菜单
+    contextMenu.bind('body', [{
+        name: '菜单三',
+        subs: [{
+            name: '子菜单一',
+            click: function () {
+                layer.msg('点击了子菜单一', {icon: 1});
+            }
+        }, {
+            name: '子菜单三',
+            subs: [{
+                name: '三级菜单一',
+                click: function () {
+                    layer.msg('点击了三级菜单一', {icon: 1});
+                }
+            }]
+        }]
+    }]);
+    //
+    // 也可以直接使用show方法
+    $('#btn1').click(function (e) {
+        var x = $(this).offset().left;
+        var y = $(this).offset().top + $(this).outerHeight();
+        contextMenu.show([{
+            name: '按钮菜单一',
+            click: function () {
+                layer.msg('点击了按钮菜单一', {icon: 1});
+            }
+        }, {
+            name: '按钮菜单二',
+            click: function () {
+                layer.msg('点击了按钮菜单二', {icon: 1});
+            }
+        }], x, y);
+        e.preventDefault();
+        e.stopPropagation();
+    });
+
+});

@@ -1,0 +1,145 @@
+<!-- 关闭Tab时顶部标题 -->
+<div class="layui-body-header">
+    <span class="layui-body-header-title">应用管理</span>
+    <span class="layui-breadcrumb pull-right">
+        <a href="#/">首页</a>
+        <a><cite>应用管理</cite></a>
+    </span>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline" style="width: 120px;">
+                        <select id="sltKey">
+                            <option value="">-搜索条件-</option>
+                            <option value="name">应用名称</option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
+                        <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                        <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
+                    </div>
+                </div>
+            </div>
+
+            <table class="layui-table" id="applicationTable" lay-filter="applicationTable"></table>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'config', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var config = layui.config;
+        var admin = layui.admin;
+        form.render('select');
+
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#applicationTable',
+            url: config.base_server + 'application/list',
+            method: 'GET',
+            where: {
+                token: config.getToken().access_token
+            },
+            page: true,
+            cols: [[
+                {type: 'checkbox'}, {type: 'numbers'},
+                {field: 'name', sort: true, title: '应用名称'},
+                {align: 'center', toolbar: '#tableBar', title: '操作'}
+            ]]
+        });
+
+        // 添加按钮点击事件
+        $('#btnAdd').click(function () {
+            showEditModel();
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            table.reload('applicationTable', {where: {searchKey: key, searchValue: value}});
+        });
+
+        // 工具条点击事件
+        table.on('tool(applicationTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            } else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }
+        });
+
+        // 删除
+        function doDelete(obj) {
+            var index = top.layer.confirm('确定要删除吗？', {
+                skin: 'layui-layer-admin'
+            }, function () {
+                layer.load(2);
+                admin.req('application/delete', {
+                    id: obj.data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'delete');
+            });
+        }
+
+        // 导出excel
+        $('#btnExp').click(function () {
+            var checkRows = table.checkStatus('applicationTable');
+            if (checkRows.data.length == 0) {
+                layer.msg('请选择要导出的数据', {icon: 2});
+            } else {
+                table.exportFile(ins1.config.id, checkRows.data, 'xls');
+            }
+        });
+
+        // 显示表单弹窗
+        function showEditModel(data) {
+            admin.putTempData('t_application', data);
+            admin.open({
+                type: 2,
+                title: data ? '修改应用' : '添加应用',
+                area: ['380px', '392px'],
+                offset: '200px',
+                url: 'components/base/applicationForm.html',
+                resize: true,/**/
+                success: function (layero, index) {
+                    $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                }
+            });
+        }
+
+    });
+</script>

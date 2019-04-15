@@ -1,0 +1,148 @@
+<div class="layui-body-header">
+    <span class="layui-breadcrumb pull-right">
+    	<span class="layui-body-header-title">消息管理</span>
+        <a href="#/">首页</a>
+        <a><cite>消息管理</cite></a>
+    </span>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">发送人</label>
+                        <div class="layui-input-inline">
+                            <input id="sendor" type="text" class="layui-input" placeholder="输入关键字"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">接收人</label>
+                        <div class="layui-input-inline">
+                            <input id="receiver" type="text" class="layui-input" placeholder="输入关键字"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline" style="width: 25%">
+                        <label class="layui-form-label">发送时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="send_time" class="layui-input" placeholder="-">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">消息类型</label>
+                        <div class="layui-input-inline">
+                            <select id="type">
+                                <option value="0">文字</option>
+                                <option value="1">图片</option>
+                                <option value="2">语音</option>
+                                <option value="3">视频</option>
+                                <option value="4">文件</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        <!--<button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>-->
+                    </div>
+                </div>
+            </div>
+
+            <table class="layui-table" id="messageTable" lay-filter="messageTable"></table>
+
+        </div>
+    </div>
+
+</div>
+<!-- 表格操作列 -->
+<!--<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>-->
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'config', 'admin', 'laydate'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var laydate = layui.laydate;
+        var config = layui.config;
+        form.render('select');
+
+        var start;
+        var end;
+        //日期时间范围
+        laydate.render({
+            elem: '#send_time',
+            type: 'datetime',
+            range: '—',
+            done: function (value, date, endDate) {
+                if (value) {
+                    var strArr = value.split('—');
+                    start = strArr[0];
+                    end = strArr[1];
+                } else {
+                    start = '';
+                    end = '';
+                }
+            }
+        });
+
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#messageTable',
+            url: config.base_server + 'message/list?token=' + config.getToken().access_token,
+            method: 'GET',
+            page: true,
+            limits: [20, 50, 100],
+            cols: [[
+                {type: 'numbers'},
+                {field: 'sendTime', title: '发送时间'},
+                {field: 'sendor', title: '发送人'},
+                {field: 'receiver', title: '接收人'},
+                {field: 'typeStr', title: '消息类型'},//0:文字，1:图片，2:语音，3:视频，4:文件
+                {field: 'body', title: '消息内容'}
+                //{align: 'center', toolbar: '#tableBar', title: '操作'}
+            ]]
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            $('#send_time').val;
+            table.reload('messageTable', {
+                where: {
+                    'sendor': $('#sendor').val(),
+                    'receiver': $('#receiver').val(),
+                    'type': $('#type').val(),
+                    'start': start,
+                    'end': end
+                }
+            });
+        });
+
+        // 工具条点击事件
+        table.on('tool(messageTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (obj.event === 'del') { //删除
+            }
+        });
+
+
+        // 导出excel
+        $('#btnExp').click(function () {
+            var checkRows = table.checkStatus('messageTable');
+            if (checkRows.data.length == 0) {
+                layer.msg('请选择要导出的数据', {icon: 2});
+            } else {
+                table.exportFile(ins1.config.id, checkRows.data, 'xls');
+            }
+        });
+
+    });
+</script>

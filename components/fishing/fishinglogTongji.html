@@ -1,0 +1,193 @@
+<!-- 关闭Tab时顶部标题 -->
+<div class="layui-body-header">
+    <span class="layui-breadcrumb pull-right">
+    	<span class="layui-body-header-title">渔捞日志总数</span>
+        <a href="#/">首页</a>
+        <a><cite>渔捞日志总数</cite></a>
+    </span>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">公司名称</label>
+                        <div class="layui-input-inline">
+                            <select id="company" lay-verify="required" lay-filter="companyFilter"
+                                    lay-search="">
+                                <option value="">直接选择或搜索</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">船舶名称</label>
+                        <div class="layui-input-inline">
+                            <select id="ship" lay-verify="required" lay-filter="shipFilter" lay-search="">
+                                <option value="">直接选择或搜索</option>
+                            </select>
+                        </div>
+                    </div>
+                   <!-- <div class="layui-inline">
+                        <label class="layui-form-label" style="width: 85px">渔捞日志类型</label>
+                        <div class="layui-inline">&lt;!&ndash;"","公海围网","金枪鱼延绳钓/超低温","鱿钓","远洋拖网","金枪鱼围网","竹筴鱼/鲐鱼"&ndash;&gt;
+                            <select id="logType" lay-verify="required">
+                                <option value="">-请选择类型-</option>
+                                <option value="1">公海围网</option>
+                                <option value="2">金枪鱼延绳钓/超低温</option>
+                                <option value="3">鱿钓</option>
+                                <option value="4">远洋拖网</option>
+                                <option value="5">金枪鱼围网</option>
+                                <option value="6">竹筴鱼/鲐鱼</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">活动类型</label>
+                        <div class="layui-inline">&lt;!&ndash;"作业","航行","漂流","在港","转载","故障","未作业-天气原因","寻找鱼群","清洁网具","放置或回收"&ndash;&gt;
+                            <select id="actionType" lay-verify="required">
+                                <option value="">-请选择类型-</option>
+                                <option value="0">作业</option>
+                                <option value="1">航行</option>
+                                <option value="2">漂流</option>
+                                <option value="3">在港</option>
+                                <option value="4">转载</option>
+                                <option value="5">故障</option>
+                                <option value="6">未作业-天气原因</option>
+                                <option value="7">寻找鱼群</option>
+                                <option value="8">清洁网具</option>
+                                <option value="9">放置或回收</option>
+                            </select>
+                        </div>
+                    </div>-->
+                  <!--  <div class="layui-inline" style="width: 25%">
+                        <label class="layui-form-label">日志时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="log_date" class="layui-input" placeholder="-">
+                        </div>
+                    </div>-->
+                    <div class="layui-inline">
+                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        <!--<button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>-->
+                       <!-- <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>FFA导出</button>-->
+                    </div>
+                </div>
+            </div>
+            <table class="layui-table" id="fishinglogTongjiTable" lay-filter="fishinglogTongjiTable"></table>
+        </div>
+    </div>
+
+</div>
+
+<!-- 表格操作列
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="view">查看日志</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="trip">查看航次</a>
+</script>-->
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'config', 'laydate'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var config = layui.config;
+        var laydate = layui.laydate;
+
+        //公司下拉框
+        admin.req('fishinglog/selectCompanyName', {}, function (data) {
+            $.each(data, function (index, item) {
+                $("#company").append(  //此处向select中循环绑定数据
+                    "<option value=" + item.id + ">" + item.name + "</option>");
+            });
+            layui.form.render("select");
+        }, "GET");
+        //船舶下拉框
+        admin.req('fishinglog/selectShipName', {}, function (res) {
+            if (res.code == '200') {
+                $.each(res.data.list, function (index, item) {
+                    $("#ship").append(  //此处向select中循环绑定数据
+                        "<option value=" + item.id + ">" + item.name + "</option>");
+                });
+                layui.form.render("select");
+            }
+
+        }, "GET");
+        //公司船舶联动
+        form.on('select(companyFilter)', function () {
+            if ($("#company").val() == '') {
+                $("#ship").html('').append("<option value=''>直接选择或搜索</option>");
+                admin.req('fishinglog/selectShipName', {}, function (data) {
+                    if (res.code == '200') {
+                        $.each(res.data.list, function (index, item) {
+                            $("#ship").append(  //此处向select中循环绑定数据
+                                "<option value=" + item.id + ">" + item.name + "</option>");
+                        });
+                        layui.form.render("select");
+                    }
+                }, "GET");
+            } else {
+                admin.req('fishinglog/selectCompanyShip', {
+                    "companyId": $("#company").val()
+                }, function (data) {
+                    $("#ship").html('').append("<option value=''>直接选择或搜索</option>");
+                    if (data !== null) {
+                        $.each(data, function (index, item) {
+                            $("#ship").append(  //此处向select中循环绑定数据
+                                "<option value=" + item.id + ">" + item.name + "</option>");
+                        });
+                    }
+                    layui.form.render("select");
+                }, "GET");
+            }
+        });
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#fishinglogTongjiTable',
+            url: config.base_server + 'fishinglog/selectTripLogCount',
+            method: 'GET',
+            where: {
+                token: config.getToken().access_token
+            },
+            page: true,
+            cols: [[
+                {type: 'numbers'},
+                {field: 'companyName', title: '公司名称'},
+                {field: 'shipName', title: '船舶名称'},
+                {field: 'logCount', title: '本年度收到日志数'},
+                {field: 'tripCount', title: '本年度收到航次数'}
+                /*,{align: 'center', width: '15%', toolbar: '#tableBar', title: '操作'}*/
+            ]]
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            table.reload('fishinglogTongjiTable', {
+                where: {
+                    'company': $('#company').val(),
+                    'ship': $('#ship').val()
+                }
+            });
+        });
+        // 工具条点击事件
+        table.on('tool(fishinglogTongjiTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            } else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }
+        });
+
+
+
+    });
+</script>

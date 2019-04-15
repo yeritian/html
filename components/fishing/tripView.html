@@ -1,0 +1,197 @@
+<style>
+    .layui-form-item {
+        margin-bottom: 0;
+        margin-top: 20px;
+    }
+
+    .layui-form-item .layui-inline {
+        margin-bottom: 25px;
+        margin-right: 0;
+    }
+
+    .layui-form-label {
+        padding: 9px 0px;
+        width: 180px;
+    }
+
+    .layui-input-block {
+        margin-left: 190px;
+    }
+
+    #logDiv input {
+        border-width: 0px;
+        border-bottom-width: 1px;
+    }
+
+    .layui-tab {
+        margin: 0px 0;
+    }
+</style>
+
+<!-- 正文开始 -->
+<div class="layui-fluid" id="logDiv">
+    <div class="layui-tab">
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-form">
+                            <div class="layui-form-item layui-row">
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">船名:</label>
+                                    <div class="layui-input-block">
+                                        <input id="shipName" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">开始时间:</label>
+                                    <div class="layui-input-block">
+                                        <input id="departureTime" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">航次号:</label>
+                                    <div class="layui-input-block">
+                                        <input id="trip_no" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">出发港口:</label>
+                                    <div class="layui-input-block">
+                                        <input id="departure" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">主捕鱼种:</label>
+                                    <div class="layui-input-block">
+                                        <input id="targetNamespace" type="text" readonly="readonly"
+                                               class="layui-input"/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">结束时间:</label>
+                                    <div class="layui-input-block">
+                                        <input id="unloadingTime" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">转载港口:</label>
+                                    <div class="layui-input-block">
+                                        <input id="unloadingPlace" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-card">
+                            <div class="layui-card-header">开始时船上剩余量</div>
+                            <div class="layui-card-body">
+                                <table class="layui-table" id="fish-table1" lay-filter="fish-table1"></table>
+                            </div>
+                        </div>
+                        <div class="layui-card">
+                            <div class="layui-card-header">卸载/运输量</div>
+                            <div class="layui-card-body">
+                                <table class="layui-table" id="fish-table2" lay-filter="fish-table2"></table>
+                            </div>
+                        </div>
+                        <div class="layui-card">
+                            <div class="layui-card-header">卸载后船上剩余鱼量</div>
+                            <div class="layui-card-body">
+                                <table class="layui-table" id="fish-table3" lay-filter="fish-table3"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div style="text-align: center;margin-top: 30px;margin-bottom: 20px;">
+                <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'formSelects', 'admin', 'config', 'jquery', 'laydate', 'table', 'element'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var config = layui.config;
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+        var table = layui.table;
+
+        var tripId = admin.getTempData('t_tripId');
+        if (tripId) {
+            admin.req('trip/selectByTripId', {tripId: tripId}, function (d) {
+                var trip = d;
+                $("#shipName").val(trip.shipName);
+                $("#departureTime").val(trip.departureTime);
+                $("#trip_no").val(trip.tripNo);
+                $("#departure").val(trip.departure);
+                $("#targetNamespace").val(trip.targetNamespace);
+                $("#unloadingTime").val(trip.unloadingTime);
+                $("#unloadingPlace").val(trip.unloadingPlace);
+            }, "GET");
+            //更新全部
+            form.render();
+            //开始时船上剩余量
+            table.render({
+                elem: '#fish-table1',
+                url: config.base_server + 'trip/fishStart',
+                where: {tripId: tripId, token: config.getToken().access_token},
+                page: false,
+                limit: 1000,
+                cellMinWidth: 100,
+                cols: [[
+                    {type: 'numbers'},
+                    {field: 'fishName', align: 'center', sort: true, title: '鱼种名'},
+                    {field: 'standardName', align: 'center', sort: true, title: '规格'},
+                    {field: 'num', align: 'center', sort: true, title: '捕获数量'},
+                    {field: 'unitName', align: 'center', sort: true, title: '单位'}
+                ]]
+            });
+            //卸载/运输量
+            table.render({
+                elem: '#fish-table2',
+                url: config.base_server + 'trip/fishUnloading',
+                where: {tripId: tripId, token: config.getToken().access_token},
+                page: false,
+                limit: 1000,
+                cellMinWidth: 100,
+                cols: [[
+                    {type: 'numbers'},
+                    {field: 'fishName', align: 'center', sort: true, title: '鱼种名'},
+                    {field: 'standardName', align: 'center', sort: true, title: '规格'},
+                    {field: 'num', align: 'center', sort: true, title: '捕获数量'},
+                    {field: 'unitName', align: 'center', sort: true, title: '单位'}
+                ]]
+            });
+            //卸载后船上剩余鱼量
+            table.render({
+                elem: '#fish-table3',
+                url: config.base_server + 'trip/fishEnd',
+                where: {tripId: tripId, token: config.getToken().access_token},
+                page: false,
+                limit: 1000,
+                cellMinWidth: 100,
+                cols: [[
+                    {type: 'numbers'},
+                    {field: 'fishName', align: 'center', sort: true, title: '鱼种名'},
+                    {field: 'standardName', align: 'center', sort: true, title: '规格'},
+                    {field: 'num', align: 'center', sort: true, title: '捕获数量'},
+                    {field: 'unitName', align: 'center', sort: true, title: '单位'}
+                ]]
+            });
+
+
+        }
+
+    });
+</script>

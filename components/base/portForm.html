@@ -1,0 +1,317 @@
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline" style="width: 120px;">
+                        <select id="sltKey">
+                            <option value="">-搜索条件-</option>
+                        <option value="englishname">英文名</option>
+                        <option value="chinaname">中文名</option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
+                        <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>添加</button>
+                        <button id="outputTbale" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
+                        <!--<button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>-->
+                    </div>
+                </div>
+            </div>
+
+            <table class="layui-table" id="portDetailTable" lay-filter="portDetailTable"></table>
+        </div>
+    </div>
+
+</div>
+
+<!-- 表单弹窗 -->
+<script type="text/html" id="portDetailModel">
+    <form id="portDetailForm" lay-filter="portDetailForm" class="layui-form model-form" >
+        <input name="id" type="hidden"/>
+        <input id="portid" name="portid" type="hidden"/>
+
+                  <!--                              <div class="layui-form-item">
+                    <label class="layui-form-label">港口名称</label>
+                    <div class="layui-input-block">
+                        <input name="portname" placeholder="" type="text" class="layui-input" maxlength="50"
+                               lay-verify="required" required/>
+                    </div>
+                </div>-->
+                                                <div class="layui-form-item">
+                    <label class="layui-form-label">中文名</label>
+                    <div class="layui-input-block">
+                        <input name="chinaname" placeholder="请输入中文名" type="text" class="layui-input" maxlength="50"
+                               lay-verify="required" required/>
+                    </div>
+                </div>
+                                                <div class="layui-form-item">
+                    <label class="layui-form-label">英文名</label>
+                    <div class="layui-input-block">
+                        <input name="englishname" placeholder="请输入英文名" type="text" class="layui-input" maxlength="50"
+                               />
+                    </div>
+                </div>
+                                                <div class="layui-form-item">
+                    <label class="layui-form-label">拉丁文</label>
+                    <div class="layui-input-block">
+                        <input name="latinname" placeholder="请输入拉丁文" type="text" class="layui-input" maxlength="50"
+                               />
+                    </div>
+                </div>
+                                                <div class="layui-form-item">
+                    <label class="layui-form-label">缩写</label>
+                    <div class="layui-input-block">
+                        <input name="abbreviation" placeholder="请输入缩写" type="text" class="layui-input" maxlength="50"
+                               />
+                    </div>
+                </div>
+                                                <div class="layui-form-item">
+                    <label class="layui-form-label">HL(cm)</label>
+                    <div class="layui-input-block">
+                        <input name="hl" placeholder="请输入HL" type="text" class="layui-input" maxlength="50"
+                               />
+                    </div>
+                </div>
+                                                <div class="layui-form-item">
+                    <label class="layui-form-label">LTD(cm)</label>
+                    <div class="layui-input-block">
+                        <input name="ltd" placeholder="请输入LTD" type="text" class="layui-input" maxlength="50"
+                               />
+                    </div>
+                </div>
+                                                <div class="layui-form-item">
+                    <label class="layui-form-label">BL(躯干长cm)</label>
+                    <div class="layui-input-block">
+                        <input name="bl" placeholder="请输入BL" type="text" class="layui-input" maxlength="50"
+                               />
+                    </div>
+                </div>
+                                                <div class="layui-form-item">
+                    <label class="layui-form-label">GPL(cm)</label>
+                    <div class="layui-input-block">
+                        <input name="gpl" placeholder="请输入GPL" type="text" class="layui-input" maxlength="50"
+                              />
+                    </div>
+                </div>
+                                                <div class="layui-form-item">
+                    <label class="layui-form-label">FL(cm)</label>
+                    <div class="layui-input-block">
+                        <input name="fl" placeholder="请输入FL" type="text" class="layui-input" maxlength="50"
+                               />
+                    </div>
+                </div>
+                                                <div class="layui-form-item">
+                    <label class="layui-form-label">重量(KG)</label>
+                    <div class="layui-input-block">
+                        <input name="kg" placeholder="请输入重量" type="text" class="layui-input" maxlength="50"
+                               />
+                    </div>
+                </div>
+                                                <div class="layui-form-item">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <input name="annotation" placeholder="备注" type="text" class="layui-input" maxlength="50"
+                               />
+                    </div>
+                </div>
+
+              <div class="layui-form-item text-right">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">返回</button>
+            <button class="layui-btn" lay-filter="portDetailFormSubmit" lay-submit>保存</button>
+        </div>
+    </form>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<!-- 表格操作列 -->
+
+<script type="text/html" id="tableBar" style="height: 150px">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'config','formSelects','laytpl'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var config = layui.config;
+        var formSelects = layui.formSelects;
+        var laytpl = layui.laytpl;
+
+        var dada = layui.router().search.p1;
+        //var portid=dada;
+        console.log(dada);
+        form.render('select');
+        // 渲染表格
+        var ins1 = table.render({
+
+            elem: '#portDetailTable',
+           url: config.base_server + 'base/portDetail',
+            where:{id: dada},
+            page: true,
+            cols: [[
+                // {field: 'num', sort: true, title: '序号'},
+                {type: 'numbers'},
+             /*   {field: 'portName', sort: true, title: '港口名称'},*/
+                {field: 'chinaname', sort: true, title: '中文名',},
+                {field: 'englishname', sort: true, title: '英文名'},
+                {field: 'latinname', sort: true, title: '拉丁文'},
+                {field: 'abbreviation', sort: true, title: '缩写'},
+                {field: 'hl', sort: true, title: 'HL(cm)'},
+                {field: 'ltd', sort: true, title: 'LTD(cm)'},
+                {field: 'bl', sort: true, title: 'BL(躯干长cm)'},
+                {field: 'gpl', sort: true, title: 'GPL(cm)'},
+                {field: 'fl', sort: true, title: 'FL(cm)'},
+                {field: 'kg', sort: true, title: '重量(KG)'},
+                {field: 'annotation', sort: true, title: '备注'},
+                 {align: 'center', toolbar: '#tableBar', title: '操作'}
+            ]]
+        });
+
+        // 添加按钮点击事件
+        $('#btnAdd').click(function () {
+            showEditModel();
+        });
+        //导出
+        $('#outputTbale').click(function () {
+            // showimportModel();
+            outputTableData();
+        });
+        //导出
+        function outputTableData(data) {
+
+            window.location.href= config.base_server + 'base/port/export?Authorization='+ config.getToken().access_token+'&id=' +dada;
+
+        }
+
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            table.reload('portDetailTable', {where: {searchKey: key, searchValue: value}});
+        });
+
+        // 表单提交事件
+        form.on('submit(portDetailFormSubmit)', function (data) {
+            layer.load(2);
+            var theMethod = data.field.id?"PUT":"POST";
+            admin.req('base/portDetail', data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                    table.reload('portDetailTable');
+                    admin.closeDialog('#portDetailForm');
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, theMethod);
+            return false;
+        });
+        // 工具条点击事件
+        table.on('tool(portDetailTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            }else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }else if(obj.event === 'detail'){//详情
+                showdetail(data);
+            }
+        });
+        /*详情*/
+        function showdetail(data){
+            // admin.req('observer/observerinfo/'+ obj.observerinfoid, {}, function (data){
+                admin.open({
+                    type: 1,
+                    title:'详情',
+                    area:['400px','800px'],
+                    btn: ['返回列表'],
+                    content:laytpl(document.getElementById('portDetailModel1').innerHTML).render(data||{}),
+                    success: function (layero, index) {
+                        form.val('portDetailForm1', data);
+                    },
+                    yes: function(index, layero){
+                        layer.close(index)
+                    },
+                    cancel: function(index){
+                        layer.close(index)
+                    }
+                });
+            // },'put');
+        }
+
+
+
+        // 删除
+        function doDelete(obj) {
+            layer.confirm('确定要删除吗？', {
+                skin: 'layui-layer-admin'
+            }, function (i) {
+                layer.close(i);
+                layer.load(2);
+                admin.req('base/portDetail/'+ obj.data.id, {}, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                    table.reload('portDetailTable');
+                }, 'delete');
+            });
+        };
+        // 导出excel
+        $('#btnExp').click(function () {
+            var checkRows = table.checkStatus('portDetailTable');
+            if (checkRows.data.length == 0) {
+                layer.msg('请选择要导出的数据', {icon: 2});
+            } else {
+                table.exportFile(ins1.config.id, checkRows.data, 'xls');
+            }
+        });
+
+        // 显示表单弹窗
+        function showEditModel(data) {
+            admin.open({
+                type: 1,
+                title: data ? '修改PortDetail' : '添加详情',
+                content: laytpl(document.getElementById('portDetailModel').innerHTML).render(data||{}),
+                success: function (layero, index) {
+                    $('#portDetailForm')[0].reset();
+                    $("#portid").val(dada);
+                    // console.log(  $("#portid").val(dada));
+                    if (data) {
+
+                        form.val('portDetailForm', data);
+                    }
+                    $(layero).children('.layui-layer-content').css('overflow', 'visible');  // 禁止出现滚动条
+                }
+            });
+        }
+
+    });
+</script>

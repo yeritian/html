@@ -1,0 +1,176 @@
+
+<link rel="stylesheet" href="../../assets/css/ol4.6.css"/>
+<style>
+    #legendCon b{width:100px;float: right;}
+    #legendCon span{position: absolute;
+        width: 10px;
+        height: 10px;
+        top: 18px;
+        left: 15px;}
+</style>
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" style="padding: 2px" id="map1">
+            <!--区域管理开始-->
+            <div class="mark_box mark_box2" style="display: block;width:220px;top:30px">
+                <div class="mark_box_t">
+                    <div class="t">站点区域</div>
+                </div>
+                <div class="mark_box_m">
+                    <div class="mark_list mark_list2">
+                        <div class="item">
+                            <div class="con">
+                                <ul>
+                                    <li><b>太平洋</b><a href="#" class="view" title="查看"></a></li>
+                                    <li><b>大西洋</b><a href="#" class="view" title="查看"></a></li>
+                                    <li><b>印度洋</b><a href="#" class="view" title="查看"></a></li>
+                                    <li><b>中西太</b><a href="#" class="view" title="查看"></a></li>
+                                    <li><b>北太</b><a href="#" class="view" title="查看"></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--区域管理结束-->
+
+            <!--图例开始-->
+            <div style="position:absolute;background-color: white;width:170px;bottom:40px;right:20px;opacity: 0.6;z-index: 1000">
+                <div class="mark_box_m">
+                    <div class="mark_list mark_list2">
+                        <div class="item">
+                            <div class="con" id="legendCon">
+                                <ul>
+                                    <li><b>观察员1</b><span style="background-color: red"></span></li>
+                                    <li><b>观察员2</b><span style="top: 53px;background-color: #F76219"></span></li>
+                                    <li><b>观察员3</b><span style="top:88px;background-color: #B129DF"></span></li>
+                                    <li><b>观察员4</b><span style="top:128px;background-color: #58E61A"></span></li>
+                                    <li><b>观察员5</b><span style="top:161px;background-color: #3F2537"></span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--图例结束-->
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="../../assets/js/ol.js"></script>
+<script>
+    layui.use(['layer','table','jquery', 'util', 'admin', 'config','index'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var config = layui.config;
+        var index = layui.index;
+
+        var stroke1 = new ol.style.Stroke({color: 'red', width: 1});
+        var stroke2 = new ol.style.Stroke({color: '#F76219', width: 1});
+        var stroke3 = new ol.style.Stroke({color: '#B129DF', width: 1});
+        var stroke4 = new ol.style.Stroke({color: '#58E61A', width: 1});
+        var stroke5 = new ol.style.Stroke({color: '#3F2537', width: 1});
+        var fill1 = new ol.style.Fill({color: 'red'});
+        var fill2 = new ol.style.Fill({color: '#F76219'});
+        var fill3 = new ol.style.Fill({color: '#B129DF'});
+        var fill4 = new ol.style.Fill({color: '#58E61A'});
+        var fill5 = new ol.style.Fill({color: '#3F2537'});
+
+        var styles = {
+            'square': new ol.style.Style({
+                image: new ol.style.RegularShape({
+                    fill: fill1,
+                    stroke: stroke1,
+                    points: 4,
+                    radius: 8,
+                    angle: Math.PI / 4
+                })
+            }),
+            'triangle': new ol.style.Style({
+                image: new ol.style.RegularShape({
+                    fill: fill2,
+                    stroke: stroke2,
+                    points: 4,
+                    radius: 8,
+                    angle: Math.PI / 4
+                })
+            }),
+            'star': new ol.style.Style({
+                image: new ol.style.RegularShape({
+                    fill: fill3,
+                    stroke: stroke3,
+                    points: 4,
+                    radius: 8,
+                    angle: Math.PI / 4
+                })
+            }),
+            'cross': new ol.style.Style({
+                image: new ol.style.RegularShape({
+                    fill: fill4,
+                    stroke: stroke4,
+                    points: 4,
+                    radius: 8,
+                    angle: Math.PI / 4
+                })
+            }),
+            'x': new ol.style.Style({
+                image: new ol.style.RegularShape({
+                    fill: fill5,
+                    stroke: stroke5,
+                    points: 4,
+                    radius: 8,
+                    angle: Math.PI / 4
+                })
+            })
+        };
+
+        var styleKeys = ['x', 'cross', 'star', 'triangle', 'square'];
+        var count = 250;
+        var features = new Array(count);
+        var e = 4500000;
+        for (var i = 0; i < count; ++i) {
+            var coordinates = [4*e+2 * e * Math.random(), 2 * e * Math.random() - e];
+            features[i] = new ol.Feature(new ol.geom.Point(coordinates));
+            features[i].setStyle(styles[styleKeys[Math.floor(Math.random() * 5)]]);
+        }
+
+        var source = new ol.source.Vector({
+            features: features
+        });
+
+        var vectorLayer = new ol.layer.Vector({
+            source: source
+        });
+        var center = ol.proj.transform([-170, 0], 'EPSG:4326', 'EPSG:3857');
+        var view = new ol.View({
+            center: center,
+            zoom: 3
+        });
+        var map1 = new ol.Map({
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.XYZ({
+                        attributions: '上海海洋大学',
+                        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/' +
+                            'World_Topo_Map/MapServer/tile/{z}/{y}/{x}'
+                    })
+                }),
+                vectorLayer
+            ],
+            target: 'map1',
+            view: view
+        });
+
+        $(" #legendCon span").click(function () {
+            map1.getView().setCenter([160, 48]);
+            console.log(789);
+        });
+        //view.setCenter([160, 48]);
+    });
+</script>

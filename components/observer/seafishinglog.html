@@ -1,0 +1,450 @@
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline" style="width: 120px;">
+                        <select id="sltKey">
+                             <option value="">-搜索条件-</option>
+                             <option value="homeworkhook">作业钩次</option>
+                             <option value="seastartdatehook">下钩开始日期</option>
+                             <option value="chinesename">中文名</option>
+                         </select>
+                    </div>
+                    <div class="layui-inline">
+                        <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                        <button class="layui-btn btn-add btn-default" id="improtFile">导入</button>
+                        <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
+                        <button id="btnDel" class="layui-btn icon-btn" data-type="getCheckData"><i class="layui-icon">&#xe67d;</i>删除</button>
+                    </div>
+                </div>
+            </div>
+
+            <table class="layui-table" id="seafishinglogTable" lay-filter="seafishinglogTable"></table>
+        </div>
+    </div>
+
+</div>
+
+<!-- 表单弹窗 -->
+<script type="text/html" id="seafishinglogModel">
+    <form id="seafishinglogForm" lay-filter="seafishinglogForm" class="layui-form model-form">
+        <input name="seafishingid" type="hidden"/>
+                        <input id="obid" style="display:none" name="observerinfoid" placeholder="请输入外键-观察员信息" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                        <div class="layui-form-item">
+                    <label class="layui-form-label">作业钩次</label>
+                    <div class="layui-input-block">
+                        <input name="homeworkhook" placeholder="请输入作业钩次" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">下钩开始日期</label>
+                    <div class="layui-input-block">
+                        <input id="test" name="seastartdatehook" placeholder="请输入下钩开始日期" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+
+                   <div class="layui-form-item">
+                    <label class="layui-form-label">实际下钩数</label>
+                    <div class="layui-input-block">
+                        <input id="hook" name="realityhook" placeholder="请输入实际下钩数" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                     <div class="layui-form-item">
+                    <label class="layui-form-label">中文名</label>
+                    <div class="layui-input-block">
+                        <input name="chinesename" placeholder="请输入中文名" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                         <div class="layui-form-item">
+                    <label class="layui-form-label">全重WW</label>
+                    <div class="layui-input-block">
+                        <input name="fullweightww" placeholder="请输入全重WW" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                           <div class="layui-form-item">
+                    <label class="layui-form-label">加工重量GT</label>
+                    <div class="layui-input-block">
+                        <input name="workingweighgt" placeholder="请输入加工重量GT" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                         <div class="layui-form-item">
+                    <label class="layui-form-label">加工重量GX</label>
+                    <div class="layui-input-block">
+                        <input name="workingweighgx" placeholder="请输入加工重量GX" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                       <div class="layui-form-item">
+                    <label class="layui-form-label">其它加工重量</label>
+                    <div class="layui-input-block">
+                        <input name="otherworkingweight" placeholder="请输入其它加工重量" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                          <div class="layui-form-item">
+                    <label class="layui-form-label">说明</label>
+                    <div class="layui-input-block">
+                        <input name="explain" placeholder="请输入说明" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                          <div class="layui-form-item">
+                    <label class="layui-form-label">注释</label>
+                    <div class="layui-input-block">
+                        <input name="seafishingremark" placeholder="请输入注释" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+               <div class="layui-form-item text-right">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+            <button class="layui-btn" lay-filter="seafishinglogFormSubmit" lay-submit>保存</button>
+        </div>
+    </form>
+
+</script>
+
+
+<!--详情表格-->
+<script type="text/html" id="seafishinglogDetail">
+    <form id="seafishinglogFormDetail" lay-filter="seafishinglogFormDetail" class="layui-form model-form">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">作业钩次</label>
+            <div class="layui-input-block">
+                <input name="homeworkhook" placeholder="请输入作业钩次" type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">下钩开始日期</label>
+            <div class="layui-input-block">
+                <input  name="seastartdatehook" placeholder="请输入下钩开始日期" type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">实际下钩数</label>
+            <div class="layui-input-block">
+                <input  name="realityhook" placeholder="请输入实际下钩数" type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">中文名</label>
+            <div class="layui-input-block">
+                <input name="chinesename" placeholder="请输入中文名" type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">全重WW</label>
+            <div class="layui-input-block">
+                <input name="fullweightww" placeholder="请输入全重WW" type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">加工重量GT</label>
+            <div class="layui-input-block">
+                <input name="workingweighgt" placeholder="请输入加工重量GT" type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">加工重量GX</label>
+            <div class="layui-input-block">
+                <input name="workingweighgx" placeholder="请输入加工重量GX" type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">其它加工重量</label>
+            <div class="layui-input-block">
+                <input name="otherworkingweight" placeholder="请输入其它加工重量" type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">说明</label>
+            <div class="layui-input-block">
+                <input name="explain" placeholder="请输入说明" type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">注释</label>
+            <div class="layui-input-block">
+                <input name="seafishingremark" placeholder="请输入注释" type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+    </form>
+
+</script>
+
+<!--导入按钮-->
+<script type="text/html" id="improtFilefu">
+    <center>
+    <form id="improtFilefuRu" lay-filter="improtFilefuRu"  class="layui-form model-form">
+        <div>请确定表格类型，防止数据出错</div>
+    <a class="layui-btn btn-add btn-default" id="btn-excel">选择Excel文件</a>
+    <a class="layui-btn btn-add btn-default" id="btn-excel-sure">上传导入</a>
+    </form>
+    </center>
+</script>
+
+
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+   <script type="text/html" id="tableBar">
+       <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">返回列表</button>
+   </script>
+
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'config','formSelects','laytpl','laydate','upload'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var config = layui.config;
+        var formSelects = layui.formSelects;
+        var laytpl = layui.laytpl;
+        var laydate = layui.laydate;
+        var upload = layui.upload;
+
+         var obid = layui.router().search.p1;
+
+
+        form.render('select');
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#seafishinglogTable',
+            url: config.base_server + 'observer/seafishinglog/list',
+            where:{observerinfoid:obid},
+            page: true,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'homeworkhook', sort: true, title: '作业钩次'},
+                {field: 'seastartdatehook', sort: true, title: '下钩开始日期'},
+                {field: 'realityhook', sort: true, title: '实际下钩数'},
+                {field: 'chinesename', sort: true, title: '中文名'},
+                {field: 'explain', sort: true, title: '说明'},
+                {field: 'updateTime', sort: true, title: '更新时间'},
+                {field: 'seafishingremark', sort: true, title: '注释'},
+                {align: 'center', toolbar: '#tableBar', title: '操作'}
+            ]]
+        });
+
+        // 添加按钮点击事件
+        $('#btnAdd').click(function () {
+            showEditModel();
+        });
+       //导入按钮
+        $('#improtFile').click(function () {
+             imfile();
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            table.reload('seafishinglogTable', {where: {searchKey: key, searchValue: value}});
+        });
+        // 表单提交事件
+        form.on('submit(seafishinglogFormSubmit)', function (data) {
+            layer.load(2);
+            var theMethod = data.field.seafishingid?"PUT":"POST";
+            admin.req('observer/seafishinglog/', data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                    table.reload('seafishinglogTable');
+                    admin.closeDialog('#seafishinglogForm');
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, theMethod);
+            return false;
+        });
+        // 工具条点击事件
+        table.on('tool(seafishinglogTable)', function (obj) {
+
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            }else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }else if(obj.event ==='detail'){
+                showdetail(data);  //详情
+            }
+        });
+
+        // 删除
+        function doDelete(obj) {
+            layer.confirm('确定要删除吗？', {
+                skin: 'layui-layer-admin'
+            }, function (i) {
+                layer.close(i);
+                layer.load(2);
+                admin.req('observer/seafishinglog/'+ obj.data.seafishingid, {}, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                    table.reload('seafishinglogTable');
+                }, 'delete');
+
+            });
+        };
+
+        //Excel导入
+        function imfile(){
+         admin.open({
+                type:1,
+                title:"文件导入",
+                area:["400px","250px"],
+                btn:["取消"],
+                offset: ['15%', '25%'],
+                content:document.getElementById('improtFilefu').innerHTML,
+                success:function () {
+                    upload.render({
+                        elem: '#btn-excel'
+                        ,url: config.base_server + 'observer/seafishinglog/fileexcel?obid='+obid
+                        ,auto: false
+                        //,multiple: true
+                        ,bindAction: '#btn-excel-sure'
+                        ,size: 5120 //最大允许上传的文件大小 2M
+                        ,accept: 'file' //允许上传的文件类型
+                        ,exts:'xlsx'//只上传pdf文档
+                        ,done: function(res){
+
+                            if(res.code == 1){//成功的回调
+                                table.reload('seafishinglogTable');
+                                layer.msg(res.msg, {icon: 1});
+                                admin.closeDialog('#improtFilefuRu');
+                            }else if(res.code==2){
+                                table.reload('seafishinglogTable');
+                                layer.msg(res.msg, {icon: 2});
+                                admin.closeDialog('#improtFilefuRu');
+                            }
+                        }
+                    });
+             },yes:function (index) {
+                 layer.close(index);
+             }
+             ,cancel: function(index){
+                 layer.close(index)
+             }
+         });
+
+        }
+
+
+
+        // 导出excel
+        $('#btnExp').click(function () {
+            var checkRows = table.checkStatus('seafishinglogTable');
+
+            if (checkRows.data.length == 0) {
+                layer.msg('请选择要导出的数据', {icon: 2});
+            } else {
+                var ids = "";
+                for(var x = 0;x<checkRows.data.length;x++){
+                    ids+=checkRows.data[x].seafishingid+",";
+                }
+                window.location.href=config.base_server+"observer/seafishinglog/putExp?Authorization="+config.getToken().access_token+"&ids="+ids;
+            }
+        });
+
+
+
+        /*批量删除*/
+        $('#btnDel').click(function () {
+            //获取选中行数据
+            var checkStatus = table.checkStatus('seafishinglogTable')
+                ,dataSeaId = checkStatus.data;
+
+            if(dataSeaId.length==0){
+                layer.msg("请选择要删除的数据",{icon: 3});
+            }else{
+
+            layer.confirm('确定要删除'+ dataSeaId.length +'条吗？', {
+                   skin: 'layui-layer-admin',
+                   btn: ['确定', '取消']
+                }, function (index, layero) {
+                 var str = new Array();
+                for (var i = 0; i < dataSeaId.length; i++) {
+                    str[i] = dataSeaId[i].seafishingid;
+                }
+                admin.req("observer/seafishinglog/deletAllSeafishingid",{
+                    dataSeafishingid:JSON.stringify(str)
+                },function (data) {
+                    table.reload('seafishinglogTable');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                },"PUT");
+                    layer.closeAll('dialog');  //加入这个信息点击确定 会关闭这个消息框
+                });
+            }
+
+        });
+
+
+
+        // 显示表单弹窗
+        function showEditModel(data) {
+            admin.open({
+                type: 1,
+                title: data ? '修改日志记录' : '添加日志记录',
+                content: laytpl(document.getElementById('seafishinglogModel').innerHTML).render(data||{}),
+                success: function (layero, index) {
+                    laydate.render({
+                        elem: '#test'
+                        ,type:'datetime'
+                    });
+                    $('#seafishinglogForm')[0].reset();
+                     $('#obid').val(obid);
+                    if (data) {
+                       form.val('seafishinglogForm', data);
+                    }
+                    $(layero).children('.layui-layer-content').css('overflow', 'visible');  // 禁止出现滚动条
+                }
+            });
+        }
+
+         //详情
+        function showdetail(obj){
+            admin.req('observer/seafishinglog/'+ obj.seafishingid, {}, function (data){
+                admin.open({
+                    type: 1,
+                    title:'详情',
+                    area:['400px','800px'],
+                    btn: ['返回列表'],
+                    content:laytpl(document.getElementById('seafishinglogDetail').innerHTML).render(data||{}),
+                    success: function (layero, index) {
+                        form.val('seafishinglogFormDetail', data);
+                    },
+                    yes: function(index, layero){
+                        layer.close(index)
+                    },
+                    cancel: function(index){
+                        layer.close(index)
+                    }
+                });
+            },'put');
+        }
+
+
+    });
+</script>

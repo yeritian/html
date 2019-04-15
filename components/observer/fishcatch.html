@@ -1,0 +1,393 @@
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline" style="width: 120px;">
+                        <select id="sltKey">
+                            <option value="">-搜索条件-</option>
+                            <option value="obfishcatchhooks">钩次</option>
+                            <option value="obfishcatchdatehook">下钩日期</option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
+                        <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                        <button class="layui-btn btn-add btn-default" id="improtFile">导入</button>
+                        <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
+                        <button id="btnDel" class="layui-btn icon-btn" data-type="getCheckData"><i class="layui-icon">&#xe67d;</i>删除</button>
+                    </div>
+                </div>
+            </div>
+
+            <table class="layui-table" id="fishcatchTable" lay-filter="fishcatchTable"></table>
+        </div>
+    </div>
+
+</div>
+
+<!-- 表单弹窗 -->
+<script type="text/html" id="fishcatchModel">
+    <form id="fishcatchForm" lay-filter="fishcatchForm" class="layui-form model-form">
+        <input name="obfishcatchid" type="hidden"/>
+                    <div class="layui-form-item">
+                    <label class="layui-form-label">钩次</label>
+                    <div class="layui-input-block">
+                        <input name="obfishcatchhooks" placeholder="请输入钩次" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                    <div class="layui-form-item">
+                    <label class="layui-form-label">下钩日期</label>
+                    <div class="layui-input-block">
+                        <input id="testtime" name="obfishcatchdatehook" placeholder="请输入下钩日期" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                        <div class="layui-form-item">
+                    <label class="layui-form-label">观察筐数</label>
+                    <div class="layui-input-block">
+                        <input name="obbasketnum" placeholder="请输入观察筐数" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                      <div class="layui-form-item">
+                    <label class="layui-form-label">总筐数</label>
+                    <div class="layui-input-block">
+                        <input name="obbaskettotsum" placeholder="请输入总筐数" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+        <input id="obid" style="display: none" name="observerinfoid" placeholder="请输入外键--观察员信息" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    <div class="layui-form-item">
+                    <label class="layui-form-label">更新时间</label>
+                    <div class="layui-input-block">
+                        <input name="update_time" placeholder="请输入更新时间" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                        <div class="layui-form-item">
+                    <label class="layui-form-label">外键-鱼种类型</label>
+                    <div class="layui-input-block">
+                        <input name="fishtypeid" placeholder="请输入外键-鱼种类型" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                         <div class="layui-form-item">
+                    <label class="layui-form-label">注释</label>
+                    <div class="layui-input-block">
+                        <input name="fcremark" placeholder="请输入注释" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+
+         <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="fishcatchFormSubmit" lay-submit>保存</button>
+    </div>
+    </form>
+</script>
+
+<!--导入按钮-->
+<script type="text/html" id="improtFilefu">
+    <center>
+        <form id="improtFilefuRu" lay-filter="improtFilefuRu"  class="layui-form model-form">
+            <div>请确定表格类型，防止数据出错</div>
+            <a class="layui-btn btn-add btn-default" id="btn-excel">选择Excel文件</a>
+            <a class="layui-btn btn-add btn-default" id="btn-excel-sure">上传导入</a>
+        </form>
+    </center>
+</script>
+
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+<!--js部分-->
+
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'config','formSelects','laytpl','laydate','upload'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var config = layui.config;
+        var formSelects = layui.formSelects;
+        var laytpl = layui.laytpl;
+        var laydate = layui.laydate;
+        var upload = layui.upload;
+
+
+
+        var obid = layui.router().search.p1;
+
+        form.render('select');
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#fishcatchTable',
+            url: config.base_server + 'observer/fishcatch/list',
+            where:{observerinfoid:obid},
+            page: true,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'obfishcatchhooks', sort: true, title: '作业钩次'},
+                {field: 'obfishcatchdatehook', sort: true, title: '下钩日期'},
+                {field: 'obbasketnum', sort: true, title: '观察筐数'},
+                {field: 'obbaskettotsum', sort: true, title: '总筐数'},
+                {field: 'updateTime', sort: true, title: '更新时间'},
+                {field: 'fcremark', sort: true, title: '注释'},
+                {align: 'center', toolbar: '#tableBar', title: '操作'}
+            ]]
+        });
+
+
+
+        /*添加弹出层*/
+        function show(updata) {
+             admin.putTempData('fishupdata', updata);
+            var  url = "components/observer/fishcatchFrom.html";
+            admin.open({
+                type: 1,
+                title: '渔获量-捕捞努力量统计',
+                area: ['820px', '800px'],
+              //  offset: '5%',
+                url: url,
+                resize: true,
+                success: function (layero, index) {
+
+                },
+                yes: function(index, layero){
+                    layer.close(index)
+                }
+            });
+        };
+
+        // 添加按钮点击事件
+        $('#btnAdd').click(function () {
+             show(obid);
+        });
+
+        //导入按钮
+        $('#improtFile').click(function () {
+            imfile();
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            table.reload('fishcatchTable', {where: {searchKey: key, searchValue: value}});
+        });
+
+        // 表单提交事件
+        form.on('submit(fishcatchFormSubmit)', function (data) {
+            layer.load(2);
+            var theMethod = data.field.obfishcatchid?"PUT":"POST";
+            admin.req('observer/fishcatch/', data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                    table.reload('fishcatchTable');
+                    admin.closeDialog('#fishcatchForm');
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, theMethod);
+            return false;
+        });
+
+        // 工具条点击事件
+        table.on('tool(fishcatchTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                show(data);
+            }else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }else if (obj.event === 'detail') { //详情
+                detailone(data);
+            }
+        });
+
+        // 删除
+        function doDelete(obj) {
+            layer.confirm('确定要删除吗？', {
+                skin: 'layui-layer-admin'
+            }, function (i) {
+                layer.close(i);
+                layer.load(2);
+                admin.req('observer/fishcatch/deletefishcatch', {
+                    obfishcatchid:obj.data.obfishcatchid
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        table.reload('fishcatchTable');
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'delete');
+            });
+        };
+
+
+        /*批量删除*/
+        $('#btnDel').click(function () {
+            //获取选中行数据
+            var checkStatus = table.checkStatus('fishcatchTable')
+                ,dataSeaId = checkStatus.data;
+            if(dataSeaId.length==0){
+                layer.msg("请选择要删除的数据",{icon: 3});
+            }else{
+                layer.confirm('确定要删除'+ dataSeaId.length +'条吗？', {
+                    skin: 'layui-layer-admin',
+                    btn: ['确定', '取消']
+                }, function (index, layero) {
+                    var str = new Array();
+                    for (var i = 0; i < dataSeaId.length; i++) {
+                        str[i] = dataSeaId[i].obfishcatchid;
+                    }
+                    admin.req("observer/fishcatch/deletAllObfishcatchid",{
+                        obfishcatchid:JSON.stringify(str)
+                    },function (data) {
+                        table.reload('fishcatchTable');
+                        if (data.code == 200) {
+                            layer.msg(data.msg, {icon: 1});
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+                    },"PUT");
+                    layer.closeAll('dialog');  //加入这个信息点击确定 会关闭这个消息框
+                });
+            }
+        });
+
+        // 导出excel
+        $('#btnExp').click(function () {
+            var checkRows = table.checkStatus('fishcatchTable');
+
+            if (checkRows.data.length == 0) {
+                layer.msg('请选择要导出的数据', {icon: 2});
+            } else {
+                var ids = "";
+                for(var x = 0;x<checkRows.data.length;x++){
+                    ids+=checkRows.data[x].obfishcatchid+",";
+                }
+                window.location.href=config.base_server+"observer/fishcatch/putExp?Authorization="+config.getToken().access_token+"&ids="+ids;
+            }
+        });
+
+
+
+        //Excel导入
+        function imfile(){
+            admin.open({
+                type:1,
+                title:"文件导入",
+                area:['auto',"250px"],
+                btn:["取消"],
+                offset: ['15%', '25%'],
+                content:document.getElementById('improtFilefu').innerHTML,
+                success:function () {
+                    //Excel导入
+                    upload.render({
+                        elem: '#btn-excel'
+                        ,url: config.base_server + 'observer/fishcatch/fileexcel?obid='+obid
+                        ,auto: false
+                        //,multiple: true
+                        ,bindAction: '#btn-excel-sure'
+                        ,size: 5120 //最大允许上传的文件大小 2M
+                        ,accept: 'file' //允许上传的文件类型
+                        ,exts:'xlsx'//只上传pdf文档
+                        ,done: function(res){ //res
+                            console.log(res);
+                            table.reload('fishcatchTable');
+                            if(res.code == 1){
+                                layer.msg(res.msg, {icon: 1});
+                                admin.closeDialog('#improtFilefuRu');
+                            }else if(res.code==2){
+                                layer.msg(res.msg, {icon: 2});
+                                admin.closeDialog('#improtFilefuRu');
+                            }
+                        }
+                    });
+                },yes:function (index) {
+                    layer.close(index);
+                }
+                ,cancel: function(index){
+                    layer.close(index)
+                }
+            });
+
+        }
+
+
+
+
+        // 显示表单弹窗
+        function showEditModel(data) {
+            admin.open({
+                type: 1,
+                title: data ? '修改' : '添加',
+                area:['800px','800px'],
+                content: laytpl(document.getElementById('fishcatchModel').innerHTML).render(data||{}),
+                success: function (layero, index) {
+                    //日期格式
+                    laydate.render({
+                        elem: '#testtime'
+                        ,type:'datetime'
+                    });
+                    $('#fishcatchForm')[0].reset();
+                    $('#obid').val(obid);//外键列赋值
+                    if (data) {
+                        form.val('fishcatchForm', data);
+                    }
+                    //$(layero).children('.layui-layer-content').css('overflow', 'visible');  // 禁止出现滚动条
+                },
+                yes: function(index, layero){
+                    layer.close(index)
+                },
+                cancel: function(index){
+                    layer.close(index)
+                }
+            });
+        }
+
+
+        //详情One
+        function detailone(data){
+
+            admin.putTempData('fishDetail', data);
+            var  url = "components/observer/fishcatchDetail.html";
+            admin.open({
+                type: 1,
+                title: '查看详细信息',
+                area: ['1060px', '750px'],
+                offset: '5%',
+                url: url,
+                resize: true,
+                btn: ['返回列表'],
+                success: function (layero, index) {
+                    $(layero).children('.layui-layer-content').css('overflow-y', 'scroll');//滚动条
+                },
+                yes: function(index, layero){
+                    layer.close(index)
+                },
+                cancel: function(index){
+                    layer.close(index)
+                }
+            });
+
+        }
+
+
+
+    });
+</script>

@@ -1,0 +1,95 @@
+<form id="authForm" lay-filter="authForm" class="layui-form model-form">
+    <input name="authorityId" type="hidden"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称</label>
+        <div class="layui-input-block">
+            <input name="authorityName" placeholder="请输入名称" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-parentId-item">
+        <label class="layui-form-label">上级菜单</label>
+        <div class="layui-input-block">
+            <input name="parentId" value="-1" type="hidden" class="layui-input parentId-input"/>
+            <input type="text" disabled="true" class="layui-input parentId-label"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">权限标识</label>
+        <div class="layui-input-block">
+            <input name="authority" placeholder="请输入权限标识" type="text" class="layui-input" lay-verify="required"
+                   required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">访问路径</label>
+        <div class="layui-input-block">
+            <input name="menuUrl" placeholder="请输入访问路径" type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜单图标</label>
+        <div class="layui-input-block">
+            <input name="menuIcon" placeholder="请输入菜单图标/可选项" type="text" class="layui-input"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序号</label>
+        <div class="layui-input-block">
+            <input name="orderNumber" placeholder="请输入排序号" type="number" class="layui-input"/>
+        </div>
+    </div>
+
+    <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="authFormSubmit" lay-submit>保存</button>
+    </div>
+</form>
+
+<script>
+    layui.use(['layer', 'form', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var admin = layui.admin;
+        form.render('select');
+        //form.render('radio');
+        var url;
+        var method;
+        // 回显数据
+        var authoritie = admin.getTempData('t_authoritie');
+        var authoritie_config = admin.getTempData('t_authoritie_config');
+        if (authoritie_config) {
+            $(".layui-form-parentId-item").show();
+            $(".parentId-input").val(authoritie_config.id);
+            $(".parentId-label").val(authoritie_config.authorityName);
+        } else {
+            $(".layui-form-parentId-item").hide();
+        }
+        if (authoritie) {
+            url = 'authority/role';
+            form.val('authForm', authoritie);
+            method = "PUT";
+        } else {
+            url = 'authority/role';
+            method = "POST";
+        }
+
+        // 表单提交事件
+        form.on('submit(authFormSubmit)', function (data) {
+            layer.load(2);
+            admin.req(url, data.field, function (data) {
+                layer.closeAll('loading');
+                admin.putTempData('notify', data);
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                    admin.closeDialog('#authForm');
+
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, method);
+            return false;
+        });
+    });
+</script>

@@ -1,0 +1,181 @@
+<style type="text/css">
+	.dtree-nav-item {
+	    line-height: 33px;
+	    padding-left: 16px;
+	}
+</style>
+
+<!-- 关闭Tab时顶部标题 -->
+<div class="layui-body-header">
+    <span class="layui-breadcrumb pull-right">
+    	<span class="layui-body-header-title">数据字典</span>
+        <a href="#/">首页</a>
+        <a><cite>数据字典</cite></a>
+    </span>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <ul id="demoTree1" class="dtree" data-id="0"></ul>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md9">
+            <div class="layui-card">
+                <div class="layui-card-body">
+
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <div class="layui-inline" style="width: 60px;">
+                                类型名
+                            </div>
+                            <div class="layui-inline">
+                                <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                                <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                                <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="layui-table" id="dicTable" lay-filter="dicTable"></table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'config', 'admin','dtree'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var config = layui.config;
+        var admin = layui.admin;
+        var dtree = layui.dtree;
+        var selectKey = 0;
+        dtree.render({
+            elem: "#demoTree1",  //绑定元素
+            url: config.base_server + "dic/listType" +"?token="+ config.getToken().access_token,  //异步接口
+            method: 'GET'
+        });
+
+        //单击节点 监听事件
+        dtree.on("node('demoTree1')" ,function(param){
+            selectKey = param.param.nodeId;
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            table.reload('dicTable', {where: {searchKey: key, searchValue: value,selectKey:selectKey}});
+        });
+
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#dicTable',
+            url: config.base_server + 'dic',
+            method: 'GET',
+            where: {
+            	selectKey:selectKey,
+                token: config.getToken().access_token
+            },
+            page: true,
+            cols: [[
+                {type: 'numbers'},{type: 'checkbox'},
+                {field: 'id', sort: true, title: '编号'},
+                {field: 'name', sort: true, title: '名称'},
+                {field: 'updateTime', sort: true, title: '修改时间'},
+                {align: 'center', toolbar: '#tableBar', title: '操作'}
+            ]]
+        });
+
+        // 添加按钮点击事件
+        $('#btnAdd').click(function () {
+            showEditModel();
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            table.reload('dicTable', {where: {searchKey: key, searchValue: value}});
+        });
+
+        // 工具条点击事件
+        table.on('tool(dicTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            }else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }
+        });
+
+        // 删除
+        function doDelete(obj) {
+            var index = top.layer.confirm('确定要删除吗？', {
+                skin: 'layui-layer-admin'
+            }, function () {
+                layer.load(2);
+                admin.req('dic/delete', {
+                    id: obj.data.id,
+                    selectKey:selectKey
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'delete');
+            });
+        }
+
+        // 导出excel
+        $('#btnExp').click(function () {
+            var checkRows = table.checkStatus('dicTable');
+            if (checkRows.data.length == 0) {
+                layer.msg('请选择要导出的数据', {icon: 2});
+            } else {
+                table.exportFile(ins1.config.id, checkRows.data, 'xls');
+            }
+        });
+
+        // 显示表单弹窗
+        function showEditModel(data) {
+        	admin.putTempData('selectKey', selectKey);
+            admin.putTempData('t_dic', data);
+            admin.open({
+                type: 2,
+                title: data ? '修改Dic' : '添加Dic',
+                area: ['380px', '192px'],
+                offset: '200px',
+                url: 'components/base/dicForm.html',
+                resize: true,/**/
+                success: function (layero, index) {
+                    $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                }
+            });
+        }
+
+    });
+</script>
+
+</body>
+</html>

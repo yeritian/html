@@ -1,0 +1,370 @@
+
+<link href="../../assets/libs/layui/css/layui.css" />
+
+
+<form id="monthlyForm" lay-filter="monthlyForm" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">公司名称</label>
+        <div class="layui-input-block">
+            <input id="companyName" placeholder="请输入公司名称" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">作业类型</label>
+            <select id="jobType" style="height: 38px;width: 310px;display: block;border-color: #e6e6e6" >
+                <option value="0">-请选择类型-</option>
+                <option value="超低温">超低温</option>
+                <option value="冰鲜钓">冰鲜钓</option>
+                <option value="常温">常温</option>
+                <option value="围网">围网</option>
+            </select>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">作业洋区</label>
+        <div class="layui-input-block">
+            <input id="jobTheArea" placeholder="请输入作业洋区" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">公海EEZ</label>
+
+        <select id="eez" style="height: 38px;width: 310px;display: block;border-color: #e6e6e6" >
+            <option value="0">-请选择类型-</option>
+            <option value="公海">公海</option>
+            <option value="EEZ">EEZ</option>
+        </select>
+
+        <!--<div class="layui-input-block">
+            <input id="eez" placeholder="请输入公海EEZ" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>-->
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属省份</label>
+        <div class="layui-input-block">
+            <input id="province" placeholder="请输入所属省份" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <!--<label class="layui-form-label">作业时间</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" id="jobTimeForm" placeholder="yyyy-MM-dd" autocomplete="off" readonly="readonly" style="width: 310px" >
+        </div>-->
+
+            <label class="layui-form-label">作业时间</label>
+            <div class="layui-input-inline">
+                <input type="text" id="jobTimeForm" class="layui-input" placeholder="yyyy-MM" autocomplete="off" readonly="readonly" style="width: 310px">
+            </div>
+        <!--<div class="layui-input-inline">
+            <input type="text" style="width: 187px;" class="layui-input" id="jobTime" placeholder="yyyy-MM-dd" autocomplete="off" >
+        </div>-->
+
+        <!--<div class="layui-input-block">
+            <input id="jobTime" placeholder="请输入作业时间" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>-->
+
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">船名</label>
+        <div class="layui-input-block">
+            <input id="shipName" placeholder="请输入船名" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">作业天数(天)</label>
+        <div class="layui-input-block">
+            <input id="jobNumOfDays" placeholder="请输入作业天数" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">开始地点(116°20N,39°56E)</label>
+        <div class="layui-input-block">
+            <input id="startSite" placeholder="请输入开始地点" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">结束地点(116°20N,39°56E)</label>
+        <div class="layui-input-block">
+            <input id="endSite" placeholder="请输入结束地点" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">投钩数</label>
+        <div class="layui-input-block">
+            <input id="castHookNum" placeholder="请输入投钩数" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">注释</label>
+        <div class="layui-input-block">
+            <input id="annotation" placeholder="请输入注释" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">其他类重量（kg）</label>
+        <div class="layui-input-block">
+            <input id="else" placeholder="请输入重量" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">渔船进港情况</label>
+        <div class="layui-input-block">
+            <input id="shipPutIn" placeholder="请输入情况" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">渔船专属经济区入渔情况</label>
+        <div class="layui-input-block">
+            <input id="shipEezTheFish" placeholder="请输入重量" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">渔船无产量原因</label>
+        <div class="layui-input-block">
+            <input id="shipNoProduction" placeholder="请输入重量" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+
+    <div class="layui-form-item" align="center">
+        <table border="1px">
+            <tr>
+                <td>鱼类</td>
+                <td>鱼名</td>
+                <td>重量（kg）</td>
+                <td>尾数（尾）</td>
+            </tr>
+            <tr>
+                <td rowspan="4" >金枪鱼类</td>
+                <td>大目</td>
+                <td><input type="text" style="width: 72px;height: 20px" id="1num" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+                <td><input type="text" style="width: 72px;height: 20px" id="1weight" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+            </tr>
+            <tr>
+                <td>黄鳍</td>
+                <td><input type="text" style="width: 72px;height: 20px" id="2num" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+                <td><input type="text" style="width: 72px;height: 20px" id="2weight" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+            </tr>
+            <tr>
+                <td>蓝鳍</td>
+                <td><input type="text" style="width: 72px;height: 20px" id="3num" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+                <td><input type="text" style="width: 72px;height: 20px" id="3weight" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+            </tr>
+            <tr>
+
+                <td>长鳍</td>
+                <td><input type="text" style="width: 72px;height: 20px" id="4num" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+                <td><input type="text" style="width: 72px;height: 20px" id="4weight" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+            </tr>
+            <tr>
+                <td rowspan="6" >旗鱼类</td>
+                <td>剑鱼</td>
+                <td><input type="text" style="width: 72px;height: 20px" id="5num" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+                <td><input type="text" style="width: 72px;height: 20px" id="5weight" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+            </tr>
+            <tr>
+                <td>旗鱼(雨伞)</td>
+                <td><input type="text" style="width: 72px;height: 20px" id="6num" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+                <td><input type="text" style="width: 72px;height: 20px" id="6weight" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+            </tr>
+            <tr>
+                <td>蓝枪(黑旗)</td>
+                <td><input type="text" style="width: 72px;height: 20px" id="7num" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+                <td><input type="text" style="width: 72px;height: 20px" id="7weight" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+            </tr>
+            <tr>
+                <td>印度枪(立翅)</td>
+                <td><input type="text" style="width: 72px;height: 20px" id="8num" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+                <td><input type="text" style="width: 72px;height: 20px" id="8weight" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+            </tr>
+            <tr>
+                <td>条纹(红肉)或白枪</td>
+                <td><input type="text" style="width: 72px;height: 20px" id="9num" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+                <td><input type="text" style="width: 72px;height: 20px" id="9weight" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+            </tr>
+            <tr>
+                <td>小吻或锯鳞</td>
+                <td><input type="text" style="width: 72px;height: 20px" id="11num" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+                <td><input type="text" style="width: 72px;height: 20px" id="11weight" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+            </tr>
+            <tr>
+                <td rowspan="4" >鲨鱼类</td>
+                <td>大青鲨(灰鲨)</td>
+                <td><input type="text" style="width: 72px;height: 20px" id="12num" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+                <td><input type="text" style="width: 72px;height: 20px" id="12weight" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+            </tr>
+            <tr>
+                <td>尖吻鲭鲨(马加)</td>
+                <td><input type="text" style="width: 72px;height: 20px" id="13num" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+                <td><input type="text" style="width: 72px;height: 20px" id="13weight" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+            </tr>
+            <tr>
+                <td>长鳍真鲨(黑鲨)</td>
+                <td><input type="text" style="width: 72px;height: 20px" id="14num" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+                <td><input type="text" style="width: 72px;height: 20px" id="14weight" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+            </tr>
+            <tr>
+                <td>长尾鲨</td>
+                <td><input type="text" style="width: 72px;height: 20px" id="15num" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+                <td><input type="text" style="width: 72px;height: 20px" id="15weight" class="layui-input" maxlength="50" lay-verify="required" required ></td>
+            </tr>
+        </table>
+    </div>
+    <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="monthlyFormSubmit" id="but" >保存</button>
+    </div>
+</form>
+
+<!-- js部分 -->
+
+<script>
+    layui.use(['layer', 'form', 'formSelects', 'admin','table','laydate'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var table = layui.table;
+        var admin = layui.admin;
+        var laydate = layui.laydate;
+
+        //年月选择器
+        laydate.render({
+            elem: '#jobTimeForm'
+            ,type: 'month'
+        });
+
+
+
+        $('#but').click(function () {
+            var companyName = $('#companyName').val();
+            var jobType = $('#jobType').val();
+            if(jobType === '0'){
+                layer.msg("请选择作业类型", {icon: 2});
+                return;
+            }
+            var jobTheArea = $('#jobTheArea').val();
+            var province = $('#province').val();
+            var jobTime = $('#jobTimeForm').val();
+            var shipName = $('#shipName').val();
+            var jobNumOfDays = $('#jobNumOfDays').val();
+            var startSite = $('#startSite').val();
+            var endSite = $('#endSite').val();
+            var castHookNum = $('#castHookNum').val();
+            var annotation = $('#annotation').val();
+            var elses = $('#elseFish').val();
+            var eez = $('#eez').val();
+            var shipPutIn = $('#shipPutIn').val();
+            var shipEezTheFish = $('#shipEezTheFish').val();
+            var shipNoProduction = $('#shipNoProduction').val();
+
+            if(eez === '0'){
+                layer.msg("请选择公海EEZ", {icon: 2});
+                return ;
+            }
+
+            var num1 = $('#1num').val();
+            var weight1 = $('#1weight').val();
+
+            var num2 = $('#2num').val();
+            var weight2 = $('#2weight').val();
+
+            var num3 = $('#3num').val();
+            var weight3 = $('#3weight').val();
+
+            var num4 = $('#4num').val();
+            var weight4 = $('#4weight').val();
+
+            var num5 = $('#5num').val();
+            var weight5 = $('#5weight').val();
+
+            var num6 = $('#6num').val();
+            var weight6 = $('#6weight').val();
+
+            var num7 = $('#7num').val();
+            var weight7 = $('#7weight').val();
+
+            var num8 = $('#8num').val();
+            var weight8 = $('#8weight').val();
+
+            var num9 = $('#9num').val();
+            var weight9 = $('#9weight').val();
+
+            var num11 = $('#11num').val();
+            var weight11 = $('#11weight').val();
+
+            var num12 = $('#12num').val();
+            var weight12 = $('#12weight').val();
+
+            var num13 = $('#13num').val();
+            var weight13 = $('#13weight').val();
+
+            var num14 = $('#14num').val();
+            var weight14 = $('#14weight').val();
+
+            var num15 = $('#15num').val();
+            var weight15 = $('#15weight').val();
+
+
+            var jsonArr = {"tuna":{"name":"金枪鱼类","bigEye":{"num":num1,"weight":weight1,"name":"大目"},"yellowFin":{"num":num2,"weight":weight2,"name":"黄鳍"},"blueFin":{"num":num3,"weight":weight3,"name":"蓝鳍"},"albacore":{"num":num4,"weight":weight4,"name":"长鳍"}},
+                            "sailfish":{"name":"旗鱼类","dorado":{"num":num5,"weight":weight5,"name":"剑鱼"},"umbrella":{"num":num6,"weight":weight6,"name":"旗鱼(雨伞)"},"blackFlag":{"num":num7,"weight":weight7,"name":"蓝枪(黑旗)"},"verticalFin":{"num":num8,"weight":weight8,"name":"印度枪(立翅)"},"streak":{"num":num9,"weight":weight9,"name":"条纹(红肉)或白枪"},"bigEyedSoldier":{"num":num11,"weight":weight11,"name":"小吻或锯鳞"}},
+                            "shark":{"name":"鲨鱼类","greyShark":{"num":num12,"weight":weight12,"name":"大青鲨(灰鲨)"},"mako":{"num":num13,"weight":weight13,"name":"尖吻鲭鲨(马加)"},"blackShark":{"num":num14,"weight":weight14,"name":"长鳍真鲨(黑鲨)"},"thresher":{"num":num15,"weight":weight15,"name":"长尾鲨"}}
+            };
+
+
+
+            admin.req('monthly/addMonthly',{
+                companyName:companyName,
+                jobType:jobType,
+                jobTheArea:jobTheArea,
+                province:province,
+                jobTime:jobTime,
+                shipName:shipName,
+                jobNumOfDays:jobNumOfDays,
+                startSite:startSite,
+                endSite:endSite,
+                castHookNum:castHookNum,
+                annotation:annotation,
+                elseFish:elses,
+                eez:eez,
+                jsonArr:JSON.stringify(jsonArr),
+                shipPutIn:shipPutIn,
+                shipEezTheFish:shipEezTheFish,
+                shipNoProduction:shipNoProduction
+            },function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    // 关闭当前iframe弹出层
+                    table.reload('monthlyTable');
+                    admin.closeDialog('#monthlyForm');
+                    layer.msg(data.msg, {icon: 1});
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            },"POST");
+        })
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,291 @@
+<style>
+    .layui-form-item {
+        margin-bottom: 0;
+        margin-top: 20px;
+    }
+
+    .layui-form-item .layui-inline {
+        margin-bottom: 25px;
+        margin-right: 0;
+    }
+
+    .layui-form-label {
+        padding: 9px 0px;
+        width: 180px;
+    }
+
+    .layui-input-block {
+        margin-left: 190px;
+    }
+
+    #logDiv input {
+        border-width: 0px;
+        border-bottom-width: 1px;
+    }
+
+    .layui-tab {
+        margin: 0px 0;
+    }
+</style>
+
+
+<!-- 加载动画，移除位置在common.js中 -->
+<!--<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>-->
+
+<!-- 正文开始 -->
+<div class="layui-fluid" id="logDiv">
+    <div class="layui-tab">
+        <ul class="layui-tab-title">
+            <li id="modifyLi" class="layui-this">修改后日志</li>
+            <li id="yuanshi" style="display: none;">原始日志</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-form">
+                            <div class="layui-form-item layui-row">
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">船名:</label>
+                                    <div class="layui-input-block">
+                                        <input id="shipName" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">网次</label>
+                                    <div class="layui-input-block">
+                                        <input id="netNum" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4" style="visibility: hidden">
+                                    <label class="layui-form-label">日期:</label>
+                                    <div class="layui-input-block">
+                                        <input id="logDate" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">作业开始时间:</label>
+                                    <div class="layui-input-block">
+                                        <input id="startTime" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">开始位置纬度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="startLat" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">开始位置经度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="startLon" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">作业结束时间:</label>
+                                    <div class="layui-input-block">
+                                        <input id="endTime" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">结束位置纬度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="endLat" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">结束位置经度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="endLon" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="layui-card">
+                            <div class="layui-card-header">捕获信息</div>
+                            <div class="layui-card-body">
+                                <table class="layui-table" id="fish-table" lay-filter="fish-table"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-form">
+                            <div class="layui-form-item layui-row">
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">船名:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_shipName" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">网次</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_netNum" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4" style="visibility: hidden">
+                                    <label class="layui-form-label">日期:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_logDate" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">作业开始时间:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_startTime" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">开始位置纬度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_startLat" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">开始位置经度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_startLon" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">作业结束时间:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_endTime" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">结束位置纬度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_endLat" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">结束位置经度:</label>
+                                    <div class="layui-input-block">
+                                        <input id="e_endLon" type="text" readonly="readonly" class="layui-input"/>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="layui-card">
+                            <div class="layui-card-header">捕获信息</div>
+                            <div class="layui-card-body">
+                                <table class="layui-table" id="e_fish-table" lay-filter="e_fish-table"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div style="text-align: center;margin-top: 30px;margin-bottom: 20px;">
+                <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'formSelects', 'admin', 'config', 'jquery', 'laydate', 'table', 'element'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var config = layui.config;
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+        var table = layui.table;
+
+        var log = admin.getTempData('t_fishinglog');
+        if (log) {
+            $("#shipName").val(log.shipName);
+            $("#logDate").val(log.logDate);
+            $("#netNum").val(log.netNum);
+            $("#startTime").val(log.startTime);
+            $("#startLon").val(log.startLonStr);
+            $("#startLat").val(log.startLatStr);
+            $("#endTime").val(log.endTime);
+            $("#endLon").val(log.endLonStr);
+            $("#endLat").val(log.endLatStr);
+            if (log.modifyLogId) {
+                $("#yuanshi").show();
+                admin.req('fishinglog/oneLog', {id: log.modifyLogId}, function (data) {
+                    if (data.code == 200) {
+                        var elog = data.data;
+                        $("#e_shipName").val(log.shipName);
+                        $("#e_logDate").val(elog.logDate);
+                        $("#e_netNum").val(elog.netNum);
+                        $("#e_startTime").val(elog.startTime);
+                        $("#e_startLon").val(elog.startLonStr);
+                        $("#e_startLat").val(elog.startLatStr);
+                        $("#e_endTime").val(elog.endTime);
+                        $("#e_endLon").val(elog.endLonStr);
+                        $("#e_endLat").val(elog.endLatStr);
+                        table.render({
+                            elem: '#e_fish-table',
+                            url: config.base_server + 'fishinglog/fish',
+                            page: false,
+                            limit: 1000,
+                            where: {id: elog.id, token: config.getToken().access_token},
+                            cellMinWidth: 100,
+                            cols: [[
+                                {type: 'numbers'},
+                                {field: 'fishName', align: 'center', sort: true, title: '鱼种名'},
+                                {field: 'standardName', align: 'center', sort: true, title: '规格'},
+                                {field: 'num', align: 'center', sort: true, title: '捕获数量'},
+                                {field: 'unitName', align: 'center', sort: true, title: '单位'}
+                            ]]
+                        });
+                    }
+                },'GET');
+            } else {
+                $("#yuanshi").show();
+                $("#modifyLi").hide();
+            }
+        }
+
+        table.render({
+            elem: '#fish-table',
+            url: config.base_server + 'fishinglog/fish',
+            page: false,
+            limit: 1000,
+            where: {id: log.id, token: config.getToken().access_token},
+            cellMinWidth: 100,
+            cols: [[
+                {type: 'numbers'},
+                {field: 'fishName', align: 'center', sort: true, title: '鱼种名'},
+                {field: 'standardName', align: 'center', sort: true, title: '规格'},
+                {field: 'num', align: 'center', sort: true, title: '捕获数量'},
+                {field: 'unitName', align: 'center', sort: true, title: '单位'}
+            ]]
+        });
+    });
+</script>

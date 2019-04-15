@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html class="bg-white">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>添加/修改Trip</title>
+    <base href="${ctxPath}">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+</head>
+
+<body>
+
+<form id="tripForm" lay-filter="tripForm" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+                                    <div class="layui-form-item">
+                <label class="layui-form-label">${field.comment}</label>
+                <div class="layui-input-block">
+                    <input name="shipId" placeholder="请输入${field.comment}" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">${field.comment}</label>
+                <div class="layui-input-block">
+                    <input name="unloadingAgent" placeholder="请输入${field.comment}" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">序列，每年从1开始</label>
+                <div class="layui-input-block">
+                    <input name="tripNo" placeholder="请输入序列，每年从1开始" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">主捕鱼种</label>
+                <div class="layui-input-block">
+                    <input name="targetSpec" placeholder="请输入主捕鱼种" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">出发港或地点</label>
+                <div class="layui-input-block">
+                    <input name="departure" placeholder="请输入出发港或地点" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">转载港或地点</label>
+                <div class="layui-input-block">
+                    <input name="unloadingPlace" placeholder="请输入转载港或地点" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">出发时间</label>
+                <div class="layui-input-block">
+                    <input name="departureTime" placeholder="请输入出发时间" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">转载时间</label>
+                <div class="layui-input-block">
+                    <input name="unloadingTime" placeholder="请输入转载时间" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">开始时船上剩余鱼量（克）</label>
+                <div class="layui-input-block">
+                    <input name="fishStart" placeholder="请输入开始时船上剩余鱼量（克）" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                <div class="layui-form-item">
+                <label class="layui-form-label">卸载后船上剩余鱼量(克)</label>
+                <div class="layui-input-block">
+                    <input name="fishEnd" placeholder="请输入卸载后船上剩余鱼量(克)" type="text" class="layui-input" maxlength="50"
+                           lay-verify="required" required/>
+                </div>
+            </div>
+                                                                <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+    </div>
+</form>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script>
+    layui.use(['layer', 'form', 'formSelects', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+
+        var url = 'add';
+        // 回显trip数据
+        var trip = admin.getTempData('t_trip');
+        if (trip) {
+            url = 'update';
+            form.val('tripForm', trip);
+        }
+
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            layer.load(2);
+            $.post(url, data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    top.layer.msg(data.msg, {icon: 1});
+                    admin.putTempData('formOk', true);  // 操作成功刷新表格
+                    // 关闭当前iframe弹出层
+                    parent.layer.close(parent.layer.getFrameIndex(window.name));
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            });
+            return false;
+        });
+    });
+</script>
+
+</body>
+</html>

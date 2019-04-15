@@ -1,0 +1,129 @@
+
+
+
+<style>
+    .layui-form-item {
+        margin-bottom: 0;
+        margin-top: 20px;
+    }
+
+    .layui-form-item .layui-inline {
+        margin-bottom: 25px;
+        margin-right: 0;
+    }
+    .layui-form-label {
+        padding: 9px 0px;
+        width: 180px;
+    }
+    .layui-input-block {
+        margin-left: 200px;
+    }
+    #logDiv input{
+        border-width: 0px;
+        border-bottom-width: 1px;
+    }
+    .layui-tab {
+        margin: 0px 0;
+    }
+</style>
+
+<div class="layui-fluid" id="logDiv">
+    <div class="layui-tab">
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-form">
+
+                            <div class="layui-form-item layui-row">
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">钩次</label>
+                                    <div class="layui-input-block">
+                                        <input  id="obhks" readonly="readonly"   type="text" class="layui-input" />
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">下钩日期</label>
+                                    <div class="layui-input-block">
+                                        <input id="datehook" readonly="readonly"   type="text" class="layui-input" />
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">观察筐数</label>
+                                    <div class="layui-input-block">
+                                        <input id="obnum" readonly="readonly"   type="text" class="layui-input" />
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md4">
+                                    <label class="layui-form-label">总筐数</label>
+                                    <div class="layui-input-block">
+                                        <input id="obtotsum" readonly="readonly"   type="text" class="layui-input"  />
+                                    </div>
+                                </div>
+
+
+                                <div class="layui-card">
+                                    <div class="layui-card-body">
+                                        <table class="layui-table" id="fishcatchDetail" lay-filter="fishcatchDetail"></table>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'formSelects', 'admin', 'config', 'jquery', 'laydate', 'table','element'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var config = layui.config;
+        var laydate = layui.laydate;
+        var table = layui.table;
+
+        var log = admin.getTempData('fishDetail');
+
+if (log) {
+    $("#obhks").val(log.obfishcatchhooks);
+    $("#datehook").val(log.obfishcatchdatehook);
+    $("#obnum").val(log.obbasketnum);
+    $("#obtotsum").val(log.obbaskettotsum);
+
+}
+          var obfishcatchid = log.obfishcatchid;
+
+            table.render({
+                elem: '#fishcatchDetail',
+                url: config.base_server + 'observer/fishcatch/selectFishCatchById',
+                where:{obfishcatchid:obfishcatchid},
+                page: false,
+                limit:1000,
+                cellMinWidth: 100,
+                cols: [[
+                     {type: 'numbers'},
+                    {field: 'chinesename', sort: true, title: '类型'},
+                    {field: 'obtrailnum', sort: true, title: '观察尾数'},
+                    {field: 'oboutput', sort: true, title: '观察产量'},
+                    {field: 'obtotletailnum', sort: true, title: '总尾数'},
+                    {field: 'obtotleoutput', sort: true, title: '总产量'}
+                ]]
+            });
+
+
+
+    });
+
+</script>

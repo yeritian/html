@@ -1,0 +1,850 @@
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline" style="width: 120px;">
+                        <select id="sltKey">
+                            <option value="">-搜索条件-</option>
+                            <option value="ftworkhooktimes">作业钩次</option>
+                            <option value="ftstatehookdate">下钩开始日期</option>
+                            <option value="chinesename">中文名</option>
+                            <option value="kindcode">种代码</option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
+                        <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                        <button class="layui-btn btn-add btn-default" id="improtFile">导入</button>
+                        <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
+                        <button id="btnDel" class="layui-btn icon-btn" data-type="getCheckData"><i class="layui-icon">&#xe67d;</i>删除</button>
+                    </div>
+                </div>
+            </div>
+
+            <table class="layui-table" id="fishtailTable" lay-filter="fishtailTable"></table>
+        </div>
+    </div>
+
+</div>
+
+<!-- 表单弹窗 -->
+<script type="text/html" id="fishtailModel">
+    <form id="fishtailForm" lay-filter="fishtailForm" class="layui-form model-form">
+        <input name="fishtailid" type="hidden"/>
+                        <input id="obid" style="display: none" name="observerinfoid"  type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">作业钩次</label>
+                    <div class="layui-input-block">
+                        <input name="ftworkhooktimes" placeholder="请输入作业钩次" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">下钩开始日期</label>
+                    <div class="layui-input-block">
+                        <input id="test" name="ftstatehookdate" placeholder="请输入下钩开始日期" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                  <div class="layui-form-item">
+                    <label class="layui-form-label">观察筐数</label>
+                    <div class="layui-input-block">
+                        <input name="ftbasketnum" placeholder="请输入观察筐数" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">钓获钩位</label>
+                    <div class="layui-input-block">
+                        <input name="ftcatchhook" placeholder="请输入钓获钩位" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">中文名</label>
+                    <div class="layui-input-block">
+                        <input name="chinesename" placeholder="请输入中文名" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">英文名</label>
+                    <div class="layui-input-block">
+                        <input name="englishname" placeholder="请输入英文名" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">科学名</label>
+                    <div class="layui-input-block">
+                        <input name="scientificname" placeholder="请输入科学名" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">种代码</label>
+                    <div class="layui-input-block">
+                        <input name="kindcode" placeholder="请输入种代码" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">捕获时状态</label>
+                    <div class="layui-input-block">
+                        <select  name="capturetimestate"   lay-verify="required" >
+                            <option value="">请输入捕获时状态</option>
+                            <option value="A1">活着且健康</option>
+                            <option value="A2">活着但明显受伤</option>
+                            <option value="A3">活着但接近死亡</option>
+                            <option value="D">已死亡</option>
+                            <option value="U">未观察</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">保留/丢弃</label>
+                    <div class="layui-input-block">
+                        <select  name="retaindiscard"  type="text" lay-verify="required">
+                            <option value="">请选择保留/丢弃</option>
+                            <option value="D-a">整体丢弃-alive</option>
+                            <option value="D-d">整体丢弃-dead</option>
+                            <option value="PD">部分丢弃</option>
+                            <option value="R">整体保留</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">全长TL(cm)</label>
+                    <div class="layui-input-block">
+                        <input name="fulllength" placeholder="请输入全长TL(cm)   " type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">上额叉长FL</label>
+                    <div class="layui-input-block">
+                        <input name="foreheadforklg" placeholder="请输入上额叉长FL" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+              <div class="layui-form-item">
+                    <label class="layui-form-label">下额叉长LJFL</label>
+                    <div class="layui-input-block">
+                        <input name="lowerforklg" placeholder="请输入下额叉长LJFL" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+               <div class="layui-form-item">
+                    <label class="layui-form-label">吻端-尾鳍凹洼长PCL</label>
+                    <div class="layui-input-block">
+                        <input name="caudalfin" placeholder="请输入吻端-尾鳍凹洼长PCL" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">转换长度(背鳍间长LBD)</label>
+                    <div class="layui-input-block">
+                        <input name="conversionlbd" placeholder="请输入转换长度(背鳍间长LBD)" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">全重WW(kg)</label>
+                    <div class="layui-input-block">
+                        <input name="ftfullweight" placeholder="请输入全重WW(kg)" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">加工重量GT</label>
+                    <div class="layui-input-block">
+                        <input name="ftprocesswgt" placeholder="请输入加工重量GT" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">加工重量GX</label>
+                    <div class="layui-input-block">
+                        <input name="ftprocesswgx" placeholder="请输入加工重量GX" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">其它加工重量</label>
+                    <div class="layui-input-block">
+                        <input name="ftprocesseachw" placeholder="请输入其它加工重量" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">摄食等级</label>
+                    <div class="layui-input-block">
+                        <select  name="ftfoodclass"  type="text" lay-verify="required">
+                            <option value="">请选择摄食等级</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">性别</label>
+                    <div class="layui-input-block">
+                        <select  name="ftsex"  type="text" lay-verify="required">
+                            <option value="">请选择性别</option>
+                            <option value="F">雌</option>
+                            <option value="M">雄</option>
+                            <option value="UD">无法辨认</option>
+                            <option value="U">未观察</option>
+                        </select>
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">成熟期</label>
+                    <div class="layui-input-block">
+                        <select  name="ftautumnperiod"   lay-verify="required">
+                            <option value="">请选择成熟期</option>
+                            <option value="成熟">成熟</option>
+                            <option value="未成熟">未成熟</option>
+                            <option value="幼鲨">幼鲨</option>
+                            <option value="成熟中">成熟中</option>
+                            <option value="排卵中">排卵中</option>
+                            <option value="已怀孕">已怀孕</option>
+                            <option value="其他鱼0">其他鱼0</option>
+                            <option value="其他鱼1">其他鱼1</option>
+                            <option value="其他鱼2">其他鱼2</option>
+                            <option value="其他鱼3">其他鱼3</option>
+                            <option value="其他鱼4">其他鱼4</option>
+                            <option value="其他鱼5">其他鱼5</option>
+                            <option value="无法辨认">无法辨认</option>
+                        </select>
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">卵/精巢重(g)</label>
+                    <div class="layui-input-block">
+                        <input name="eggtestisweight" placeholder="请输入卵/精巢重(g)" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">肝重(一对)(kg)</label>
+                    <div class="layui-input-block">
+                        <input name="liverweight" placeholder="请输入肝重(一对)(kg" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">鳍脚内长(cm)</label>
+                    <div class="layui-input-block">
+                        <input name="pinnipedia" placeholder="请输入鳍脚内长(cm)" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">卵壳腺宽(mm)</label>
+                    <div class="layui-input-block">
+                        <input name="eggshellglandwidth" placeholder="请输入卵壳腺宽(mm)" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">卵巢卵径(mm)</label>
+                    <div class="layui-input-block">
+                        <input name="ovarianeggsdiameter" placeholder="请输入卵巢卵径(mm)" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">子宫中胚胎个数</label>
+                    <div class="layui-input-block">
+                        <input name="embryoswombnum" placeholder="请输入子宫中胚胎个数" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">子宫中幼鲨尾数</label>
+                    <div class="layui-input-block">
+                        <input name="sharkmantissa" placeholder="请输入子宫中幼鲨尾数" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">幼鲨性别与长度(cm)</label>
+                    <div class="layui-input-block">
+                        <input name="sexlength" placeholder="请输入幼鲨性别与长度(cm)" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">卵、胚胎、幼鲨描述</label>
+                    <div class="layui-input-block">
+                        <input name="ftdescribe" placeholder="请输入卵、胚胎、幼鲨描述" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">椎骨编号(部位)</label>
+                    <div class="layui-input-block">
+                        <input name="vertebraeno" placeholder="请输入椎骨编号(部位)" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                  <div class="layui-form-item">
+                    <label class="layui-form-label">鳍棘编号(部位)</label>
+                    <div class="layui-input-block">
+                        <input name="finspine" placeholder="请输入鳍棘编号(部位)" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                  <div class="layui-form-item">
+                    <label class="layui-form-label">胃含物编号</label>
+                    <div class="layui-input-block">
+                        <input name="gastriccontents" placeholder="请输入胃含物编号" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">胃含物图片编号</label>
+                    <div class="layui-input-block">
+                        <input name="gastriccontentsimg" placeholder="请输入胃含物图片编号" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">胃含物明细(种类与个体数)</label>
+                    <div class="layui-input-block">
+                        <input name="kindnum" placeholder="请输入胃含物明细(种类与个体数)" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">性腺编号</label>
+                    <div class="layui-input-block">
+                        <input name="gonadno" placeholder="请输入性腺编号" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                  <div class="layui-form-item">
+                    <label class="layui-form-label">组织编号</label>
+                    <div class="layui-input-block">
+                        <input name="organizationno" placeholder="请输入组织编号" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">船上是否记录</label>
+                    <div class="layui-input-block">
+                        <select  name="ftrecord"   lay-verify="required">
+                        <option value="">船上是否记录</option>
+                        <option value="是">是</option>
+                        <option value="否">否</option>
+                        </select>
+                    </div>
+                </div>
+                   <div class="layui-form-item">
+                    <label class="layui-form-label">观察到的其它现象</label>
+                    <div class="layui-input-block">
+                        <input name="ftotherrecord" placeholder="请输入观察到的其它现象" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">注释</label>
+                    <div class="layui-input-block">
+                        <input name="ftremark" placeholder="请输入注释" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                            <div class="layui-form-item text-right">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+            <button class="layui-btn" lay-filter="fishtailFormSubmit" lay-submit>保存</button>
+        </div>
+    </form>
+</script>
+
+<!--详情表格-->
+<script type="text/html" id="fishtailDetail">
+    <form id="fishtailFormDetail" lay-filter="fishtailFormDetail" class="layui-form model-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">作业钩次</label>
+            <div class="layui-input-block">
+                <input name="ftworkhooktimes" placeholder="请输入作业钩次" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">下钩开始日期</label>
+            <div class="layui-input-block">
+                <input id="test" name="ftstatehookdate" placeholder="请输入下钩开始日期" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">观察筐数</label>
+            <div class="layui-input-block">
+                <input name="ftbasketnum" placeholder="请输入观察筐数" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">钓获钩位</label>
+            <div class="layui-input-block">
+                <input name="ftcatchhook" placeholder="请输入钓获钩位" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">中文名</label>
+            <div class="layui-input-block">
+                <input name="chinesename" placeholder="请输入中文名" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">英文名</label>
+            <div class="layui-input-block">
+                <input name="englishname" placeholder="请输入英文名" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">科学名</label>
+            <div class="layui-input-block">
+                <input name="scientificname" placeholder="请输入科学名" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">种代码</label>
+            <div class="layui-input-block">
+                <input name="kindcode" placeholder="请输入种代码" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">捕获时状态</label>
+            <div class="layui-input-block">
+                <input name="capturetimestate"   type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">保留/丢弃  </label>
+            <div class="layui-input-block">
+                <input name="retaindiscard"   type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">全长TL(cm)</label>
+            <div class="layui-input-block">
+                <input name="fulllength"   type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上额叉长FL</label>
+            <div class="layui-input-block">
+                <input name="foreheadforklg" placeholder="请输入上额叉长FL" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">下额叉长LJFL</label>
+            <div class="layui-input-block">
+                <input name="lowerforklg" placeholder="请输入下额叉长LJFL" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">吻端-尾鳍凹洼长PCL</label>
+            <div class="layui-input-block">
+                <input name="caudalfin" placeholder="请输入吻端-尾鳍凹洼长PCL" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">转换长度(背鳍间长LBD)</label>
+            <div class="layui-input-block">
+                <input name="conversionlbd" placeholder="请输入转换长度(背鳍间长LBD)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">全重WW(kg)</label>
+            <div class="layui-input-block">
+                <input name="ftfullweight" placeholder="请输入全重WW(kg)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">加工重量GT</label>
+            <div class="layui-input-block">
+                <input name="ftprocesswgt" placeholder="请输入加工重量GT" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">加工重量GX</label>
+            <div class="layui-input-block">
+                <input name="ftprocesswgx" placeholder="请输入加工重量GX" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">其它加工重量</label>
+            <div class="layui-input-block">
+                <input name="ftprocesseachw" placeholder="请输入其它加工重量" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">摄食等级</label>
+            <div class="layui-input-block">
+                <input name="ftfoodclass"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <input name="ftsex"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">成熟期</label>
+            <div class="layui-input-block">
+                <input name="ftautumnperiod"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">卵/精巢重(g)</label>
+            <div class="layui-input-block">
+                <input name="eggtestisweight" placeholder="请输入卵/精巢重(g)" type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">肝重(一对)(kg)</label>
+            <div class="layui-input-block">
+                <input name="liverweight" placeholder="请输入肝重(一对)(kg" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">鳍脚内长(cm)</label>
+            <div class="layui-input-block">
+                <input name="pinnipedia" placeholder="请输入鳍脚内长(cm)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">卵壳腺宽(mm)</label>
+            <div class="layui-input-block">
+                <input name="eggshellglandwidth" placeholder="请输入卵壳腺宽(mm)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">卵巢卵径(mm)</label>
+            <div class="layui-input-block">
+                <input name="ovarianeggsdiameter" placeholder="请输入卵巢卵径(mm)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">子宫中胚胎个数</label>
+            <div class="layui-input-block">
+                <input name="embryoswombnum" placeholder="请输入子宫中胚胎个数" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">子宫中幼鲨尾数</label>
+            <div class="layui-input-block">
+                <input name="sharkmantissa" placeholder="请输入子宫中幼鲨尾数" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">幼鲨性别与长度(cm)</label>
+            <div class="layui-input-block">
+                <input name="sexlength" placeholder="请输入幼鲨性别与长度(cm)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">卵、胚胎、幼鲨描述</label>
+            <div class="layui-input-block">
+                <input name="ftdescribe" placeholder="请输入卵、胚胎、幼鲨描述" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">椎骨编号(部位)</label>
+            <div class="layui-input-block">
+                <input name="vertebraeno" placeholder="请输入椎骨编号(部位)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">鳍棘编号(部位)</label>
+            <div class="layui-input-block">
+                <input name="finspine" placeholder="请输入鳍棘编号(部位)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">胃含物编号</label>
+            <div class="layui-input-block">
+                <input name="gastriccontents" placeholder="请输入胃含物编号" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">胃含物图片编号</label>
+            <div class="layui-input-block">
+                <input name="gastriccontentsimg" placeholder="请输入胃含物图片编号" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">胃含物明细(种类与个体数)</label>
+            <div class="layui-input-block">
+                <input name="kindnum" placeholder="请输入胃含物明细(种类与个体数)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性腺编号</label>
+            <div class="layui-input-block">
+                <input name="gonadno" placeholder="请输入性腺编号" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">组织编号</label>
+            <div class="layui-input-block">
+                <input name="organizationno" placeholder="请输入组织编号" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">船上是否记录</label>
+            <div class="layui-input-block">
+                <input name="ftrecord"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">观察到的其它现象</label>
+            <div class="layui-input-block">
+                <input name="ftotherrecord" placeholder="请输入观察到的其它现象" type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">注释</label>
+            <div class="layui-input-block">
+                <input name="ftremark"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+    </form>
+</script>
+
+<!--导入按钮-->
+<script type="text/html" id="improtFilefu">
+    <center>
+        <form id="improtFilefuRu" lay-filter="improtFilefuRu"  class="layui-form model-form">
+            <div>请确定表格类型，防止数据出错</div>
+            <a class="layui-btn btn-add btn-default" id="btn-excel">选择Excel文件</a>
+            <a class="layui-btn btn-add btn-default" id="btn-excel-sure">上传导入</a>
+        </form>
+    </center>
+</script>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'config','formSelects','laytpl','laydate','upload'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var config = layui.config;
+        var formSelects = layui.formSelects;
+        var laytpl = layui.laytpl;
+        var laydate = layui.laydate;
+        var upload = layui.upload;
+
+        var obid = layui.router().search.p1;
+
+
+        form.render('select');
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#fishtailTable',
+            url: config.base_server + 'observer/fishtail/list',
+            where:{observerinfoid:obid},
+            page: true,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'ftworkhooktimes', sort: true, title: '作业钩次'},
+                {field: 'kindcode', sort: true, title: '种代码'},
+                {field: 'ftstatehookdate', sort: true, title: '下钩开始日期'},
+                {field: 'ftbasketnum', sort: true, title: '观察筐数'},
+                {field: 'ftcatchhook', sort: true, title: '钓获钩位'},
+                {field: 'chinesename', sort: true, title: '中文名'},
+                {field: 'updateTime', sort: true, title: '更新时间'},
+                {field: 'ftremark', sort: true, title: '注释'},
+                {align: 'center', toolbar: '#tableBar', title: '操作'}
+            ]]
+        });
+
+        // 添加按钮点击事件
+        $('#btnAdd').click(function () {
+            showEditModel();
+        });
+
+        //导入按钮
+        $('#improtFile').click(function () {
+            imfile();
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            table.reload('fishtailTable', {where: {searchKey: key, searchValue: value}});
+        });
+        // 表单提交事件
+        form.on('submit(fishtailFormSubmit)', function (data) {
+            layer.load(2);
+            var theMethod = data.field.fishtailid?"PUT":"POST";
+            admin.req('observer/fishtail', data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                    table.reload('fishtailTable');
+                    admin.closeDialog('#fishtailForm');
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, theMethod);
+            return false;
+        });
+        // 工具条点击事件
+        table.on('tool(fishtailTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            }else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }else if (obj.event === 'detail') { //详情
+                showdetail(data);
+            }
+        });
+        // 删除
+        function doDelete(obj) {
+            layer.confirm('确定要删除吗？', {
+                skin: 'layui-layer-admin'
+            }, function (i) {
+                layer.close(i);
+                layer.load(2);
+                admin.req('observer/fishtail/'+ obj.data.fishtailid, {}, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        table.reload('fishtailTable');
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'delete');
+            });
+        };
+
+
+        /*批量删除*/
+        $('#btnDel').click(function () {
+            //获取选中行数据
+            var checkStatus = table.checkStatus('fishtailTable')
+                ,dataSeaId = checkStatus.data;
+            if(dataSeaId.length==0){
+                layer.msg("请选择要删除的数据",{icon: 3});
+            }else{
+                layer.confirm('确定要删除'+ dataSeaId.length +'条吗？', {
+                    skin: 'layui-layer-admin',
+                    btn: ['确定', '取消']
+                }, function (index, layero) {
+                    var str = new Array();
+                    for (var i = 0; i < dataSeaId.length; i++) {
+                        str[i] = dataSeaId[i].fishtailid;
+                    }
+                    admin.req("observer/fishtail/deletAllfishtailid",{
+                        fishtailid:JSON.stringify(str)
+                    },function (data) {
+                        table.reload('fishtailTable');
+                        if (data.code == 200) {
+                            layer.msg(data.msg, {icon: 1});
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+                    },"PUT");
+                    layer.closeAll('dialog');  //加入这个信息点击确定 会关闭这个消息框
+                });
+            }
+        });
+
+        //Excel导入
+        function imfile(){
+            admin.open({
+                type:1,
+                title:"文件导入",
+                area:["400px","250px"],
+                btn:["取消"],
+                offset: ['15%', '25%'],
+                content:document.getElementById('improtFilefu').innerHTML,
+                success:function () {
+                    //Excel导入
+                    upload.render({
+                        elem: '#btn-excel'
+                        ,url: config.base_server + 'observer/fishtail/fileexcel?obid='+obid
+                        ,auto: false
+                        //,multiple: true
+                        ,bindAction: '#btn-excel-sure'
+                        ,size: 5120 //最大允许上传的文件大小 2M
+                        ,accept: 'file' //允许上传的文件类型
+                        ,exts:'xlsx'//只上传pdf文档
+                        ,done: function(res){
+                            table.reload('fishtailTable');
+                            if(res.code == 1){//成功的回调
+                                layer.msg(res.msg, {icon: 1});
+                                admin.closeDialog('#improtFilefuRu');
+                            }else if(res.code==2){
+                                layer.msg(res.msg, {icon: 2});
+                                admin.closeDialog('#improtFilefuRu');
+                            }
+                        }
+                    });
+
+                },yes:function (index) {
+                    layer.close(index);
+                }
+                ,cancel: function(index){
+                    layer.close(index)
+                }
+            });
+        }
+
+
+        // 导出excel
+        $('#btnExp').click(function () {
+            var checkRows = table.checkStatus('fishtailTable');
+
+            if (checkRows.data.length == 0) {
+                layer.msg('请选择要导出的数据', {icon: 2});
+            } else {
+                var ids = "";
+                for(var x = 0;x<checkRows.data.length;x++){
+                    ids+=checkRows.data[x].fishtailid+",";
+                }
+                window.location.href=config.base_server+"observer/fishtail/putExp?Authorization="+config.getToken().access_token+"&ids="+ids;
+            }
+        });
+
+
+        // 显示表单弹窗
+        function showEditModel(data) {
+            admin.open({
+                type: 1,
+                title: data ? '修改Fishtail' : '添加Fishtail',
+                content: laytpl(document.getElementById('fishtailModel').innerHTML).render(data||{}),
+                success: function (layero, index) {
+                    //日期格式
+                    laydate.render({
+                        elem: '#test'
+                        ,type:'datetime'
+                    });
+                    $('#fishtailForm')[0].reset();
+                    $('#obid').val(obid);
+                    if (data) {
+                        form.val('fishtailForm', data);
+                    }
+                    //$(layero).children('.layui-layer-content').css('overflow', 'visible');  // 禁止出现滚动条
+                }
+            });
+        }
+
+        //详情
+        function showdetail(obj){
+            admin.req('observer/fishtail/'+ obj.fishtailid, {}, function (data){
+                admin.open({
+                    type: 1,
+                    title:'详情',
+                    area:['400px','800px'],
+                    btn: ['返回列表'],
+                    content:laytpl(document.getElementById('fishtailDetail').innerHTML).render(data||{}),
+                    success: function (layero, index) {
+                        form.val('fishtailFormDetail', data);
+                    },
+                    yes: function(index, layero){
+                        layer.close(index)
+                    },
+                    cancel: function(index){
+                        layer.close(index)
+                    }
+                });
+            },'put');
+        }
+
+
+
+    });
+</script>

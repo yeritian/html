@@ -1,0 +1,62 @@
+<!-- 关闭Tab时顶部标题 -->
+<div class="layui-body-header">
+    <span class="layui-body-header-title">路由传参</span>
+    <span class="layui-breadcrumb pull-right">
+        <a href="#/">首页</a>
+        <a><cite>路由传参</cite></a>
+    </span>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">参数一</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="p1" class="layui-input" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">参数二</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="p2" class="layui-input" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">参数三</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="p3" class="layui-input" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-filter="formHash" lay-submit>跳转</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'index'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var index = layui.index;
+
+        //监听提交
+        form.on('submit(formHash)', function (data) {
+            var ps = data.field;
+            index.openNewTab({
+                title: '参数接收',
+                url: '#/other/routerParam/p1=' + ps.p1 + '/p2=' + ps.p2 + '/p3=' + ps.p3
+            });
+        });
+    });
+</script>

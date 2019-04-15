@@ -1,0 +1,418 @@
+<!-- 关闭Tab时顶部标题 -->
+<div class="layui-body-header">
+    <span class="layui-breadcrumb pull-right">
+    	<span class="layui-body-header-title">纸质渔捞日志</span>
+        <a href="#/">首页</a>
+        <a><cite>纸质渔捞日志</cite></a>
+    </span>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">公司名称</label>
+                        <div class="layui-input-inline">
+                            <select id="company" lay-verify="required" lay-filter="companyFilter"
+                                    lay-search="">
+                                <option value="">直接选择或搜索</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">船舶名称</label>
+                        <div class="layui-input-inline">
+                            <select id="ship" lay-verify="required" lay-filter="shipFilter" lay-search="">
+                                <option value="">直接选择或搜索</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">活动类型</label>
+                        <div class="layui-inline"><!--"作业","航行","漂流","在港","转载","故障","未作业-天气原因","寻找鱼群","清洁网具","放置或回收"-->
+                            <select id="actionType" lay-verify="required">
+                                <option value="">-请选择类型-</option>
+                                <option value="0">作业</option>
+                                <option value="1">航行</option>
+                                <option value="2">漂流</option>
+                                <option value="3">在港</option>
+                                <option value="4">转载</option>
+                                <option value="5">故障</option>
+                                <option value="6">未作业-天气原因</option>
+                                <option value="7">寻找鱼群</option>
+                                <option value="8">清洁网具</option>
+                                <option value="9">放置或回收</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label" style="width: 85px">渔捞日志类型</label>
+                        <div class="layui-inline"><!--"","公海围网","金枪鱼延绳钓/超低温","鱿钓","远洋拖网","金枪鱼围网","竹筴鱼/鲐鱼"-->
+                            <select id="logType" lay-verify="required">
+                                <option value="">-请选择类型-</option>
+                                <option value="1">公海围网</option>
+                                <option value="2">金枪鱼延绳钓/超低温</option>
+                                <option value="3">鱿钓</option>
+                                <option value="4">远洋拖网</option>
+                                <option value="5">金枪鱼围网</option>
+                                <option value="6">竹筴鱼/鲐鱼</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline" style="width: 25%">
+                        <label class="layui-form-label">日志时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="log_date" class="layui-input" placeholder="-">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="btnSearchPaper" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索
+                        </button>
+                        <!--<button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>-->
+                        <button id="btnExpPaper" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>FFA导出
+                        </button>
+                        <button id="btnExpInPaper" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导入
+                        </button>
+                        <button id="btnAddPaper" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <table class="layui-table" id="fishinglogPaperTable" lay-filter="fishinglogPaperTable"></table>
+        </div>
+    </div>
+
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBarPaper">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="viewPaper">查看日志</a>
+    <!--<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="subIt">上报</a>-->
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="tripPaper">查看航次</a>
+    <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+</script>
+
+<!-- js部分 -->
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'config', 'laydate'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var config = layui.config;
+        var laydate = layui.laydate;
+
+        var start;
+        var end;
+        //日期时间范围
+        laydate.render({
+            elem: '#log_date',
+            type: 'datetime',
+            range: '—',
+            done: function (value, date, endDate) {
+                if (value) {
+                    var strArr = value.split('—');
+                    start = strArr[0];
+                    end = strArr[1];
+                } else {
+                    start = '';
+                    end = '';
+                }
+            }
+        });
+        //公司下拉框
+        admin.req('fishinglog/selectCompanyName', {}, function (data) {
+            $.each(data, function (index, item) {
+                $("#company").append(  //此处向select中循环绑定数据
+                    "<option value=" + item.id + ">" + item.name + "</option>");
+            });
+            layui.form.render("select");
+        }, "GET");
+        //船舶下拉框
+        admin.req('fishinglog/selectShipName', {}, function (res) {
+            if (res.code == '200') {
+                $.each(res.data.list, function (index, item) {
+                    $("#ship").append(  //此处向select中循环绑定数据
+                        "<option value=" + item.id + ">" + item.name + "</option>");
+                });
+                layui.form.render("select");
+            }
+
+        }, "GET");
+        //公司船舶联动
+        form.on('select(companyFilter)', function () {
+            if ($("#company").val() == '') {
+                $("#ship").html('').append("<option value=\"\">直接选择或搜索</option>");
+                admin.req('fishinglog/selectShipName', {}, function (data) {
+                    $.each(data, function (index, item) {
+                        $("#ship").append(  //此处向select中循环绑定数据
+                            "<option value=" + item.id + ">" + item.name + "</option>");
+                    });
+                    layui.form.render("select");
+                }, "GET");
+            } else {
+                admin.req('fishinglog/selectCompanyShip', {
+                    "companyId": $("#company").val()
+                }, function (data) {
+                    $("#ship").html('').append("<option value=\"\">直接选择或搜索</option>");
+                    if (data !== null) {
+                        $.each(data, function (index, item) {
+                            $("#ship").append(  //此处向select中循环绑定数据
+                                "<option value=" + item.id + ">" + item.name + "</option>");
+                        });
+                    }
+                    layui.form.render("select");
+                }, "GET");
+            }
+        });
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#fishinglogPaperTable',
+            url: config.base_server + 'fishinglog/list',
+            method: 'GET',
+            where: {
+                type: 1,
+                token: config.getToken().access_token
+            },
+            page: true,
+            cols: [[
+                {type: 'numbers'},
+                {field: 'updateTime', sort: true, title: '更新时间'},
+                {field: 'shipName', title: '船舶'},
+                {field: 'logTypeStr', title: '日志类型'},
+                {field: 'actionTypeStr', title: '活动类型'},
+                {field: 'logDate', sort: true, title: '日志/开始时间'},
+                {field: 'latStr', title: '纬度'},
+                {field: 'lonStr', title: '经度'},
+                /* {
+                     field: 'logRecordType', title: '是否修改', templet: function (d) {
+                         if (1 === d.logRecordType) {
+                             return '已修改'
+                         } else {
+                             return '未修改'
+                         }
+                     }
+                 },*/
+                {align: 'center', width: '15%', toolbar: '#tableBarPaper', title: '操作'}
+            ]]
+        });
+        // 添加按钮点击事件
+        $('#btnAddPaper').click(function () {
+            showEditModel();
+        });
+        // 搜索按钮点击事件
+        $('#btnSearchPaper').click(function () {
+            table.reload('fishinglogPaperTable', {
+                where: {
+                    'company': $('#company').val(),
+                    'ship': $('#ship').val(),
+                    'actionType': $('#actionType').val(),
+                    'logType': $('#logType').val(),
+                    'start': start,
+                    'end': end,
+                    'type': 0
+                }
+            });
+        });
+        // 工具条点击事件
+        table.on('tool(fishinglogPaperTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            } else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            } else if (obj.event === 'viewPaper') { //查看
+                showViewModel(data);
+            } else if (obj.event === 'subIt') {
+                doSubmit(obj);
+            } else if (obj.event === 'tripPaper') { //航次
+                showTripModel(data);
+            }
+        });
+
+        //查询一条渔捞日志
+        function oneLog(id) {
+            admin.ajax({
+                url: config.base_server + 'fishinglog/oneLog',
+                data: {id: id, token: config.getToken().access_token},
+                dataType: 'json',
+                async: false,//同步
+                type: 'GET',
+                success: function (result) {
+                    var fishingLog = result.data;
+                    delete fishingLog.fishLog;
+                    admin.putTempData('t_fishinglog', fishingLog);
+                }
+            });
+        }
+
+        // 显示修改表单弹窗
+        function showEditModel(data) {
+            oneLog(data.id);
+            var url = '';
+            if (data.actionType === '0') {//作业
+                url = "components/fishing/fishinglogEdit" + data.logType + ".html"
+            } else if (data.actionType == '4') {//转载
+                if (data.logType == '5') {
+                    url = "components/fishing/fishinglogEditPSUnloading.html"
+                } else {
+                    url = "components/fishing/fishinglogEditAction.html"
+                }
+            } else {//其他
+                url = "components/fishing/fishinglogEditAction.html"
+            }
+            admin.open({
+                type: 2,
+                title: '修改渔捞日志',
+                area: ['1200px', '800px'],
+                offset: '5%',
+                url: url,
+                resize: true,/**/
+                success: function (layero, index) {
+                    $(layero).children('.layui-layer-content').css('overflow-y', 'scroll');
+                }
+            });
+        }
+
+        // 显示查看弹窗
+        function showViewModel(data) {
+            oneLog(data.id);
+            var url = '';
+            if (data.actionType == 0) {//作业
+                url = "components/fishing/fishinglogView" + data.logType + ".html"
+            } else if (data.actionType == 4) {//转载
+                if (data.logType == '5') {//金枪鱼围网
+                    url = "components/fishing/fishinglogPSUnloading.html"
+                } else {
+                    url = "components/fishing/fishinglogViewAction.html"
+                }
+            } else {//其他
+                url = "components/fishing/fishinglogViewAction.html"
+            }
+            admin.open({
+                type: 2,
+                title: '查看渔捞日志',
+                area: ['1200px', '750px'],
+                offset: '5%',
+                url: url,
+                resize: true,/**/
+                success: function (layero, index) {
+                    $(layero).children('.layui-layer-content').css('overflow-y', 'scroll');
+                }
+            });
+        }
+
+        //查看航次
+        function showTripModel(data) {
+            if (data.tripId != null) {
+                admin.putTempData('t_tripId', data.tripId);
+                var url = "components/fishing/tripView.html";
+                admin.open({
+                    type: 2,
+                    title: '查看航次信息',
+                    area: ['1060px', '750px'],
+                    offset: '5%',
+                    url: url,
+                    resize: true,
+                    success: function (layero, index) {
+                        $(layero).children('.layui-layer-content').css('overflow-y', 'scroll');
+                    }
+                });
+            } else {
+                layer.msg("无航次信息", {icon: 1});
+            }
+        }
+
+        //上报
+        function doSubmit(obj) {
+            var index = top.layer.confirm('确定要上报吗？', function () {
+                layer.load(2);
+                var lid = obj.data.id;
+
+                admin.req('fishinglog/subIt', {
+                    id: lid
+                }, function (data) {
+                    top.layer.close(index);
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, "POST");
+            });
+        }
+
+        // 删除
+        function doDelete(obj) {
+            var index = top.layer.confirm('确定要删除吗？', function () {
+                layer.load(2);
+                $.post('fishinglog/delete', {
+                    id: obj.data.id
+                }, function (data) {
+                    top.layer.close(index);
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                });
+            });
+        }
+
+        // 导出FFAexcel
+        $('#btnExp').click(function () {
+            /* var checkRows = table.checkStatus('fishinglogTable');
+             if (checkRows.data.length == 0) {
+                 layer.msg('请选择要导出的数据', {icon: 2});
+             } else {
+                 table.exportFile(ins1.config.id, checkRows.data, 'xls');
+             }*/
+            if ($("#ship").val() === '') {
+                layer.msg('请选择船舶名称');
+            } else {
+                if ($("#logType").val() === '') {
+                    layer.msg('请选择渔捞日志类型');
+                } else {
+                    if (start == null && end == null) {
+                        layer.msg('请选择渔捞日志时间');
+                    } else {
+                        layer.msg("导出成功", {icon: 1});
+                        /*$.post({
+                            url: "/fishing/fishinglog/exportExcel",
+                            data: {
+                                "ship": $('#ship').val(),
+                                'logType': $('#logType').val(),
+                                'start': start,
+                                'end': end
+                            },
+                            success: function (data) {
+                                if (data !== null) {
+                                    layer.msg(data);
+                                }
+                            }
+
+                        })*/
+                    }
+                }
+            }
+        });
+
+
+    });
+</script>
+
+</body>
+</html>

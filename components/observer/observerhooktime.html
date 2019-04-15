@@ -1,0 +1,860 @@
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline" style="width: 120px;">
+                        <select id="sltKey">
+                            <option value="">-搜索条件-</option>
+                            <option value="hooktimes">作业钩次</option>
+                            <option value="obstartdatehook">下钩日期</option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
+                        <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                        <button class="layui-btn btn-add btn-default" id="improtFile">导入</button>
+                        <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
+                        <button id="btnDel" class="layui-btn icon-btn" data-type="getCheckData"><i class="layui-icon">&#xe67d;</i>删除</button>
+                    </div>
+                </div>
+            </div>
+
+            <table class="layui-table" id="observerhooktimeTable" lay-filter="observerhooktimeTable"></table>
+        </div>
+    </div>
+
+</div>
+
+<!-- 表单弹窗 -->
+<script type="text/html" id="observerhooktimeModel">
+    <form id="observerhooktimeForm" lay-filter="observerhooktimeForm" class="layui-form model-form">
+        <input name="observerhookid" type="hidden"/>
+                        <input id="obid" style="display:none" name="observerinfoid"  type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">作业钩次</label>
+                    <div class="layui-input-block">
+                        <input name="hooktimes" placeholder="请输入作业钩次" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">下钩日期</label>
+                    <div class="layui-input-block">
+                        <input id="test" name="obstartdatehook" placeholder="请输入下钩日期" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+
+               <div class="layui-form-item">
+                   <label class="layui-form-label">两浮子间主绳长</label>
+                   <div class="layui-input-block">
+                       <input name="buoybetween" placeholder="请输入两浮子间主绳长" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                   </div>
+               </div>
+               <div class="layui-form-item">
+                   <label class="layui-form-label">浮绳长</label>
+                   <div class="layui-input-block">
+                       <input name="floatlinelength" placeholder="请输入浮绳长" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                   </div>
+               </div>
+                <div class="layui-form-item">
+                   <label class="layui-form-label">支绳长</label>
+                   <div class="layui-input-block">
+                       <input name="ropelength" placeholder="请输入支绳长" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                   </div>
+               </div>
+               <div class="layui-form-item">
+                   <label class="layui-form-label">支绳间距</label>
+                   <div class="layui-input-block">
+                       <input name="ropebetween" placeholder="请输入支绳间距" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                   </div>
+               </div>
+                      <div class="layui-form-item">
+                   <label class="layui-form-label">投绳速度</label>
+                   <div class="layui-input-block">
+                       <input name="throwropespeed" placeholder="请输入投绳速度" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                   </div>
+               </div>
+                        <div class="layui-form-item">
+                   <label class="layui-form-label">投绳时船速</label>
+                   <div class="layui-input-block">
+                       <input name="throwropeshipspeed" placeholder="请输入投绳时船速" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                   </div>
+               </div>
+        <div class="layui-form-item">
+                   <label class="layui-form-label">单筐钩数(金枪鱼钩)</label>
+                   <div class="layui-input-block">
+                       <input name="singlebaskethook" placeholder="请输入单筐钩数(金枪鱼钩)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                   </div>
+               </div>
+        <div class="layui-form-item">
+                   <label class="layui-form-label">实际总筐数</label>
+                   <div class="layui-input-block">
+                       <input name="realitytotalbaskets" placeholder="请输入实际总筐数" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                   </div>
+               </div>
+        <div class="layui-form-item">
+                   <label class="layui-form-label">实际总下钩数(金枪鱼钩)</label>
+                   <div class="layui-input-block">
+                       <input name="realitytotalhook" placeholder="请输入实际总下钩数(金枪鱼钩)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                   </div>
+               </div>
+                        <div class="layui-form-item">
+                   <label class="layui-form-label">是否采用了鲨鱼钩</label>
+                   <div class="layui-input-block">
+                       <select  name="sharkhook"  lay-verify="required">
+                           <option value=""></option>
+                           <option value="是">是</option>
+                           <option value="否">否</option>
+                       </select>
+                   </div>
+               </div>
+                        <div class="layui-form-item">
+                   <label class="layui-form-label">实际总下鲨鱼钩数</label>
+                   <div class="layui-input-block">
+                       <input name="realitysharkhook" placeholder="请输入实际总下鲨鱼钩数" type="text" class="layui-input" maxlength="50" />
+                   </div>
+               </div>
+                         <div class="layui-form-item">
+                   <label class="layui-form-label">观察筐数</label>
+                   <div class="layui-input-block">
+                       <input name="obbaskets" placeholder="请输入观察筐数" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                   </div>
+               </div>
+                         <div class="layui-form-item">
+                   <label class="layui-form-label">观察筐数比率(随机,0~1)</label>
+                   <div class="layui-input-block">
+                       <input name="observebasketsrate" placeholder="请输入观察筐数比率(随机,0~1)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                   </div>
+               </div>
+                         <div class="layui-form-item">
+                   <label class="layui-form-label">目标鱼种</label>
+                   <div class="layui-input-block">
+                       <input name="targetspecies" placeholder="请输入目标鱼种" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                   </div>
+               </div>
+
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">下钩开始时间（当地）</label>
+                    <div class="layui-input-block">
+                        <input id="test1" name="obstatedatehook" placeholder="请输入下钩开始时间（当地）" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">下钩结束时间</label>
+                    <div class="layui-input-block">
+                        <input id="test2" name="obenddatehook" placeholder="请输入下钩结束时间" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">起钩开始时间</label>
+                    <div class="layui-input-block">
+                        <input id="test3" name="obupstatedate" placeholder="请输入起钩开始时间" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">起钩结束时间</label>
+                    <div class="layui-input-block">
+                        <input id="test4" name="obupenddate" placeholder="请输入起钩结束时间" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">起钩开始SST(海水温度表面)</label>
+                    <div class="layui-input-block">
+                        <input name="uphooksst" placeholder="请输入起钩开始SST(海水温度表面)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">起钩开始气压</label>
+                    <div class="layui-input-block">
+                        <input name="uphookpa" placeholder="请输入起钩开始气压" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">起钩开始天气</label>
+                    <div class="layui-input-block">
+                        <input name="uphookweather" placeholder="请输入起钩开始天气" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">起钩开始海况BF</label>
+                    <div class="layui-input-block">
+                        <input name="uphookbf" placeholder="请输入起钩开始海况BF" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">农历日</label>
+                    <div class="layui-input-block">
+                        <input name="lday" placeholder="请输入农历日" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">纬度 度 (北纬+南纬-)</label>
+                    <div class="layui-input-block">
+                        <input name="latitudedegrees" placeholder="请输入纬度 度 (北纬+南纬-)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">纬度 分 (北纬+南纬-)</label>
+                    <div class="layui-input-block">
+                        <input name="latitudepoints" placeholder="请输入纬度 分 (北纬+南纬-)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">经度 度 (东经+西经-)</label>
+                    <div class="layui-input-block">
+                        <input name="longitudesdegrees" placeholder="请输入经度 度 (东经+西经-)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">经度 分 (东经+西经-)</label>
+                    <div class="layui-input-block">
+                        <input name="longitudespoints" placeholder="请输入经度 分 (东经+西经-)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">金枪鱼钓钩类型</label>
+                    <div class="layui-input-block">
+                        <input name="tunahooktype" placeholder="请输入金枪鱼钓钩类型" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">金枪鱼钓钩尺寸</label>
+                    <div class="layui-input-block">
+                        <input name="tunahooksize" placeholder="请输入金枪鱼钓钩尺寸" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">鲨鱼钓钩类型</label>
+                    <div class="layui-input-block">
+                        <input name="sharkhooktype" placeholder="请输入鲨鱼钓钩类型" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+        <div class="layui-form-item">
+                    <label class="layui-form-label">鲨鱼钓钩尺寸</label>
+                    <div class="layui-input-block">
+                        <input name="sharkhooksize" placeholder="请输入鲨鱼钓钩尺寸" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                   <div class="layui-form-item">
+                    <label class="layui-form-label">是否采用荧光棒</label>
+                    <div class="layui-input-block">
+                        <select  name="glowsticks"   lay-verify="required">
+                            <option value=""></option>
+                            <option value="是">是</option>
+                            <option value="否">否</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">是否配备海龟脱钩器</label>
+                    <div class="layui-input-block">
+                        <select  name="turtlehook"   lay-verify="required">
+                            <option value=""></option>
+                            <option value="是">是</option>
+                            <option value="否">否</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">海龟脱钩器类型</label>
+                    <div class="layui-input-block">
+                        <input name="turtlehooktype" placeholder="请输入海龟脱钩器类型" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">是否有海鸟钓获</label>
+                    <div class="layui-input-block">
+                        <select  name="catchbirds"   lay-verify="required">
+                            <option value=""></option>
+                            <option value="是">是</option>
+                            <option value="否">否</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">饵料鱼1</label>
+                    <div class="layui-input-block">
+                        <input name="baitfish1" placeholder="请输入饵料鱼1" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">饵料鱼1平均长度(cm)</label>
+                    <div class="layui-input-block">
+                        <input name="baitfishavglength1" placeholder="请输入饵料鱼1平均长度(cm)" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">饵料鱼2</label>
+                    <div class="layui-input-block">
+                        <input name="baitfish2" placeholder="请输入饵料鱼2" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">饵料鱼2平均长度(cm)</label>
+                    <div class="layui-input-block">
+                        <input name="baitfishavglength2" placeholder="请输入饵料鱼2平均长度(cm)" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">注释</label>
+                    <div class="layui-input-block">
+                        <input name="observerremark" placeholder="请输入注释" type="text" class="layui-input" maxlength="50" />
+                    </div>
+                </div>
+
+        <div class="layui-form-item text-right">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+            <button class="layui-btn" lay-filter="observerhooktimeFormSubmit" lay-submit>保存</button>
+        </div>
+    </form>
+</script>
+
+<!--详情表格-->
+<script type="text/html" id="observerhooktimeDetail">
+    <form id="observerhooktimeFormDetail" lay-filter="observerhooktimeFormDetail" class="layui-form model-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">作业钩次</label>
+            <div class="layui-input-block">
+                <input name="hooktimes"  type="text" class="layui-input" maxlength="50"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">下钩日期</label>
+            <div class="layui-input-block">
+                <input  name="obstartdatehook"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">两浮子间主绳长</label>
+            <div class="layui-input-block">
+                <input name="buoybetween"  type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">浮绳长</label>
+            <div class="layui-input-block">
+                <input name="floatlinelength" placeholder="请输入浮绳长" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">支绳长</label>
+            <div class="layui-input-block">
+                <input name="ropelength" placeholder="请输入支绳长" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">支绳间距</label>
+            <div class="layui-input-block">
+                <input name="ropebetween" placeholder="请输入支绳间距" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">投绳速度</label>
+            <div class="layui-input-block">
+                <input name="throwropespeed" placeholder="请输入投绳速度" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">投绳时船速</label>
+            <div class="layui-input-block">
+                <input name="throwropeshipspeed" placeholder="请输入投绳时船速" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">单筐钩数(金枪鱼钩)</label>
+            <div class="layui-input-block">
+                <input name="singlebaskethook" placeholder="请输入单筐钩数(金枪鱼钩)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">实际总筐数</label>
+            <div class="layui-input-block">
+                <input name="realitytotalbaskets" placeholder="请输入实际总筐数" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">实际总下钩数(金枪鱼钩)</label>
+            <div class="layui-input-block">
+                <input name="realitytotalhook" placeholder="请输入实际总下钩数(金枪鱼钩)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否采用了鲨鱼钩</label>
+            <div class="layui-input-block">
+                <input name="sharkhook"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">实际总下鲨鱼钩数</label>
+            <div class="layui-input-block">
+                <input name="realitysharkhook" placeholder="请输入实际总下鲨鱼钩数" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">观察筐数</label>
+            <div class="layui-input-block">
+                <input name="obbaskets" placeholder="请输入观察筐数" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">观察筐数比率(随机,0~1)</label>
+            <div class="layui-input-block">
+                <input name="observebasketsrate" placeholder="请输入观察筐数比率(随机,0~1)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">目标鱼种</label>
+            <div class="layui-input-block">
+                <input name="targetspecies" placeholder="请输入目标鱼种" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">下钩开始时间（当地）</label>
+            <div class="layui-input-block">
+                <input  name="obstatedatehook" placeholder="请输入下钩开始时间（当地）" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">下钩结束时间</label>
+            <div class="layui-input-block">
+                <input  name="obenddatehook" placeholder="请输入下钩结束时间" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">起钩开始时间</label>
+            <div class="layui-input-block">
+                <input  name="obupstatedate" placeholder="请输入起钩开始时间" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">起钩结束时间</label>
+            <div class="layui-input-block">
+                <input  name="obupenddate" placeholder="请输入起钩结束时间" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">起钩开始SST(海水温度表面)</label>
+            <div class="layui-input-block">
+                <input name="uphooksst" placeholder="请输入起钩开始SST(海水温度表面)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">起钩开始气压</label>
+            <div class="layui-input-block">
+                <input name="uphookpa" placeholder="请输入起钩开始气压" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">起钩开始天气</label>
+            <div class="layui-input-block">
+                <input name="uphookweather" placeholder="请输入起钩开始天气" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">起钩开始海况BF</label>
+            <div class="layui-input-block">
+                <input name="uphookbf" placeholder="请输入起钩开始海况BF" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">农历日</label>
+            <div class="layui-input-block">
+                <input name="lday" placeholder="请输入农历日" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">纬度 度 (北纬+南纬-)</label>
+            <div class="layui-input-block">
+                <input name="latitudedegrees" placeholder="请输入纬度 度 (北纬+南纬-)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">纬度 分 (北纬+南纬-)</label>
+            <div class="layui-input-block">
+                <input name="latitudepoints" placeholder="请输入纬度 分 (北纬+南纬-)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">经度 度 (东经+西经-)</label>
+            <div class="layui-input-block">
+                <input name="longitudesdegrees" placeholder="请输入经度 度 (东经+西经-)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">经度 分 (东经+西经-)</label>
+            <div class="layui-input-block">
+                <input name="longitudespoints" placeholder="请输入经度 分 (东经+西经-)" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">金枪鱼钓钩类型</label>
+            <div class="layui-input-block">
+                <input name="tunahooktype" placeholder="请输入金枪鱼钓钩类型" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">金枪鱼钓钩尺寸</label>
+            <div class="layui-input-block">
+                <input name="tunahooksize" placeholder="请输入金枪鱼钓钩尺寸" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">鲨鱼钓钩类型</label>
+            <div class="layui-input-block">
+                <input name="sharkhooktype" placeholder="请输入鲨鱼钓钩类型" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">鲨鱼钓钩尺寸</label>
+            <div class="layui-input-block">
+                <input name="sharkhooksize" placeholder="请输入鲨鱼钓钩尺寸" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否采用荧光棒</label>
+            <div class="layui-input-block">
+                <input name="glowsticks"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否配备海龟脱钩器</label>
+            <div class="layui-input-block">
+                <input name="turtlehook"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">海龟脱钩器类型</label>
+            <div class="layui-input-block">
+                <input name="turtlehooktype" placeholder="请输入海龟脱钩器类型" type="text" class="layui-input" maxlength="50" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否有海鸟钓获</label>
+            <div class="layui-input-block">
+                <input name="catchbirds"  type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">饵料鱼1</label>
+            <div class="layui-input-block">
+                <input name="baitfish1" placeholder="请输入饵料鱼1" type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">饵料鱼1平均长度(cm)</label>
+            <div class="layui-input-block">
+                <input name="baitfishavglength1" placeholder="请输入饵料鱼1平均长度(cm)" type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">饵料鱼2</label>
+            <div class="layui-input-block">
+                <input name="baitfish2" placeholder="请输入饵料鱼2" type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">饵料鱼2平均长度(cm)</label>
+            <div class="layui-input-block">
+                <input name="baitfishavglength2" placeholder="请输入饵料鱼2平均长度(cm)" type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">注释</label>
+            <div class="layui-input-block">
+                <input name="observerremark" placeholder="请输入注释" type="text" class="layui-input" maxlength="50" />
+            </div>
+        </div>
+
+    </form>
+</script>
+
+<!--导入按钮-->
+<script type="text/html" id="improtFilefu">
+    <center>
+        <form id="improtFilefuRu" lay-filter="improtFilefuRu"  class="layui-form model-form">
+            <div>请确定表格类型，防止数据出错</div>
+            <a class="layui-btn btn-add btn-default" id="btn-excel">选择Excel文件</a>
+            <a class="layui-btn btn-add btn-default" id="btn-excel-sure">上传导入</a>
+        </form>
+    </center>
+</script>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script>
+
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'config','formSelects','laytpl','laydate','upload'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var config = layui.config;
+        var formSelects = layui.formSelects;
+        var laytpl = layui.laytpl;
+        var laydate = layui.laydate;
+        var upload = layui.upload;
+
+        var obid = layui.router().search.p1;
+
+
+        form.render('select');
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#observerhooktimeTable',
+            url: config.base_server + 'observer/observerhooktime/list',
+            where:{observerinfoid:obid},
+            page: true,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'observerhookid', sort: true, title: '主键',hide:true},
+                {field: 'hooktimes', sort: true, title: '作业钩次'},
+                {field: 'obstartdatehook', sort: true, title: '下钩日期'},
+                {field: 'singlebaskethook', sort: true, title: '单筐钩数(金枪鱼钩)'},
+                {field: 'realitytotalbaskets', sort: true, title: '实际总筐数'},
+                {field: 'targetspecies', sort: true, title: '目标鱼种'},
+                {field: 'lday', sort: true, title: '农历日'},
+                {field: 'observerremark', sort: true, title: '注释'},
+                {field: 'updateTime', sort: true, title: '更新时间'},
+                {align: 'center', toolbar: '#tableBar', title: '操作'}
+            ]]
+        });
+
+        // 添加按钮点击事件
+        $('#btnAdd').click(function () {
+            showEditModel();
+        });
+
+        //导入按钮
+        $('#improtFile').click(function () {
+            imfile();
+        });
+
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            table.reload('observerhooktimeTable', {where: {searchKey: key, searchValue: value}});
+        });
+        // 表单提交事件
+        form.on('submit(observerhooktimeFormSubmit)', function (data) {
+            layer.load(2);
+            var theMethod = data.field.observerhookid?"PUT":"POST";
+            admin.req('observer/observerhooktime/', data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                    table.reload('observerhooktimeTable');
+                    admin.closeDialog('#observerhooktimeForm');
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, theMethod);
+            return false;
+        });
+        // 工具条点击事件
+        table.on('tool(observerhooktimeTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            }else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }else if (obj.event === 'detail') { //详情
+                showdetail(data);
+            }
+        });
+
+        // 删除
+        function doDelete(obj) {
+            layer.confirm('确定要删除吗？', {
+                skin: 'layui-layer-admin'
+            }, function (i) {
+                layer.close(i);
+                layer.load(2);
+                admin.req('observer/observerhooktime/'+ obj.data.observerhookid, {}, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        table.reload('observerhooktimeTable');
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'delete');
+            });
+        };
+
+        /*批量删除*/
+        $('#btnDel').click(function () {
+            //获取选中行数据
+            var checkStatus = table.checkStatus('observerhooktimeTable')
+                ,dataSeaId = checkStatus.data;
+            if(dataSeaId.length==0){
+                layer.msg("请选择要删除的数据",{icon: 3});
+            }else{
+                layer.confirm('确定要删除'+ dataSeaId.length +'条吗？', {
+                    skin: 'layui-layer-admin',
+                    btn: ['确定', '取消']
+                }, function (index, layero) {
+                    var str = new Array();
+                    for (var i = 0; i < dataSeaId.length; i++) {
+                        str[i] = dataSeaId[i].observerhookid;
+                    }
+                    admin.req("observer/observerhooktime/deletAllobserverhookid",{
+                        observerhookid:JSON.stringify(str)
+                    },function (data) {
+                        table.reload('observerhooktimeTable');
+                        if (data.code == 200) {
+                            layer.msg(data.msg, {icon: 1});
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+                    },"PUT");
+                    layer.closeAll('dialog');  //加入这个信息点击确定 会关闭这个消息框
+                });
+            }
+        });
+
+        //Excel导入
+        function imfile(){
+            admin.open({
+                type:1,
+                title:"文件导入",
+                area:["400px","250px"],
+                btn:["取消"],
+                offset: ['15%', '25%'],
+                content:document.getElementById('improtFilefu').innerHTML,
+                success:function () {
+                    //Excel导入
+                    upload.render({
+                        elem: '#btn-excel'
+                        ,url: config.base_server + 'observer/observerhooktime/fileexcel?obid='+obid
+                        ,auto: false
+                        //,multiple: true
+                        ,bindAction: '#btn-excel-sure'
+                        ,size: 5120 //最大允许上传的文件大小 2M
+                        ,accept: 'file' //允许上传的文件类型
+                        ,exts:'xlsx'//只上传pdf文档
+                        ,done: function(res){
+                            if(res.code == 1){//成功的回调
+                                table.reload('observerhooktimeTable');
+                                layer.msg(res.msg, {icon: 1});
+                                admin.closeDialog('#improtFilefuRu');
+                            }else if(res.code==2){
+                                table.reload('observerhooktimeTable');
+                                layer.msg(res.msg, {icon: 2});
+                                admin.closeDialog('#improtFilefuRu');
+                            }
+                        }
+                    });
+
+                },yes:function (index) {
+                    layer.close(index);
+                }
+                ,cancel: function(index){
+                    layer.close(index)
+                }
+            });
+
+        }
+
+
+
+
+        // 导出excel
+        $('#btnExp').click(function () {
+            var checkRows = table.checkStatus('observerhooktimeTable');
+
+            if (checkRows.data.length == 0) {
+                layer.msg('请选择要导出的数据', {icon: 2});
+            } else {
+                var ids = "";
+                for(var x = 0;x<checkRows.data.length;x++){
+                    ids+=checkRows.data[x].observerhookid+",";
+                }
+                window.location.href=config.base_server+"observer/observerhooktime/putExp?Authorization="+config.getToken().access_token+"&ids="+ids;
+            }
+        });
+
+        // 显示表单弹窗
+        function showEditModel(data) {
+            admin.open({
+                type: 1,
+                title: data ? '修改作业钩次信息' : '添加作业钩次信息',
+                area:["400px","800px"],
+                content: laytpl(document.getElementById('observerhooktimeModel').innerHTML).render(data||{}),
+                success: function (layero, index) {
+                  //日期格式
+                    laydate.render({ //Y-M-D
+                        elem: '#test'
+                        ,type:'date'
+                    });
+                    laydate.render({//H-M-S
+                        elem: '#test1'
+                        ,type:'time'
+                    });
+                    laydate.render({
+                        elem: '#test2'
+                        ,type:'time'
+                    });
+                    laydate.render({
+                        elem: '#test3'
+                        ,type:'time'
+                    });
+                    laydate.render({
+                        elem: '#test4'
+                        ,type:'time'
+                    });
+
+                    $('#observerhooktimeForm')[0].reset();
+                    $('#obid').val(obid);
+                    if (data) {
+                        form.val('observerhooktimeForm', data);
+                    }
+                   // $(layero).children('.layui-layer-content').css('overflow', 'visible');  // 禁止出现滚动条
+                }
+            });
+        }
+
+
+        //详情
+        function showdetail(obj){
+            admin.req('observer/observerhooktime/'+ obj.observerhookid, {}, function (data){
+                admin.open({
+                    type: 1,
+                    title:'详情',
+                    area:['400px','800px'],
+                    btn: ['返回列表'],
+                    content:laytpl(document.getElementById('observerhooktimeDetail').innerHTML).render(data||{}),
+                    success: function (layero, index) {
+                        form.val('observerhooktimeFormDetail', data);
+                    },
+                    yes: function(index, layero){
+                        layer.close(index)
+                    },
+                    cancel: function(index){
+                        layer.close(index)
+                    }
+                });
+            },'put');
+        }
+
+
+    });
+</script>
